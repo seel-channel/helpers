@@ -188,28 +188,28 @@ class _HomePageState extends State<HomePage> {
   It is a simplification of many instructions.
 
 ```dart
-    //THEME INSTRUCTIONS
-    Misc.theme(context);
+    //THEME
+    Misc.theme(context);     //Helper
     Theme.of(context);
 
-    Misc.textTheme(context);
+    Misc.textTheme(context); //Helper
     Theme.of(context).textTheme;
 
 
-    //CALLBACKS INSTRUCTIONS
-    Misc.onLayoutRendered(() => null);
+    //CALLBACKS
+    Misc.delayed(200, () => null);     //Helper
+    Future.delayed(Duration(milliseconds: 200), () => null);
+
+    Misc.onLayoutRendered(() => null); //Helper
     WidgetsBinding.instance.addPostFrameCallback((_) => null);
 
-    Misc.delayed(200, () => null);
-    Future.delayed(Duration(milliseconds: 200), () => null)
 
-
-    //IF SENTENCES INSTRUCTION
-    double height = Misc.ifNull(widget.height, 0.0);
+    //IF SENTENCES
+    double height = Misc.ifNull(widget.height, 0.0); //Helper
     double height = widget.height != null ? widget.height : 0.0;
 
 
-    //TEXT INSTRUCTIONS
+    //TEXT
     Text(Misc.loremIpsum());
     Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
@@ -221,11 +221,11 @@ class _HomePageState extends State<HomePage> {
         "ullamco laboris nisi ut aliquip ex ea commodo consequat.");
 
 
-    //SYSTEM INSTRUCTIONS (NOTE: SystemChrome NEED IMPORT FLUTTER SERVICES)
-    Misc.setSystemOverlayStyle(...);
+    //SYSTEM (NOTE: SystemChrome NEED IMPORT FLUTTER SERVICES)
+    Misc.setSystemOverlayStyle(...); //Helper
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(...));
 
-    Misc.setSystemOrientation(SystemOrientation.values);
+    Misc.setSystemOrientation(SystemOrientation.values); //Helper
     SystemChrome.setPreferredOrientations(DeviceOrientation.values)
 
 ```
@@ -239,16 +239,16 @@ class _HomePageState extends State<HomePage> {
 
 ```dart
     //INSTRUCTIONS
-    SystemOverlay.none;
+    SystemOverlay.none;   //Helper
     List();
 
-    SystemOverlay.values;
+    SystemOverlay.values; //Helper
     SystemUiOverlay.values
 
-    SystemOverlay.top;
+    SystemOverlay.top;    //Helper
     [SystemUiOverlay.top]
 
-    SystemOverlay.bottom;
+    SystemOverlay.bottom; //Helper
     [SystemUiOverlay.bottom]
 ```
 
@@ -261,22 +261,22 @@ class _HomePageState extends State<HomePage> {
 
 ```dart
     //INSTRUCTIONS
-    SystemOrientation.none;
+    SystemOrientation.none;   //Helper
     DeviceOrientation.
 
-    SystemOrientation.values;
+    SystemOrientation.values; //Helper
     DeviceOrientation.values;
 
-    SystemOrientation.portraitUp;
+    SystemOrientation.portraitUp;     //Helper
     [DeviceOrientation.portraitUp];
 
-    SystemOrientation.portraitDown;
+    SystemOrientation.portraitDown;   //Helper
     [DeviceOrientation.portraitDown];
 
-    SystemOrientation.landscapeLeft;
+    SystemOrientation.landscapeLeft;  //Helper
     [DeviceOrientation.landscapeLeft];
 
-    SystemOrientation.landscapeRight;
+    SystemOrientation.landscapeRight; //Helper
     [DeviceOrientation.landscapeRight]
 ```
 
@@ -287,20 +287,19 @@ class _HomePageState extends State<HomePage> {
   It is a simplification of the _Theme.of(context)_ statement.
 
 ```dart
-    //INSTRUCTIONS
-    GetColor.primary(context);
+    GetColor.primary(context);      //Helper
     Theme.of(context).primaryColor;
 
-    GetColor.primaryLight(context);
+    GetColor.primaryLight(context); //Helper
     Theme.of(context).primaryColorLight;
 
-    GetColor.accent(context);
+    GetColor.accent(context);       //Helper
     Theme.of(context).accentColor;
 
-    GetColor.disabled(context);
+    GetColor.disabled(context);           //Helper
     Theme.of(context).disabledColor;
 
-    GetColor.scaffoldBackground(context);
+    GetColor.scaffoldBackground(context); //Helper
     Theme.of(context).scaffoldBackgroundColor;
 
     ... //+20 COLORS
@@ -316,20 +315,21 @@ class _HomePageState extends State<HomePage> {
 
 - ### **PushRoute Class:**
   It is a simplification of the _Navigator.push()_ statement.
+  **TranparentPage** solved the bug of MaterialPageRoute with a black background
 
 ```dart
     Widget page;
     BuildContext context;
 
-    //PAGE INSTRUCTION
-    PushRoute.page(context, page);
+
+    PushRoute.page(context, page); //Helper
     Navigator.push(context,
       withTransition
           ? MaterialPageRoute(builder: (_) => page)
           : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
 
-    //TRANSPARENT PAGE INSTRUCTION
-    PushRoute.transparentPage(context, page)
+
+    PushRoute.transparentPage(context, page) //Helper
     Navigator.push(context,
       TransparentRoute(builder: (_) => page, transitionMs: transitionMs))
 ```
@@ -346,7 +346,7 @@ class _HomePageState extends State<HomePage> {
   **IMPROVEMENT**: If you don't assign it a color, it will automatically select the _Theme.of(context).primaryColor_.
 
 ```dart
-    TextDesigned(
+    TextDesigned(     //Helper
       "Hello",
       size: 20,
       bold: true,
@@ -375,9 +375,9 @@ class _HomePageState extends State<HomePage> {
   Eliminate the Splash Effect or Glow Effect when reaching the limit of a PageView, ScrollView, ListView, etc.
 
 ```dart
-    //WIDGET DECLARATION
     RemoveScrollGlow(child: PageView(...));
 
+    //RESULT
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowGlow();
@@ -393,9 +393,9 @@ class _HomePageState extends State<HomePage> {
   Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
 
 ```dart
-    //WIDGET DECLARATION
     DismissKeyboard(child: Container());
 
+    //RESULT
     return GestureDetector(
       onTap: () {
         FocusScopeNode focus = FocusScope.of(context);
@@ -428,16 +428,17 @@ class _HomePageState extends State<HomePage> {
   Show or hide a Widget with an opacity transition from a Boolean variable.
 
 ```dart
-    //WIDGET DECLARATION
     bool visible = true;
 
-    OpacityTransition(
+    OpacityTransition(  //Helper
       visible: visible,
       child: Container(),
       curve: Curves.linear, //OPTIONAL
       duration: Duration(milliseconds: 200) //OPTIONAL
     );
 
+
+    //RESULT
     return BooleanTween(
       curve: widget.curve,
       animate: widget.visible,
@@ -466,20 +467,20 @@ class _HomePageState extends State<HomePage> {
 ```dart
     BuildContext context;
 
-    //INSTRUCTIONS
-    GetContext.width(context);
+
+    GetContext.width(context);   //Helper
     MediaQuery.of(context).size.width;
 
-    GetContext.height(context);
+    GetContext.height(context);  //Helper
     MediaQuery.of(context).size.height;
 
-    GetContext.padding(context);
+    GetContext.padding(context); //Helper
     MediaQuery.of(context).padding;
 
-    GetContext.size(context);
+    GetContext.size(context);    //Helper
     MediaQuery.of(context).size;
 
-    GetContext.data(context);
+    GetContext.data(context);    //Helper
     MediaQuery.of(context);
 
     ... //+10 MEDIAQUERIES
@@ -493,17 +494,17 @@ class _HomePageState extends State<HomePage> {
 ```dart
     GlobalKey key = GlobalKey();
 
-    //INSTRUCTIONS
-    GetKey.width(key);
+
+    GetKey.width(key);   //Helper
     key.currentContext.size.width;
 
-    GetKey.height(key);
+    GetKey.height(key);  //Helper
     key.currentContext.size.height;
 
-    GetKey.size(key);
+    GetKey.size(key);    //Helper
     key.currentContext.size;
 
-    GetKey.context(key);
+    GetKey.context(key); //Helper
     key.currentContext;
 ```
 
@@ -515,39 +516,39 @@ class _HomePageState extends State<HomePage> {
 ```dart
     double amount = 2.0;
 
-    //INSTRUCTIONS
-    Margin.zero;
+
+    Margin.zero; //Helper
     EdgeInsets.zero;
 
-    Margin.all(amount);
+    Margin.all(amount); //Helper
     EdgeInsets.all(amount);
 
 
     //SYMETRIC
-    Margin.vertical(amount);
+    Margin.vertical(amount);   //Helper
     EdgeInsets.symmetric(vertical: amount);
 
-    Margin.horizontal(amount);
+    Margin.horizontal(amount); //Helper
     EdgeInsets.symmetric(horizontal: amount);
 
-    Margin.symmetric(...);
+    Margin.symmetric(...);     //Helper
     EdgeInsets.symmetric(...);
 
 
     //ONLY
-    Margin.top(amount);
+    Margin.top(amount);    //Helper
     EdgeInsets.only(top: amount);
 
-    Margin.bottom(amount);
+    Margin.bottom(amount); //Helper
     EdgeInsets.only(bottom: amount);
 
-    Margin.left(amount);
+    Margin.left(amount);   //Helper
     EdgeInsets.only(left: amount);
 
-    Margin.right(amount);
+    Margin.right(amount);  //Helper
     EdgeInsets.only(right: amount);
 
-    Margin.only(...);
+    Margin.only(...);      //Helper
     EdgeInsets.only(...);
 ```
 
@@ -559,28 +560,28 @@ class _HomePageState extends State<HomePage> {
 ```dart
     double amount = 2.0;
 
-    //INSTRUCTIONS
-    EdgeRadius.zero;
+
+    EdgeRadius.zero;        //Helper
     BorderRadius.zero;
 
-    EdgeRadius.all(amount);
+    EdgeRadius.all(amount); //Helper
     BorderRadius.all(Radius.circular(amount));
 
 
     //SYMETRIC
-    Margin.vertical(top: amount, bottom: amount);
+    EdgeRadius.vertical(top: amount, bottom: amount);   //Helper
     BorderRadius.vertical(
       top: Radius.circular(top),
       bottom: Radius.circular(bottom));
 
-    Margin.horizontal(left: amount, right: amount);
+    EdgeRadius.horizontal(left: amount, right: amount); //Helper
     BorderRadius.horizontal(
       left: Radius.circular(left),
       right: Radius.circular(right));
 
 
     //ONLY
-    Margin.only(
+    EdgeRadius.only( //Helper
       topLeft: amount,
       topRight: amount,
       bottomLeft: amount,
