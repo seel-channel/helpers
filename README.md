@@ -123,8 +123,8 @@ void main() => runApp(App());
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Misc.setSystemOrientation(SystemOrientation.portraitUp);
-    Misc.setSystemOverlayStyle(
+    Misc.setSystemOrientation(SystemOrientation.portraitUp); //Helper
+    Misc.setSystemOverlayStyle( //Helper
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     );
@@ -152,19 +152,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GetColor.scaffoldBackground(context),
+      backgroundColor: GetColor.scaffoldBackground(context), //Helper
       floatingActionButton: FloatingActionButton(
-        backgroundColor: GetColor.accent(context),
+        backgroundColor: GetColor.accent(context), //Helper
         onPressed: () => setState(() => visible = !visible),
       ),
-      body: RemoveScrollGlow(
+      body: RemoveScrollGlow( //Helper
         child: PageView.builder(
           itemCount: 5,
           itemBuilder: (context, key) {
-            return OpacityTransition(
+            return OpacityTransition( //Helper
               visible: visible,
               child: Center(
-                child: TextDesigned(
+                child: TextDesigned( //Helper
                   "HELLO ${key + 1}",
                   bold: true,
                 ),
@@ -235,7 +235,6 @@ class _HomePageState extends State<HomePage> {
 - ### **SystemOverlay Class:**
 
   This is a simplification of the _List type: SystemUiOverlay_ statement. It is used for the _Misc.setSystemOverlayStyle()_ statement.
-
   **IMPROVEMENT**: By using the SystemOverlay you will not need to import _SystemChrome, DeviceOrientation_ from the flutter services.
 
 ```dart
@@ -258,7 +257,6 @@ class _HomePageState extends State<HomePage> {
 - ### **SystemOrientation Class:**
 
   This is a simplification of the _List type: DeviceOrientation_ statement. It is used for the _Misc.setSystemOrientation()_ statement.
-
   **IMPROVEMENT**: By using the SystemOrientation you will not need to import _SystemChrome, DeviceOrientation_ from the flutter services.
 
 ```dart
