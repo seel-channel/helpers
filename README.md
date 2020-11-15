@@ -31,7 +31,7 @@
   - [RemoveScrollGlow](#removescrollglow-widget)
   - [DismissKeyboard](#dismisskeyboard-widget)
   - [BooleanTween](#booleantween-widget)
-  - [OpacityTransition](#getcontext-class)
+  - [OpacityTransition](#opacitytransition-widget)
 - [Size Classes](#size-helpers)
   - [GetContext](#getcontext-class)
   - [GetKey](#getkey-class)
