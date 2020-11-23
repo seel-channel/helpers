@@ -3,6 +3,7 @@
 ## My other APIs
 
 - [Scroll Navigation](https://pub.dev/packages/scroll_navigation)
+- [Video Viewer](https://pub.dev/packages/video_viewer)
 
 <br>
 
@@ -30,8 +31,10 @@
   - [TextDesigned](#textdesigned-widget)
   - [RemoveScrollGlow](#removescrollglow-widget)
   - [DismissKeyboard](#dismisskeyboard-widget)
+- [Transition Helpers](#transition-helpers)
   - [BooleanTween](#booleantween-widget)
   - [OpacityTransition](#opacitytransition-widget)
+  - [SwipeTransition Widget](#swipetransition-widget)
 - [Size Classes](#size-helpers)
   - [GetContext](#getcontext-class)
   - [GetKey](#getkey-class)
@@ -188,24 +191,37 @@ class _HomePageState extends State<HomePage> {
   It is a simplification of many instructions.
 
 ```dart
+    double milliseconds = 200;
+
     //THEME
-    Misc.theme(context);     //Helper
+    Misc.theme(context);          //Helper
     Theme.of(context);
 
-    Misc.textTheme(context); //Helper
+    Misc.textTheme(context);      //Helper
     Theme.of(context).textTheme;
 
 
     //CALLBACKS
-    Misc.delayed(200, () => null);     //Helper
-    Future.delayed(Duration(milliseconds: 200), () => null);
+    Misc.onLayoutRendered(() {}); //Helper
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
 
-    Misc.onLayoutRendered(() => null); //Helper
-    WidgetsBinding.instance.addPostFrameCallback((_) => null);
+
+    //TIMER-ASYNC
+    Misc.delayed(milliseconds, () {});  //Helper
+    Future.delayed(Duration(milliseconds: milliseconds), () {});
+
+    Misc.timer(milliseconds, () {});    //Helper
+    Timer(Duration(milliseconds: milliseconds), () {});
+
+    Misc.periodic(milliseconds, () {}); //Helper
+    Timer.periodic(Duration(milliseconds: milliseconds), () {});
+
+    await Misc.wait(milliseconds);      //Helper
+    await Future.delayed(Duration(milliseconds: milliseconds), () {});
 
 
     //IF SENTENCES
-    double height = Misc.ifNull(widget.height, 0.0); //Helper
+    double height = Misc.ifNull(widget.height, 0.0);    //Helper
     double height = widget.height != null ? widget.height : 0.0;
 
 
@@ -224,6 +240,9 @@ class _HomePageState extends State<HomePage> {
     //SYSTEM (NOTE: SystemChrome NEED IMPORT FLUTTER SERVICES)
     Misc.setSystemOverlayStyle(...); //Helper
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(...));
+
+    Misc.setSystemOverlay(SystemOverlay.portraitUp);     //Helper
+    SystemChrome.setSystemUIOverlay([SystemUiOverlay.portraitUp]);
 
     Misc.setSystemOrientation(SystemOrientation.values); //Helper
     SystemChrome.setPreferredOrientations(DeviceOrientation.values)
@@ -261,10 +280,7 @@ class _HomePageState extends State<HomePage> {
 
 ```dart
     //INSTRUCTIONS
-    SystemOrientation.none;   //Helper
-    DeviceOrientation.
-
-    SystemOrientation.values; //Helper
+    SystemOrientation.values;         //Helper
     DeviceOrientation.values;
 
     SystemOrientation.portraitUp;     //Helper
@@ -350,20 +366,17 @@ class _HomePageState extends State<HomePage> {
       "Hello",
       size: 20,
       bold: true,
-      uppercase: true,
       underline: true,
-      letterSpacing: 1.0
       color: Colors.white,
     );
 
     Text(
-      "Hello".toUpperCase(),
+      "Hello",
       style: TextStyle(
         fontSize: 20,
         color: Colors.white,
         fontWeight: FontWeight.bold,
         decoration: TextDecoration.underline,
-        letterSpacing: 1.0,
       ),
     );
 
@@ -407,6 +420,12 @@ class _HomePageState extends State<HomePage> {
 
 <br>
 
+---
+
+<br>
+
+## Transition Helpers
+
 - ### **BooleanTween Widget:**
   It is an AnimatedBuilder. If it is **TRUE**, it will execute the Tween from _begin to end (controller.forward())_, if it is **FALSE** it will execute the Tween from _end to begin (controller.reverse())_.
 
@@ -425,7 +444,7 @@ class _HomePageState extends State<HomePage> {
 <br>
 
 - ### **OpacityTransition Widget:**
-  Show or hide a Widget with an opacity transition from a Boolean variable.
+  Show or hide a Widget with an **Fade Transition** from a Boolean variable.
 
 ```dart
     bool visible = true;
@@ -450,6 +469,40 @@ class _HomePageState extends State<HomePage> {
           child: opacity > 0.0 ? widget.child : null,
         );
       },
+    );
+```
+
+<br>
+
+- ### **SwipeTransition Widget:**
+  Show or hide a Widget with an **Slide Transition** from a Boolean variable.
+
+```dart
+    bool visible = true;
+
+    SwipeTransition(  //Helper
+      visible: visible,
+      child: Container(),
+      curve: Curves.ease, //OPTIONAL
+      duration: Duration(milliseconds: 400) //OPTIONAL
+    );
+
+
+    //RESULT
+    return ClipRRect(
+      child: BooleanTween(
+        key: tweenKey,
+        tween: Tween<Offset>(begin: direction, end: Offset.zero);,
+        curve: widget.curve,
+        animate: widget.visible,
+        duration: widget.duration,
+        builder: (value) {
+          return Transform.translate(
+            offset: value,
+            child: Container(key: key, child: widget.child),
+          );
+        },
+      ),
     );
 ```
 
