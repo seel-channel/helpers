@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -73,11 +75,55 @@ abstract class Misc {
   ///  () => callback(),
   ///);
   ///```
-  static void delayed(int durationInMiliseconds, void Function() callback) {
-    Future.delayed(
+  static Future<void> delayed(
+      int durationInMiliseconds, void Function() callback) async {
+    await Future.delayed(
       Duration(milliseconds: durationInMiliseconds),
       () => callback(),
     );
+  }
+
+  /// Create a timer that will execute an instruction after an amount of
+  /// milliseconds. The goodness and difference it has with the Misc.delayed() is
+  /// that has the ability to be canceled and thus the callback will not be executed.
+  ///
+  ///DO THAT:
+  ///```dart
+  ///return Timer(Duration(milliseconds: milliseconds), callback);
+  ///```
+  ///
+  static Timer timer(int milliseconds, void Function() callback) {
+    return Timer(Duration(milliseconds: milliseconds), callback);
+  }
+
+  /// Create a periodic timer that executes a callback every few milliseconds.
+  ///DO THAT:
+  ///```dart
+  ///return Timer.periodic(Duration(milliseconds: milliseconds), (_) => callback());
+  ///````
+  static Timer periodic(int milliseconds, void Function() callback) {
+    return Timer.periodic(
+        Duration(milliseconds: milliseconds), (_) => callback());
+  }
+
+  /// Allows you to pause instructions for a set time.
+  ///```dart
+  ///await Future.delayed(Duration(milliseconds: milliseconds), () {});
+  ///````
+  ///-
+  ///-
+  ///EXAMPLE:
+  ///
+  /// Once the state has changed, wait for the animation to finish,
+  /// which will last 400 milliseconds and then close the context
+  ///```dart
+  ///   setState(() => showWidget = false);
+  ///   await Misc.wait(400);
+  ///   Navigator.pop(context);
+  ///````
+  ///
+  static Future<void> wait(int milliseconds) async {
+    await Future.delayed(Duration(milliseconds: milliseconds), () {});
   }
 
   ///DO THAT:
@@ -309,19 +355,6 @@ abstract class GetColor {
   ///```
   static Color secondaryHeader(BuildContext context) =>
       Misc.theme(context).secondaryHeaderColor;
-
-  ///DO THAT:
-  ///```dart
-  ///Theme.of(context).textSelectionColor
-  ///```
-  static Color textSelection(BuildContext context) =>
-      Misc.theme(context).textSelectionColor;
-
-  ///DO THAT:
-  ///```dart
-  ///Theme.of(context).cursorColor
-  ///```
-  static Color cursor(BuildContext context) => Misc.theme(context).cursorColor;
 
   ///DO THAT:
   ///```dart

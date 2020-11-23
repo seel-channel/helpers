@@ -46,6 +46,8 @@ class TextDesigned extends StatelessWidget {
 }
 
 class RemoveScrollGlow extends StatelessWidget {
+  ///Eliminate the Splash Effect or Glow Effect when reaching
+  ///the limit of a PageView, ScrollView, ListView, etc.
   const RemoveScrollGlow({Key key, this.child}) : super(key: key);
   final Widget child;
   @override
@@ -61,6 +63,7 @@ class RemoveScrollGlow extends StatelessWidget {
 }
 
 class DismissKeyboard extends StatelessWidget {
+  ///Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
   const DismissKeyboard({Key key, this.child}) : super(key: key);
   final Widget child;
   @override
@@ -71,102 +74,6 @@ class DismissKeyboard extends StatelessWidget {
         if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
       },
       child: child,
-    );
-  }
-}
-
-class OpacityTransition extends StatefulWidget {
-  OpacityTransition({
-    Key key,
-    @required this.child,
-    @required this.visible,
-    Duration duration,
-    this.curve = Curves.linear,
-  })  : this.duration = duration ?? Duration(milliseconds: 200),
-        super(key: key);
-
-  final Widget child;
-  final bool visible;
-  final Duration duration;
-  final Curve curve;
-
-  @override
-  _OpacityTransitionState createState() => _OpacityTransitionState();
-}
-
-class _OpacityTransitionState extends State<OpacityTransition> {
-  @override
-  Widget build(BuildContext context) {
-    return BooleanTween(
-      curve: widget.curve,
-      animate: widget.visible,
-      duration: widget.duration,
-      tween: Tween<double>(begin: 0.0, end: 1.0),
-      builder: (opacity) {
-        return Opacity(
-          opacity: opacity,
-          child: opacity > 0.0 ? widget.child : null,
-        );
-      },
-    );
-  }
-}
-
-class BooleanTween extends StatefulWidget {
-  BooleanTween(
-      {Key key,
-      @required this.animate,
-      @required this.tween,
-      Duration duration,
-      @required this.builder,
-      this.curve = Curves.linear})
-      : this.duration = duration ?? Duration(milliseconds: 200),
-        super(key: key);
-
-  final bool animate;
-  final Duration duration;
-  final Tween<dynamic> tween;
-  final Widget Function(dynamic value) builder;
-  final Curve curve;
-
-  @override
-  _BooleanTweenState createState() => _BooleanTweenState();
-}
-
-class _BooleanTweenState extends State<BooleanTween>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<dynamic> animation;
-
-  @override
-  void initState() {
-    _controller = AnimationController(duration: widget.duration, vsync: this);
-    animation = widget.tween.animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
-    widget.animate ? _controller.forward() : _controller.reverse();
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(BooleanTween oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!oldWidget.animate && widget.animate)
-      _controller.forward();
-    else if (oldWidget.animate && !widget.animate) _controller.reverse();
-  }
-
-  @override
-  dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: animation,
-      builder: (_, __) => widget.builder(animation.value),
     );
   }
 }
