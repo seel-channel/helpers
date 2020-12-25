@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
@@ -10,8 +11,8 @@ class BooleanTween extends StatefulWidget {
       {Key key,
       @required this.animate,
       @required this.tween,
-      Duration duration,
       @required this.builder,
+      Duration duration,
       this.curve = Curves.linear})
       : this.duration = duration ?? Duration(milliseconds: 200),
         super(key: key);
@@ -88,8 +89,8 @@ class OpacityTransition extends StatefulWidget {
   /// It is a FadeTransition but this will be shown when receiving a Boolean value.
   OpacityTransition({
     Key key,
-    @required this.child,
     @required this.visible,
+    @required this.child,
     Duration duration,
     this.curve = Curves.linear,
   })  : this.duration = duration ?? Duration(milliseconds: 200),
@@ -215,6 +216,61 @@ class _SwipeTransitionState extends State<SwipeTransition> {
             child: Container(key: key, child: widget.child),
           );
         },
+      ),
+    );
+  }
+}
+
+class TurnTransition extends StatefulWidget {
+  /// It is a RotationTransition but this will be animate when receiving a Boolean value.
+  TurnTransition({
+    Key key,
+    @required this.turn,
+    @required this.child,
+    this.begin = 90,
+    this.end = -90,
+    this.curve = Curves.ease,
+    Duration duration,
+  })  : this.duration = duration ?? Duration(milliseconds: 200),
+        super(key: key);
+
+  ///**If** true, animate to end degrees, **else** animate to begin degrees.
+  final bool turn;
+
+  /// It is the curve that the SwipeTransition performs
+  final Curve curve;
+
+  /// It is the child that will be affected by the SwipeTransition
+  final Widget child;
+
+  /// Is the time it takes to make the transition.
+  final Duration duration;
+
+  ///BEGIN DEGREES (RANGE IS 0 - 359)
+  final double begin;
+
+  ///END DEGREES (RANGE IS 0 - 359)
+  final double end;
+
+  @override
+  _TurnTransitionState createState() => _TurnTransitionState();
+}
+
+class _TurnTransitionState extends State<TurnTransition> {
+  @override
+  Widget build(BuildContext context) {
+    final double degrees2radians = math.pi / 180.0;
+    return BooleanTween(
+      duration: widget.duration,
+      animate: widget.turn,
+      curve: widget.curve,
+      tween: Tween<double>(
+        begin: widget.begin * degrees2radians,
+        end: widget.end * degrees2radians,
+      ),
+      builder: (value) => Transform.rotate(
+        angle: value,
+        child: widget.child,
       ),
     );
   }
