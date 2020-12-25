@@ -42,9 +42,8 @@ abstract class Misc {
       return ifNull;
   }
 
-  ///RETURN:
   ///```dart
-  ///"Lorem ipsum dolor sit amet, consectetur
+  ///return "Lorem ipsum dolor sit amet, consectetur
   ///adipiscing elit, sed do eiusmod tempor incididunt
   ///ut labore et dolore magna aliqua."
   ///```
@@ -53,9 +52,8 @@ abstract class Misc {
         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
   }
 
-  ///RETURN:
   ///```dart
-  ///"Lorem ipsum dolor sit amet, consectetur
+  /// return "Lorem ipsum dolor sit amet, consectetur
   /// adipiscing elit, sed do eiusmod tempor incididunt
   /// ut labore et dolore magna aliqua. Ut enim ad minim
   /// veniam, quis nostrud exercitation ullamco laboris
@@ -167,63 +165,54 @@ abstract class Misc {
 }
 
 abstract class SystemOverlay {
-  ///RETURN:
   ///```dart
-  ///List()
+  ///return [];
   ///```
-  static List<SystemUiOverlay> none = List();
+  static List<SystemUiOverlay> none = [];
 
-  ///RETURN:
   ///```dart
-  ///[SystemUiOverlay.top]
+  ///return [SystemUiOverlay.top]
   ///```
   static List<SystemUiOverlay> top = [SystemUiOverlay.top];
 
-  ///RETURN:
   ///```dart
-  ///SystemUiOverlay.values
+  ///return SystemUiOverlay.values
   ///```
   static List<SystemUiOverlay> values = SystemUiOverlay.values;
 
-  ///RETURN:
   ///```dart
-  ///[SystemUiOverlay.bottom]
+  ///return [SystemUiOverlay.bottom]
   ///```
   static List<SystemUiOverlay> bottom = [SystemUiOverlay.bottom];
 }
 
 abstract class SystemOrientation {
-  ///RETURN:
   ///```dart
-  ///[DeviceOrientation.values]
+  ///return [DeviceOrientation.values]
   ///```
   static List<DeviceOrientation> values = DeviceOrientation.values;
 
-  ///RETURN:
   ///```dart
-  ///[DeviceOrientation.portraitUp]
+  ///return [DeviceOrientation.portraitUp]
   ///```
   static List<DeviceOrientation> portraitUp = [DeviceOrientation.portraitUp];
 
-  ///RETURN:
   ///```dart
-  ///[DeviceOrientation.portraitDown]
+  ///return [DeviceOrientation.portraitDown]
   ///```
   static List<DeviceOrientation> portraitDown = [
     DeviceOrientation.portraitDown
   ];
 
-  ///RETURN:
   ///```dart
-  ///[DeviceOrientation.landscapeLeft]
+  ///return [DeviceOrientation.landscapeLeft]
   ///```
   static List<DeviceOrientation> landscapeLeft = [
     DeviceOrientation.landscapeLeft
   ];
 
-  ///RETURN:
   ///```dart
-  ///[DeviceOrientation.landscapeRight]
+  ///return [DeviceOrientation.landscapeRight]
   ///```
   static List<DeviceOrientation> landscapeRight = [
     DeviceOrientation.landscapeRight
@@ -355,13 +344,6 @@ abstract class GetColor {
   ///```
   static Color secondaryHeader(BuildContext context) =>
       Misc.theme(context).secondaryHeaderColor;
-
-  ///DO THAT:
-  ///```dart
-  ///Theme.of(context).textSelectionColor
-  ///```
-  static Color textSelectionHandle(BuildContext context) =>
-      Misc.theme(context).textSelectionColor;
 
   ///DO THAT:
   ///```dart
