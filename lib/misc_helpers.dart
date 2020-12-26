@@ -166,11 +166,6 @@ abstract class Misc {
 
 abstract class SystemOverlay {
   ///```dart
-  ///return [];
-  ///```
-  static List<SystemUiOverlay> none = [];
-
-  ///```dart
   ///return [SystemUiOverlay.top]
   ///```
   static List<SystemUiOverlay> top = [SystemUiOverlay.top];

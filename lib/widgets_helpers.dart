@@ -5,9 +5,9 @@ class TextDesigned extends StatelessWidget {
   const TextDesigned(
     this.text, {
     Key key,
+    this.color,
     this.size = 16,
     this.bold = false,
-    this.color,
     this.italic = false,
     this.center = false,
     this.justify = false,
@@ -31,11 +31,8 @@ class TextDesigned extends StatelessWidget {
               ? TextAlign.center
               : TextAlign.start,
       style: TextStyle(
+        color: color,
         fontSize: size,
-        color: Misc.ifNull(
-          color,
-          Misc.ifNull(Misc.theme(context).primaryColor, Colors.black),
-        ),
         fontStyle: italic ? FontStyle.italic : FontStyle.normal,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         decoration: underline ? TextDecoration.underline : TextDecoration.none,
@@ -83,7 +80,7 @@ class DismissKeyboard extends StatelessWidget {
 class SizeBuilder extends StatefulWidget {
   ///```dart
   /////EXAMPLE:
-  ///SizeBuilder(builder: (width, height) {
+  /// SizeBuilder(builder: (width, height) {
   ///    Size layout = Size(width, height);
   ///    return Container(
   ///       width: width,
@@ -179,21 +176,24 @@ class SafeAreaColor extends StatelessWidget {
   ///    ),
   ///  );
   /// ```
-  const SafeAreaColor({
-    Key key,
-    this.child,
-    this.color = Colors.white,
-    this.height,
-  }) : super(key: key);
+  const SafeAreaColor(
+      {Key key,
+      this.child,
+      this.color = Colors.white,
+      this.height,
+      this.width = double.infinity})
+      : super(key: key);
 
   final Color color;
   final Widget child;
+  final double width;
   final double height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: color,
+      width: width,
       child: SafeArea(
         child: Container(
           height: height,
@@ -214,12 +214,11 @@ class AnimatedInteractiveViewer extends StatefulWidget {
     this.maxScale = 2.0,
     this.minScale = 0.8,
     Duration duration,
-    Curve curve,
+    this.curve = Curves.ease,
     this.onInteractionStart,
     this.onInteractionUpdate,
     this.onInteractionEnd,
   })  : this.duration = duration ?? Duration(milliseconds: 200),
-        this.curve = curve ?? Curves.ease,
         super(key: key);
 
   //The maximum allowed scale.
@@ -235,6 +234,8 @@ class AnimatedInteractiveViewer extends StatefulWidget {
   final Widget child;
 
   ///The length of time than the double-tap zoom
+  ///
+  ///Default: `Duration(milliseconds: 200)`
   final Duration duration;
 
   ///If you pass the TransformationController then can control the InteractiveViewer outside it
@@ -289,8 +290,7 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
   //Animate MATRIX4
   void _onDoubleTapHandle(TapDownDetails details) {
     if (_controller.value == Matrix4.identity()) {
-      final RenderBox box = context.findRenderObject();
-      final Offset position = box.globalToLocal(details.globalPosition);
+      final Offset position = details.localPosition;
       final Matrix4 matrix = Matrix4(
           //Column1
           widget.maxScale,
@@ -339,6 +339,8 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
       onInteractionUpdate: widget.onInteractionUpdate,
       onInteractionEnd: widget.onInteractionEnd,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onDoubleTap: () {},
         onDoubleTapDown: _onDoubleTapHandle,
         child: widget.child,
       ),
