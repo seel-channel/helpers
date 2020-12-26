@@ -4,6 +4,7 @@
 
 - [Scroll Navigation](https://pub.dev/packages/scroll_navigation)
 - [Video Viewer](https://pub.dev/packages/video_viewer)
+- [Video Editor](https://pub.dev/packages/video_editor)
 
 <br>
 
@@ -18,168 +19,32 @@
 
 ## Table of Contents
 
-- [Comparative](#comparative)
-  - [Default declaration](#default-declaration)
-  - [Helpers declaration](#helpers-declaration)
 - [Misc Classes](#misc-helpers)
   - [Misc](#misc-class)
   - [SystemOverlay](#systemoverlay-class)
   - [SystemOrientation](#systemorientation-class)
   - [GetColor](#getcolor-class)
-- [PushRoute Class](#pushroute-class)
-- [Widgets Helpers](#widgets-helpers)
-  - [TextDesigned](#textdesigned-widget)
-  - [RemoveScrollGlow](#removescrollglow-widget)
-  - [DismissKeyboard](#dismisskeyboard-widget)
-- [Transition Helpers](#transition-helpers)
-  - [BooleanTween](#booleantween-widget)
-  - [OpacityTransition](#opacitytransition-widget)
-  - [SwipeTransition Widget](#swipetransition-widget)
 - [Size Classes](#size-helpers)
   - [GetContext](#getcontext-class)
   - [GetKey](#getkey-class)
   - [Margin](#margin-class)
   - [EdgeRadius](#edgeradius-class)
-
-<br><br>
-
-# Comparative
-
-## **Default declaration:**
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    ));
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    return MaterialApp(
-      home: HomePage(),
-      theme: ThemeData(
-        accentColor: Color(0xFF0253f5),
-        primaryColor: Color(0xFF37393d),
-        scaffoldBackgroundColor: Colors.grey[100],
-      ),
-      title: 'HELPERS EXAMPLE',
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => null,
-        backgroundColor: Theme.of(context).accentColor,
-      ),
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (OverscrollIndicatorNotification overscroll) {
-          overscroll.disallowGlow();
-          return;
-        },
-        child: PageView.builder(
-          itemCount: 5,
-          itemBuilder: (context, key) {
-            return Center(
-              child: Text(
-                "HELLO ${key + 1}",
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-```
-
-<br>
-
-## **Helpers declaration:**
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:helpers/helpers.dart';
-
-void main() => runApp(App());
-
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    Misc.setSystemOrientation(SystemOrientation.portraitUp); //Helper
-    Misc.setSystemOverlayStyle( //Helper
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-    );
-    return MaterialApp(
-      home: HomePage(),
-      theme: ThemeData(
-        accentColor: Color(0xFF0253f5),
-        primaryColor: Color(0xFF37393d),
-        scaffoldBackgroundColor: Colors.grey[100],
-      ),
-      title: 'HELPERS EXAMPLE',
-      debugShowCheckedModeBanner: false,
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  bool visible = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GetColor.scaffoldBackground(context), //Helper
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: GetColor.accent(context), //Helper
-        onPressed: () => setState(() => visible = !visible),
-      ),
-      body: RemoveScrollGlow( //Helper
-        child: PageView.builder(
-          itemCount: 5,
-          itemBuilder: (context, key) {
-            return OpacityTransition( //Helper
-              visible: visible,
-              child: Center(
-                child: TextDesigned( //Helper
-                  "HELLO ${key + 1}",
-                  bold: true,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-```
+- [PushRoute Class](#pushroute-class)
+- [Widgets Helpers](#widgets-helpers)
+  - [TextDesigned](#textdesigned-widget)
+  - [RemoveScrollGlow](#removescrollglow-widget)
+  - [DismissKeyboard](#dismisskeyboard-widget)
+  - [SizeBuilder](#sizebuilder-widget)
+  - [TransparentBox](#transparentbox-widget)
+  - [ExpandedSpacer](#expandedspacer-widget)
+  - [ExpandedTap](#expandedtap-widget)
+  - [SafeAreaColor](#safeareacolor-widget)
+  - [AnimatedInteractiveViewer](#animatedinteractiveviewer-widget)
+- [Transition Helpers](#transition-helpers)
+  - [BooleanTween](#booleantween-widget)
+  - [OpacityTransition](#opacitytransition-widget)
+  - [SwipeTransition](#swipetransition-widget)
+  - [TurnTransition](#turntransition-widget)
 
 <br><br>
 
@@ -327,191 +192,6 @@ class _HomePageState extends State<HomePage> {
 
 <br>
 
-## Routes Helpers
-
-- ### **PushRoute Class:**
-  It is a simplification of the _Navigator.push()_ statement.
-  **TranparentPage** solved the bug of MaterialPageRoute with a black background
-
-```dart
-    Widget page;
-    BuildContext context;
-
-
-    PushRoute.page(context, page); //Helper
-    Navigator.push(context,
-      withTransition
-          ? MaterialPageRoute(builder: (_) => page)
-          : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
-
-
-    PushRoute.transparentPage(context, page) //Helper
-    Navigator.push(context,
-      TransparentRoute(builder: (_) => page, transitionMs: transitionMs))
-```
-
-<br>
-
----
-
-<br>
-
-## Widgets Helpers
-
-- ### **TextDesigned Widget:**
-  **IMPROVEMENT**: If you don't assign it a color, it will automatically select the _Theme.of(context).primaryColor_.
-
-```dart
-    TextDesigned(     //Helper
-      "Hello",
-      size: 20,
-      bold: true,
-      underline: true,
-      color: Colors.white,
-    );
-
-    Text(
-      "Hello",
-      style: TextStyle(
-        fontSize: 20,
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-        decoration: TextDecoration.underline,
-      ),
-    );
-
-```
-
-<br>
-
-- ### **RemoveScrollGlow Widget:**
-  Eliminate the Splash Effect or Glow Effect when reaching the limit of a PageView, ScrollView, ListView, etc.
-
-```dart
-    RemoveScrollGlow(child: PageView(...));
-
-    //RESULT
-    return NotificationListener<OverscrollIndicatorNotification>(
-      onNotification: (OverscrollIndicatorNotification overscroll) {
-        overscroll.disallowGlow();
-        return;
-      },
-      child: PageView(...),
-    );
-```
-
-<br>
-
-- ### **DismissKeyboard Widget:**
-  Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
-
-```dart
-    DismissKeyboard(child: Container());
-
-    //RESULT
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode focus = FocusScope.of(context);
-        if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
-      },
-      child: Container(),
-    );
-```
-
-<br>
-
----
-
-<br>
-
-## Transition Helpers
-
-- ### **BooleanTween Widget:**
-  It is an AnimatedBuilder. If it is **TRUE**, it will execute the Tween from _begin to end (controller.forward())_, if it is **FALSE** it will execute the Tween from _end to begin (controller.reverse())_.
-
-```dart
-    bool animate = true;
-
-    BooleanTween(
-      animate: animate,
-      tween: ColorTween(begin: Colors.blue, end: Colors.red),
-      builder: (dynamic color) {
-        return Container(color: color);
-      },
-    );
-```
-
-<br>
-
-- ### **OpacityTransition Widget:**
-  Show or hide a Widget with an **Fade Transition** from a Boolean variable.
-
-```dart
-    bool visible = true;
-
-    OpacityTransition(  //Helper
-      visible: visible,
-      child: Container(),
-      curve: Curves.linear, //OPTIONAL
-      duration: Duration(milliseconds: 200) //OPTIONAL
-    );
-
-
-    //RESULT
-    return BooleanTween(
-      curve: widget.curve,
-      animate: widget.visible,
-      duration: widget.duration,
-      tween: Tween<double>(begin: 0.0, end: 1.0),
-      builder: (opacity) {
-        return Opacity(
-          opacity: opacity,
-          child: opacity > 0.0 ? widget.child : null,
-        );
-      },
-    );
-```
-
-<br>
-
-- ### **SwipeTransition Widget:**
-  Show or hide a Widget with an **Slide Transition** from a Boolean variable.
-
-```dart
-    bool visible = true;
-
-    SwipeTransition(  //Helper
-      visible: visible,
-      child: Container(),
-      curve: Curves.ease, //OPTIONAL
-      duration: Duration(milliseconds: 400) //OPTIONAL
-    );
-
-
-    //RESULT
-    return ClipRRect(
-      child: BooleanTween(
-        key: tweenKey,
-        tween: Tween<Offset>(begin: direction, end: Offset.zero);,
-        curve: widget.curve,
-        animate: widget.visible,
-        duration: widget.duration,
-        builder: (value) {
-          return Transform.translate(
-            offset: value,
-            child: Container(key: key, child: widget.child),
-          );
-        },
-      ),
-    );
-```
-
-<br>
-
----
-
-<br>
-
 ## Size Helpers
 
 - ### **GetContext Class:**
@@ -644,4 +324,313 @@ class _HomePageState extends State<HomePage> {
       topRight: Radius.circular(topRight),
       bottomLeft: Radius.circular(bottomLeft),
       bottomRight: Radius.circular(bottomRight));
+```
+
+<br>
+
+---
+
+<br>
+
+## Routes Helpers
+
+- ### **PushRoute Class:**
+  It is a simplification of the _Navigator.push()_ statement.
+  **TranparentPage** solved the bug of MaterialPageRoute with a black background
+
+```dart
+    Widget page;
+    BuildContext context;
+
+    //EXAMPLE
+    PushRoute.page(context, page); //Helper
+    Navigator.push(context,
+      withTransition
+          ? MaterialPageRoute(builder: (_) => page)
+          : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
+
+    //EXAMPLE
+    PushRoute.transparentPage(context, page) //Helper
+    Navigator.push(context,
+      TransparentRoute(builder: (_) => page, transitionMs: transitionMs))
+```
+
+<br>
+
+---
+
+<br>
+
+## Widgets Helpers
+
+- ### **TextDesigned Widget:**
+  **IMPROVEMENT**: If you don't assign it a color, it will automatically select the _Theme.of(context).primaryColor_.
+
+```dart
+    //EXAMPLE
+    TextDesigned(
+      "Hello",
+      size: 20,
+      bold: true,
+      underline: true,
+      color: Colors.white,
+    );
+
+    //WIDGET RETURN THAT
+    Text(
+      "Hello",
+      style: TextStyle(
+        fontSize: 20,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        decoration: TextDecoration.underline,
+      ),
+    );
+
+```
+
+<br>
+
+- ### **RemoveScrollGlow Widget:**
+  Eliminate the Splash Effect or Glow Effect when reaching the limit of a PageView, ScrollView, ListView, etc.
+
+```dart
+    //EXAMPLE
+    RemoveScrollGlow(child: PageView(...));
+
+    //WIDGET RETURN THAT
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (OverscrollIndicatorNotification overscroll) {
+        overscroll.disallowGlow();
+        return;
+      },
+      child: PageView(...),
+    );
+```
+
+<br>
+
+- ### **DismissKeyboard Widget:**
+  Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
+
+```dart
+    //EXAMPLE
+    DismissKeyboard(child: Container());
+
+    //WIDGET RETURN THAT
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode focus = FocusScope.of(context);
+        if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
+      },
+      child: Container(),
+    );
+```
+
+- ### **SizeBuilder Widget:**
+  It works like the LayoutBuilder but only returns the _maxWidth_ and _maxHeight_
+
+```dart
+    //EXAMPLE
+    SizeBuilder(builder: (width, height) {
+      Size layout = Size(width, height);
+      return Container(
+        width: width,
+        height: height,
+        color: Colors.red,
+      );
+    });
+
+    //WIDGET RETURN THAT
+    return LayoutBuilder(builder: (_, constraints) {
+      return widget.builder(constraints.maxWidth, constraints.maxHeight);
+    });
+```
+
+- ### **TransparentBox Widget:**
+  It is normally used within a GestureDetector to detect the tap.
+
+```dart
+    //EXAMPLE
+    GestureDetector(
+      onTap: () => print("hello"),
+      child: TransparentBox(child: Text("Hello!"))
+    )
+
+    //WIDGET RETURN THAT
+    return Container(color: Colors.transparent);
+```
+
+- ### **ExpandedSpacer Widget:**
+  It is used as a spacer within a [Row] or [Column].
+
+```dart
+    //EXAMPLE
+    Column(children: [
+      Expanded(child: Icon(Icons.chevron_left)),
+      ExpandedSpacer(),
+      ExpandedSpacer(),
+      Expanded(child: Icon(Icons.chevron_right)),
+    ])
+
+    //WIDGET RETURN THAT
+    return Expanded(child: SizedBox());
+```
+
+- ### **ExpandedTap Widget:**
+  It is normally used for icons or texts within a [Row].
+
+```dart
+    //EXAMPLE
+    Row(children: [
+      ExpandedTap(
+        onTap:  () => print("CANCEL"),
+        child: TransparentBox(
+          child:Center(
+            child: TextDesigned(
+              "CANCEL",
+              color: Colors.white,
+              bold: true,
+            ),
+          ),
+        ),
+      ),
+      ExpandedTap(
+        onTap: () => print("CALL CALLBACK"),
+        child: TransparentBox(
+          child: Center(
+            child: TextDesigned(
+              "OK",
+              color: Colors.white,
+              bold: true,
+            ),
+          ),
+        ),
+      ),
+    ])
+
+    //WIDGET RETURN THAT
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: child,
+      ),
+    );
+```
+
+- ### **SafeAreaColor Widget:**
+  Used to create your own AppBar
+
+```dart
+    //EXAMPLE
+    Column(children: [
+      SafeAreaColor(
+        color: Colors.white,
+        height: 60,
+        child: Center(TextDesigned("APP BAR", bold: true)),
+      ),
+      ExpandedSpacer(),
+      Container(
+        height: 60,
+        color: Colors.white,
+        width: double.infinity,
+        child: Center(TextDesigned("BOTTOM NAV", bold: true)),
+      ),
+    ])
+
+    //WIDGET RETURN THAT
+    return Container(
+      color: color,
+      width: width,
+      child: SafeArea(
+        child: Container(
+          height: height,
+          child: child,
+        ),
+      ),
+    );
+```
+
+- ### **AnimatedInteractiveViewer Widget:**
+  It is an InteractiveViewer with enhanced double tap zooming.
+
+```dart
+    //EXAMPLE
+    AnimatedInteractiveViewer(
+      child: Image.network(
+          "https://avatars0.githubusercontent.com/u/65832922?s=460&u=67f908b168ae2934f9e832af2180825c6b2f0e37&v=4"),
+    ),
+```
+
+<br>
+
+---
+
+<br>
+
+## Transition Helpers
+
+- ### **BooleanTween Widget:**
+
+  It is an AnimatedBuilder. If it is **TRUE**, it will execute the Tween from _begin to end (controller.forward())_, if it is **FALSE** it will execute the Tween from _end to begin (controller.reverse())_
+
+  **IT IS THE CORE OF ALL TRANSITIONS**.
+
+```dart
+    //EXAMPLE
+    bool animate = true;
+
+    BooleanTween(
+      animate: animate,
+      tween: ColorTween(begin: Colors.blue, end: Colors.red),
+      builder: (dynamic color) {
+        return Container(color: color);
+      },
+    );
+```
+
+<br>
+
+- ### **OpacityTransition Widget:**
+  Show or hide a Widget with an **Fade Transition** from a Boolean variable.
+
+```dart
+    //EXAMPLE
+    bool visible = true;
+
+    OpacityTransition(
+      visible: visible,
+      child: Container(),
+    );
+```
+
+<br>
+
+- ### **SwipeTransition Widget:**
+  Show or hide a Widget with an **Slide Transition** from a Boolean variable.
+
+```dart
+    //EXAMPLE
+    bool visible = true;
+
+    SwipeTransition(
+      visible: visible,
+      direction: SwipeDirection.fromTop,
+      child: Center(child: TextDesigned("Swipe Transition", bold: true)),
+    ),
+```
+
+<br>
+
+- ### **TurnTransition Widget:**
+  Turn a Widget with a Boolean variable.
+
+```dart
+    //EXAMPLE
+    bool turn = true;
+
+    TurnTransition(
+      turn: turn,
+      child: Icon(Icons.chevron_left),
+    );
 ```
