@@ -48,6 +48,10 @@
 
 <br><br>
 
+![](./assets/readme/example.gif)
+
+<br><br>
+
 # Documentation
 
 ## Misc Helpers
