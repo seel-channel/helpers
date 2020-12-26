@@ -122,10 +122,6 @@
   **IMPROVEMENT**: By using the SystemOverlay you will not need to import _SystemChrome, DeviceOrientation_ from the flutter services.
 
 ```dart
-    //INSTRUCTIONS
-    SystemOverlay.none;   //Helper
-    List();
-
     SystemOverlay.values; //Helper
     SystemUiOverlay.values
 
