@@ -6,8 +6,8 @@ void main() => runApp(App());
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Misc.setSystemOrientation(SystemOrientation.portraitUp); //Helper
-    Misc.setSystemOverlayStyle( //Helper
+    Misc.setSystemOrientation(SystemOrientation.portraitUp);
+    Misc.setSystemOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
     );
@@ -35,27 +35,56 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: GetColor.scaffoldBackground(context), //Helper
       floatingActionButton: FloatingActionButton(
-        backgroundColor: GetColor.accent(context), //Helper
+        backgroundColor: GetColor.accent(context),
         onPressed: () => setState(() => visible = !visible),
+        child: TurnTransition(turn: visible, child: Icon(Icons.chevron_left)),
       ),
-      body: RemoveScrollGlow( //Helper
-        child: PageView.builder(
-          itemCount: 5,
-          itemBuilder: (context, key) {
-            return OpacityTransition( //Helper
-              visible: visible,
-              child: Center(
-                child: TextDesigned( //Helper
-                  "HELLO ${key + 1}",
-                  bold: true,
-                ),
-              ),
-            );
-          },
+      body: Column(children: [
+        SafeAreaColor(
+          color: Colors.white,
+          height: 60,
+          child: Center(
+            child: BooleanTween(
+              animate: visible,
+              tween: Tween<double>(begin: 16, end: 20),
+              builder: (value) {
+                return TextDesigned("HELPERS EXAMPLE", bold: true, size: value);
+              },
+            ),
+          ),
         ),
-      ),
+        Expanded(
+          child: SwipeTransition(
+            visible: visible,
+            direction: SwipeDirection.fromTop,
+            child: Center(child: TextDesigned("Swipe Transition", bold: true)),
+          ),
+        ),
+        Expanded(
+          child: OpacityTransition(
+            visible: visible,
+            child: Center(
+              child: AnimatedInteractiveViewer(
+                child: Image.network(
+                    "https://avatars0.githubusercontent.com/u/65832922?s=460&u=67f908b168ae2934f9e832af2180825c6b2f0e37&v=4"),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: SwipeTransition(
+            visible: visible,
+            direction: SwipeDirection.fromBottom,
+            child: Center(child: TextDesigned("Swipe Transition", bold: true)),
+          ),
+        ),
+        Container(
+          color: Colors.white,
+          height: 60,
+          width: double.infinity,
+        ),
+      ]),
     );
   }
 }
