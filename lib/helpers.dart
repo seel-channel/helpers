@@ -1,7 +1,9 @@
 library helpers;
 
-export './size_helpers.dart';
-export './misc_helpers.dart';
-export './routes_helpers.dart';
-export './widgets_helpers.dart';
-export './transition_helpers.dart';
+export 'helpers/text.dart';
+export 'helpers/size.dart';
+export 'helpers/misc.dart';
+export 'helpers/routes.dart';
+export 'helpers/context.dart';
+export 'helpers/widgets.dart';
+export 'helpers/transition.dart';
