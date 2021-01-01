@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: GetColor.accent(context),
+        backgroundColor: GetColor(context).accent,
         onPressed: () => setState(() => visible = !visible),
         child: TurnTransition(turn: visible, child: Icon(Icons.chevron_left)),
       ),

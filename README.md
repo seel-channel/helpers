@@ -23,15 +23,18 @@
   - [Misc](#misc-class)
   - [SystemOverlay](#systemoverlay-class)
   - [SystemOrientation](#systemorientation-class)
+- [Context Classes](#context-helpers)
+  - [GetMedia](#getmedia-class)
   - [GetColor](#getcolor-class)
 - [Size Classes](#size-helpers)
-  - [GetContext](#getcontext-class)
   - [GetKey](#getkey-class)
   - [Margin](#margin-class)
   - [EdgeRadius](#edgeradius-class)
 - [PushRoute Class](#pushroute-class)
-- [Widgets Helpers](#widgets-helpers)
+- [Text Helpers](#text-helpers)
   - [TextDesigned](#textdesigned-widget)
+  - [Themed Text](#themed-text-widgets)
+- [Widgets Helpers](#widgets-helpers)
   - [RemoveScrollGlow](#removescrollglow-widget)
   - [DismissKeyboard](#dismisskeyboard-widget)
   - [SizeBuilder](#sizebuilder-widget)
@@ -87,11 +90,6 @@
 
     await Misc.wait(milliseconds);      //Helper
     await Future.delayed(Duration(milliseconds: milliseconds), () {});
-
-
-    //IF SENTENCES
-    double height = Misc.ifNull(widget.height, 0.0);    //Helper
-    double height = widget.height != null ? widget.height : 0.0;
 
 
     //TEXT
@@ -163,25 +161,59 @@
 
 <br>
 
-- ### **GetColor Class:**
+---
 
-  It is a simplification of the _Theme.of(context)_ statement.
+<br>
+
+## Context Helpers
+
+- ### **GetMedia Class:**
+  It is a simplification of the _MediaQuery.of(context)_ statement.
 
 ```dart
-    GetColor.primary(context);      //Helper
-    Theme.of(context).primaryColor;
 
-    GetColor.primaryLight(context); //Helper
-    Theme.of(context).primaryColorLight;
+    final GetMedia media = GetMedia(context);
+    final MediaQueryData query = MediaQuery.of(context);
 
-    GetColor.accent(context);       //Helper
-    Theme.of(context).accentColor;
+    media.width;    //Helper
+    query.size.width;
 
-    GetColor.disabled(context);           //Helper
-    Theme.of(context).disabledColor;
+    media.height;   //Helper
+    query.size.height;
 
-    GetColor.scaffoldBackground(context); //Helper
-    Theme.of(context).scaffoldBackgroundColor;
+    media.padding;  //Helper
+    query.padding;
+
+    media.size;     //Helper
+    query.size;
+
+    ... //+10 MEDIAQUERIES
+```
+
+<br>
+
+- ### **GetColor Class:**
+
+It is a simplification of the _Theme.of(context)_ statement.
+
+```dart
+    final GetColor color = GetColor(context);
+    final ThemeData theme = Theme.of(context);
+
+    color.primary;      //Helper
+    theme.primaryColor;
+
+    color.primaryLight; //Helper
+    theme.primaryColorLight;
+
+    color.accent;       //Helper
+    theme.accentColor;
+
+    color.disabled;     //Helper
+    theme.disabledColor;
+
+    color.scaffold;     //Helper
+    theme.scaffoldBackgroundColor;
 
     ... //+20 COLORS
 ```
@@ -194,51 +226,27 @@
 
 ## Size Helpers
 
-- ### **GetContext Class:**
-  It is a simplification of the _MediaQuery.of(context)_ statement.
-
-```dart
-    BuildContext context;
-
-
-    GetContext.width(context);   //Helper
-    MediaQuery.of(context).size.width;
-
-    GetContext.height(context);  //Helper
-    MediaQuery.of(context).size.height;
-
-    GetContext.padding(context); //Helper
-    MediaQuery.of(context).padding;
-
-    GetContext.size(context);    //Helper
-    MediaQuery.of(context).size;
-
-    GetContext.data(context);    //Helper
-    MediaQuery.of(context);
-
-    ... //+10 MEDIAQUERIES
-```
-
-<br>
-
 - ### **GetKey Class:**
-  It is a simplification of the _key.currentContext_ statement.
+  It is a simplification of the _GlobalKey()_ statement.
 
 ```dart
-    GlobalKey key = GlobalKey();
+    final GlobalKey key = GlobalKey();
+    final GetKey data = GetKey(key);
 
-
-    GetKey.width(key);   //Helper
+    data.width;   //Helper
     key.currentContext.size.width;
 
-    GetKey.height(key);  //Helper
+    data.height;  //Helper
     key.currentContext.size.height;
 
-    GetKey.size(key);    //Helper
+    data.size;    //Helper
     key.currentContext.size;
 
-    GetKey.context(key); //Helper
+    data.context; //Helper
     key.currentContext;
+
+    data.state;   //Helper
+    key.currentState;
 ```
 
 <br>
@@ -342,14 +350,21 @@
     Widget page;
     BuildContext context;
 
-    //EXAMPLE
+
     PushRoute.page(context, page); //Helper
     Navigator.push(context,
-      withTransition
+      transition
           ? MaterialPageRoute(builder: (_) => page)
           : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
 
-    //EXAMPLE
+
+    PushRoute.replacement(context, page); //Helper
+    Navigator.pushReplacement(context,
+      transition
+          ? MaterialPageRoute(builder: (_) => page)
+          : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
+
+
     PushRoute.transparentPage(context, page) //Helper
     Navigator.push(context,
       TransparentRoute(builder: (_) => page, transitionMs: transitionMs))
@@ -361,13 +376,13 @@
 
 <br>
 
-## Widgets Helpers
+## Text Helpers
 
 - ### **TextDesigned Widget:**
-  **IMPROVEMENT**: If you don't assign it a color, it will automatically select the _Theme.of(context).primaryColor_.
+  It is a _Text Widget simplification_.
 
 ```dart
-    //EXAMPLE
+    //HELPER
     TextDesigned(
       "Hello",
       size: 20,
@@ -376,7 +391,7 @@
       color: Colors.white,
     );
 
-    //WIDGET RETURN THAT
+    //NORMAL WIDGET
     Text(
       "Hello",
       style: TextStyle(
@@ -390,6 +405,65 @@
 ```
 
 <br>
+
+- ### **Themed Text Widgets:**
+  Text Widgets with the TextTheme Style.
+
+```dart
+    //HEADLINES
+    Headline1("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline1);
+
+    Headline2("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline2);
+
+    Headline3("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline3);
+
+    Headline4("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline4);
+
+    Headline5("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline5);
+
+    Headline6("Hi");
+    Text("Hi", style: Misc.textTheme(context).headline6);
+
+
+    //SUBTITLES
+    Subtitle1("Hi");
+    Text("Hi", style: Misc.textTheme(context).subtitle1);
+
+    Subtitle2("Hi");
+    Text("Hi", style: Misc.textTheme(context).subtitle2);
+
+
+    //BODYTEXTS
+    BodyText1("Hi");
+    Text("Hi", style: Misc.textTheme(context).bodytext1);
+
+    BodyText2("Hi");
+    Text("Hi", style: Misc.textTheme(context).bodytext2);
+
+
+    //OTHER
+    Overlinetext("Hi");
+    Text("Hi", style: Misc.textTheme(context).overline);
+
+    CaptionText("Hi");
+    Text("Hi", style: Misc.textTheme(context).caption);
+
+    ButtonText("Hi");
+    Text("Hi", style: Misc.textTheme(context).button);
+```
+
+<br>
+
+---
+
+<br>
+
+## Widgets Helpers
 
 - ### **RemoveScrollGlow Widget:**
   Eliminate the Splash Effect or Glow Effect when reaching the limit of a PageView, ScrollView, ListView, etc.

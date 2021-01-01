@@ -1,3 +1,20 @@
+## [1.0.3]
+
+- Added:
+
+  - GetMedia
+  - Themed Text
+  - PushRoute.replacement()
+
+- Removed:
+
+  - GetContext
+
+- Updated:
+  - GetKey
+  - GetColor
+  - SwipeTransition
+
 ## [1.0.2]
 
 - Added:
