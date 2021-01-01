@@ -54,14 +54,16 @@ abstract class Misc {
   ///DO THAT:
   ///```dart
   ///Future.delayed(
-  ///  Duration(milliseconds: durationInMiliseconds),
+  ///  Duration(milliseconds: milliseconds),
   ///  () => callback(),
   ///);
   ///```
   static Future<void> delayed(
-      int durationInMiliseconds, void Function() callback) async {
+    int milliseconds,
+    void Function() callback,
+  ) async {
     await Future.delayed(
-      Duration(milliseconds: durationInMiliseconds),
+      Duration(milliseconds: milliseconds),
       () => callback(),
     );
   }
