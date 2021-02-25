@@ -2,19 +2,20 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
-class BooleanTween extends StatefulWidget {
+class BooleanTween<T> extends StatefulWidget {
   ///It is an AnimatedBuilder.
   ///If it is TRUE, it will execute the Tween from begin to end
   ///(controller.forward()),
   ///if it is FALSE it will execute the Tween from end to begin (controller.reverse())
-  BooleanTween(
-      {Key key,
-      @required this.animate,
-      @required this.tween,
-      @required this.builder,
-      Duration duration,
-      this.curve = Curves.linear})
-      : this.duration = duration ?? Duration(milliseconds: 200),
+  BooleanTween({
+    Key key,
+    @required this.animate,
+    @required this.tween,
+    @required this.builder,
+    this.child,
+    Duration duration,
+    this.curve = Curves.linear,
+  })  : this.duration = duration ?? Duration(milliseconds: 200),
         super(key: key);
 
   ///If it is TRUE, it will execute the Tween from begin to end.
@@ -26,22 +27,25 @@ class BooleanTween extends StatefulWidget {
   final Duration duration;
 
   ///Es el tipo de interpolación que llevará acabo
-  final Tween<dynamic> tween;
+  final Tween<T> tween;
 
-  /// Return a Widget and receive the interpolation value as a parameter.
-  final Widget Function(dynamic value) builder;
+  ///Called every time the animation changes value.
+  ///Return a Widget and receive the interpolation value as a parameter.
+  final ValueWidgetBuilder<T> builder;
+
+  final Widget child;
 
   /// It is the curve that will carry out the interpolation.
   final Curve curve;
 
   @override
-  BooleanTweenState createState() => BooleanTweenState();
+  _BooleanTweenState<T> createState() => _BooleanTweenState<T>();
 }
 
-class BooleanTweenState extends State<BooleanTween>
+class _BooleanTweenState<T> extends State<BooleanTween<T>>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
-  Animation<dynamic> _animation;
+  Animation<T> _animation;
 
   //Change the tween
   set changeTween(Tween<dynamic> tween) {
@@ -55,9 +59,10 @@ class BooleanTweenState extends State<BooleanTween>
   @override
   void initState() {
     _controller = AnimationController(duration: widget.duration, vsync: this);
-    _animation = widget.tween.animate(
-      CurvedAnimation(parent: _controller, curve: widget.curve),
-    );
+    _animation = widget.tween.animate(CurvedAnimation(
+      parent: _controller,
+      curve: widget.curve,
+    ));
     widget.animate ? _controller.forward() : _controller.reverse();
     super.initState();
   }
@@ -80,7 +85,12 @@ class BooleanTweenState extends State<BooleanTween>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      builder: (_, __) => widget.builder(_animation.value),
+      child: widget.child,
+      builder: (newContext, child) => widget.builder(
+        newContext,
+        _animation.value,
+        child,
+      ),
     );
   }
 }
@@ -116,17 +126,16 @@ class OpacityTransition extends StatefulWidget {
 class _OpacityTransitionState extends State<OpacityTransition> {
   @override
   Widget build(BuildContext context) {
-    return BooleanTween(
+    return BooleanTween<double>(
       curve: widget.curve,
       animate: widget.visible,
       duration: widget.duration,
       tween: Tween<double>(begin: 0.0, end: 1.0),
-      builder: (opacity) {
-        return Opacity(
-          opacity: opacity,
-          child: opacity > 0.0 ? widget.child : null,
-        );
-      },
+      child: widget.child,
+      builder: (_, opacity, child) => Opacity(
+        opacity: opacity,
+        child: opacity > 0.0 ? child : null,
+      ),
     );
   }
 }
@@ -170,7 +179,8 @@ class SwipeTransition extends StatefulWidget {
 }
 
 class _SwipeTransitionState extends State<SwipeTransition> {
-  final GlobalKey<BooleanTweenState> _tweenKey = GlobalKey<BooleanTweenState>();
+  final GlobalKey<_BooleanTweenState> _tweenKey =
+      GlobalKey<_BooleanTweenState>();
   final GlobalKey _containerKey = GlobalKey();
   SwipeDirection _swipeDirection;
   Offset _direction = Offset.zero;
@@ -190,47 +200,49 @@ class _SwipeTransitionState extends State<SwipeTransition> {
 
   void _changeData() {
     Misc.onLayoutRendered(() {
-      final Size size = GetKey(_containerKey).size;
-      if (_swipeDirection != widget.direction || _size != size)
-        setState(() {
-          _size = size;
-          _swipeDirection = widget.direction;
-          switch (widget.direction) {
-            case SwipeDirection.fromTop:
-              _direction = Offset(0.0, -_size.height);
-              break;
-            case SwipeDirection.fromLeft:
-              _direction = Offset(-_size.width, 0.0);
-              break;
-            case SwipeDirection.fromRight:
-              _direction = Offset(_size.width, 0.0);
-              break;
-            case SwipeDirection.fromBottom:
-              _direction = Offset(0.0, _size.height);
-              break;
-          }
-          _tweenKey.currentState.changeTween = _createTween();
-        });
+      if (_containerKey != null && _tweenKey != null) {
+        final Size size = GetKey(_containerKey).size;
+        if (_swipeDirection != widget.direction || _size != size)
+          setState(() {
+            _size = size;
+            _swipeDirection = widget.direction;
+            switch (widget.direction) {
+              case SwipeDirection.fromTop:
+                _direction = Offset(0.0, -_size.height);
+                break;
+              case SwipeDirection.fromLeft:
+                _direction = Offset(-_size.width, 0.0);
+                break;
+              case SwipeDirection.fromRight:
+                _direction = Offset(_size.width, 0.0);
+                break;
+              case SwipeDirection.fromBottom:
+                _direction = Offset(0.0, _size.height);
+                break;
+            }
+            _tweenKey.currentState.changeTween = _createTween();
+          });
+      }
     });
   }
 
-  Tween _createTween() => Tween<Offset>(begin: _direction, end: Offset.zero);
+  Tween<Offset> _createTween() =>
+      Tween<Offset>(begin: _direction, end: Offset.zero);
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      child: BooleanTween(
+      child: BooleanTween<Offset>(
         key: _tweenKey,
         tween: _createTween(),
         curve: widget.curve,
         animate: widget.visible,
         duration: widget.duration,
-        builder: (value) {
-          return Transform.translate(
-            offset: value,
-            child: Container(key: _containerKey, child: widget.child),
-          );
-        },
+        child: Container(key: _containerKey, child: widget.child),
+        builder: (_, value, child) => Transform.translate(
+          offset: value,
+          child: child,
+        ),
       ),
     );
   }
@@ -275,7 +287,7 @@ class _TurnTransitionState extends State<TurnTransition> {
   @override
   Widget build(BuildContext context) {
     final double degrees2radians = math.pi / 180.0;
-    return BooleanTween(
+    return BooleanTween<double>(
       duration: widget.duration,
       animate: widget.turn,
       curve: widget.curve,
@@ -283,9 +295,10 @@ class _TurnTransitionState extends State<TurnTransition> {
         begin: widget.begin * degrees2radians,
         end: widget.end * degrees2radians,
       ),
-      builder: (value) => Transform.rotate(
-        angle: value,
-        child: widget.child,
+      child: widget.child,
+      builder: (_, angle, child) => Transform.rotate(
+        angle: angle,
+        child: child,
       ),
     );
   }
