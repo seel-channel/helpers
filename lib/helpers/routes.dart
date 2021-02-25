@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class TransparentRoute extends PageRoute<void> {
+class TransparentRoute extends PageRoute<Future<void>> {
   TransparentRoute({
     @required this.builder,
     RouteSettings settings,
@@ -43,6 +43,12 @@ class TransparentRoute extends PageRoute<void> {
   }
 }
 
+Route _route(Widget page, bool withTransition) {
+  return withTransition
+      ? MaterialPageRoute(builder: (_) => page)
+      : PageRouteBuilder(pageBuilder: (_, __, ___) => page);
+}
+
 abstract class PushRoute {
   ///Do that:
   ///```dart
@@ -53,12 +59,13 @@ abstract class PushRoute {
   ///     : PageRouteBuilder(pageBuilder: (_, __, ___) => page),
   ///);
   /// ```
-  static void page(
+  static Future<void> page(
     BuildContext context,
     Widget page, {
     bool transition = true,
-  }) =>
-      Navigator.push(context, _route(page, transition));
+  }) async {
+    await Navigator.push(context, _route(page, transition));
+  }
 
   ///Do that:
   ///```dart
@@ -69,17 +76,71 @@ abstract class PushRoute {
   ///     : PageRouteBuilder(pageBuilder: (_, __, ___) => page),
   ///);
   /// ```
-  static void replacement(
+  static Future<void> replacement(
     BuildContext context,
     Widget page, {
     bool transition = true,
-  }) =>
-      Navigator.pushReplacement(context, _route(page, transition));
+  }) async {
+    await Navigator.pushReplacement(context, _route(page, transition));
+  }
 
-  static Route _route(Widget page, bool withTransition) {
-    return withTransition
-        ? MaterialPageRoute(builder: (_) => page)
-        : PageRouteBuilder(pageBuilder: (_, __, ___) => page);
+  ///Do that:
+  ///```dart
+  ///Navigator.named(context, routeName, arguments: arguments);
+  /// ```
+  static Future<void> named(
+    BuildContext context,
+    String routeName, {
+    Object arguments,
+  }) async {
+    await Navigator.pushNamed(context, routeName, arguments: arguments);
+  }
+
+  ///Do that:
+  ///```dart
+  ///Navigator.pageAndRemoveUntil(
+  ///  context,
+  ///  transition
+  ///     ? MaterialPageRoute(builder: (_) => page)
+  ///     : PageRouteBuilder(pageBuilder: (_, __, ___) => page),
+  ///  predicate
+  ///);
+  /// ```
+  static Future<void> pageAndRemove(
+    BuildContext context,
+    Widget page,
+    bool Function(Route<dynamic>) predicate, {
+    bool transition = true,
+  }) async {
+    await Navigator.pushAndRemoveUntil(
+      context,
+      _route(page, transition),
+      predicate,
+    );
+  }
+
+  ///Do that:
+  ///```dart
+  ///Navigator.pushNamedAndRemoveUntil(
+  ///  context,
+  ///  transition
+  ///     ? MaterialPageRoute(builder: (_) => page)
+  ///     : PageRouteBuilder(pageBuilder: (_, __, ___) => page),
+  ///  predicate
+  ///);
+  /// ```
+  static Future<void> namedAndRemove(
+    BuildContext context,
+    String newRouteName,
+    bool Function(Route<dynamic>) predicate, {
+    Object arguments,
+  }) async {
+    await Navigator.pushNamedAndRemoveUntil(
+      context,
+      newRouteName,
+      predicate,
+      arguments: arguments,
+    );
   }
 
   ///Do that:
@@ -89,12 +150,12 @@ abstract class PushRoute {
   ///  TransparentRoute(builder: (_) => page, duration: duration),
   ///);
   /// ```
-  static void transparentPage(
+  static Future<void> transparentPage(
     BuildContext context,
     Widget page, {
     Duration duration = Duration.zero,
-  }) {
-    Navigator.push(
+  }) async {
+    await Navigator.push(
       context,
       TransparentRoute(builder: (_) => page, duration: duration),
     );
