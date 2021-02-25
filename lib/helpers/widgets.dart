@@ -299,14 +299,14 @@ class SplashButton extends StatelessWidget {
     Key key,
     @required this.onTap,
     @required this.child,
-    this.color,
+    this.color = Colors.blue,
     EdgeInsetsGeometry padding,
     BorderRadius borderRadius,
     this.boxShadow,
     this.shape = BoxShape.rectangle,
   })  : this.padding = padding ?? const EdgeInsets.all(20.0),
-        this.borderRadius = borderRadius ??
-            const BorderRadius.vertical(top: Radius.circular(20.0)),
+        this.borderRadius =
+            borderRadius ?? const BorderRadius.all(Radius.circular(20.0)),
         super(key: key);
 
   final Color color;
@@ -321,7 +321,7 @@ class SplashButton extends StatelessWidget {
   ///
   ///Default:
   /// ```dart
-  ///const BorderRadius.vertical(top: Radius.circular(20.0))
+  ///const BorderRadius.all(Radius.circular(20.0))
   /// ```
   final BorderRadius borderRadius;
 

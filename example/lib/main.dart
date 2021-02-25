@@ -88,10 +88,7 @@ class _HomePageState extends State<HomePage> {
               context,
               SlidingPanelPage(
                 backgroundBlur: 4.4,
-                builder: (_, __) => SlidingPanelContainer(
-                  height: 600,
-                  child: SizedBox(),
-                ),
+                builder: (_, __) => SlidingPanelContainer(height: 600),
               ),
             );
           },

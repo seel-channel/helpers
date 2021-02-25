@@ -1,3 +1,20 @@
+## [1.0.4]
+
+- Added:
+
+  - ExpandedAlign
+  - SlidingPanelPage
+  - SlidingPanelContainer
+  - SplashTap
+  - OpaqueTap
+  - SplashButton
+  - TileDesigned
+
+- Updated:
+  - BooleanTween: Works with GenericTypes(T)
+  - Themed Texts: Added all Text argument
+  - PushRoute: Async functions 
+
 ## [1.0.3]
 
 - Added:

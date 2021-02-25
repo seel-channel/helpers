@@ -7,3 +7,4 @@ export 'helpers/routes.dart';
 export 'helpers/context.dart';
 export 'helpers/widgets.dart';
 export 'helpers/transition.dart';
+export 'helpers/sliding_panels.dart';
