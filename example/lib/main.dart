@@ -17,6 +17,9 @@ class App extends StatelessWidget {
         accentColor: Color(0xFF0253f5),
         primaryColor: Color(0xFF37393d),
         scaffoldBackgroundColor: Colors.grey[100],
+        textTheme: TextTheme(
+          bodyText1: TextStyle(color: Colors.white),
+        ),
       ),
       title: 'HELPERS EXAMPLE',
       debugShowCheckedModeBanner: false,
@@ -45,10 +48,10 @@ class _HomePageState extends State<HomePage> {
           color: Colors.white,
           height: 60,
           child: Center(
-            child: BooleanTween(
+            child: BooleanTween<double>(
               animate: visible,
               tween: Tween<double>(begin: 16, end: 20),
-              builder: (value) {
+              builder: (_, value, __) {
                 return TextDesigned("HELPERS EXAMPLE", bold: true, size: value);
               },
             ),
@@ -79,11 +82,22 @@ class _HomePageState extends State<HomePage> {
             child: Center(child: TextDesigned("Swipe Transition", bold: true)),
           ),
         ),
-        Container(
-          color: Colors.white,
-          height: 60,
-          width: double.infinity,
+        SplashButton(
+          onTap: () {
+            openSlidingPanelPage(
+              context,
+              SlidingPanelPage(
+                backgroundBlur: 4.4,
+                builder: (_, __) => SlidingPanelContainer(
+                  height: 600,
+                  child: SizedBox(),
+                ),
+              ),
+            );
+          },
+          child: BodyText1("Open Sliding Panel"),
         ),
+        SizedBox(height: 60),
       ]),
     );
   }

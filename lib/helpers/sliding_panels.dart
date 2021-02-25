@@ -26,19 +26,19 @@ class SlidingPanelContainer extends StatelessWidget {
   ///
   /// ```dart
   ///return ClipRRect(
-  /// borderRadius: borderRadius,
-  /// child: Container(
-  ///   height: height,
-  ///   width: double.infinity,
-  ///   child: child,
-  ///   padding: padding,
-  ///   decoration: BoxDecoration(boxShadow: boxShadow,color: color),
-  /// ),
+  ///   borderRadius: borderRadius,
+  ///   child: Container(
+  ///     height: height,
+  ///     width: double.infinity,
+  ///     child: child,
+  ///     padding: padding,
+  ///     decoration: BoxDecoration(boxShadow: boxShadow,color: color),
+  ///   ),
   ///);
   /// ```
   const SlidingPanelContainer({
     Key key,
-    @required this.child,
+    this.child,
     this.height,
     this.boxShadow,
     this.color = Colors.white,
@@ -111,11 +111,12 @@ class SlidingPanelPage extends StatefulWidget {
     Key key,
     @required this.builder,
     this.isDraggable = true,
-    this.chevronColor = Colors.white,
-    this.backgroundBlur = 0.0,
+    Color chevronColor,
     Color backgroundColor,
+    this.backgroundBlur = 0.0,
   })  : assert(builder != null),
         this.backgroundColor = backgroundColor ?? Colors.black.withOpacity(0.2),
+        this.chevronColor = chevronColor ?? Colors.white.withOpacity(0.4),
         super(key: key);
 
   ///Allows toggling of the draggability of the SlidingUpPanel.
@@ -123,9 +124,19 @@ class SlidingPanelPage extends StatefulWidget {
   final bool isDraggable;
 
   ///The color to paint the [chevron].
+  ///
+  ///Default:
+  ///```dart
+  ///Colors.white.withOpacity(0.4)
+  ///```
   final Color chevronColor;
 
   ///The color to paint behind the [builder].
+  ///
+  ///Default:
+  ///```dart
+  ///Colors.black.withOpacity(0.2)
+  ///```
   final Color backgroundColor;
 
   ///Creates an image filter that applies a Gaussian blur.
@@ -154,7 +165,6 @@ class _SlidingPanelPageState extends State<SlidingPanelPage> {
     return WillPopScope(
       onWillPop: closeSlide,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.transparent,
         body: Stack(children: [
           GestureDetector(
@@ -163,18 +173,12 @@ class _SlidingPanelPageState extends State<SlidingPanelPage> {
             child: ValueListenableBuilder(
               valueListenable: _opacity,
               builder: (_, double value, __) {
-                return Opacity(
-                  opacity: value,
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(
-                      sigmaX: widget.backgroundBlur * value,
-                      sigmaY: widget.backgroundBlur * value,
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: widget.backgroundColor,
-                    ),
+                final color = widget.backgroundColor;
+                final blur = widget.backgroundBlur * value;
+                return BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                  child: Container(
+                    color: color.withOpacity(color.opacity * value),
                   ),
                 );
               },
