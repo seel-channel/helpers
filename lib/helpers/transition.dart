@@ -1,6 +1,6 @@
 import 'dart:math' as math;
-import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
+import 'package:flutter/material.dart';
 
 class BooleanTween<T> extends StatefulWidget {
   ///It is an AnimatedBuilder.

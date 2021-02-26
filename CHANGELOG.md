@@ -1,3 +1,8 @@
+## [1.0.5+1]
+
+- Unable to locate the directory FIXED
+
+
 ## [1.0.5]
 
 - Added:
