@@ -19,35 +19,41 @@
 
 ## Table of Contents
 
+- [Build Classes](#build-helpers) 
+  - [BuildMedia](#buildmedia-class)
+  - [BuildColor](#buildcolor-class) **FAVORITE**
+  - [BuildKey](#buildkey-class)
+  - [BuildRoute](#buildroute-class) **FAVORITE**
 - [Misc Classes](#misc-helpers)
-  - [Misc](#misc-class)
+  - [Misc](#misc-class) **FAVORITE**
   - [SystemOverlay](#systemoverlay-class)
   - [SystemOrientation](#systemorientation-class)
-- [Context Classes](#context-helpers)
-  - [GetMedia](#getmedia-class)
-  - [GetColor](#getcolor-class)
 - [Size Classes](#size-helpers)
-  - [GetKey](#getkey-class)
   - [Margin](#margin-class)
   - [EdgeRadius](#edgeradius-class)
-- [PushRoute Class](#pushroute-class)
 - [Text Helpers](#text-helpers)
   - [TextDesigned](#textdesigned-widget)
-  - [Themed Text](#themed-text-widgets)
+  - [Themed Text](#themed-text-widgets) **FAVORITE**
+- [Transition Helpers](#transition-helpers)
+  - [BooleanTween](#booleantween-widget) **FAVORITE**
+  - [OpacityTransition](#opacitytransition-widget)
+  - [SwipeTransition](#swipetransition-widget)
+  - [TurnTransition](#turntransition-widget)
 - [Widgets Helpers](#widgets-helpers)
+  - [SlidingPanelPage](#slidingpanelpage-widget) **FAVORITE**
+  - [SlidingPanelContainer](#slidingpanelcontainer-widget)
   - [RemoveScrollGlow](#removescrollglow-widget)
   - [DismissKeyboard](#dismisskeyboard-widget)
   - [SizeBuilder](#sizebuilder-widget)
-  - [TransparentBox](#transparentbox-widget)
+  - [ExpandedAlign](#expandedalign-widget)
+  - [SplashTap](#splashtap-widget)
+  - [SplashButton](#splashbutton-widget)
+  - [TileDesinged](#tiledesigned-widget)
   - [ExpandedSpacer](#expandedspacer-widget)
   - [ExpandedTap](#expandedtap-widget)
   - [SafeAreaColor](#safeareacolor-widget)
   - [AnimatedInteractiveViewer](#animatedinteractiveviewer-widget)
-- [Transition Helpers](#transition-helpers)
-  - [BooleanTween](#booleantween-widget)
-  - [OpacityTransition](#opacitytransition-widget)
-  - [SwipeTransition](#swipetransition-widget)
-  - [TurnTransition](#turntransition-widget)
+
 
 <br><br>
 
@@ -165,91 +171,121 @@
 
 <br>
 
-## Context Helpers
+## Build Helpers
 
-- ### **GetMedia Class:**
+
+
+
+- ### **BuildMedia Class:**
   It is a simplification of the _MediaQuery.of(context)_ statement.
 
 ```dart
 
-    final GetMedia media = GetMedia(context);
+    final BuildMedia media = BuildMedia(context);
     final MediaQueryData query = MediaQuery.of(context);
 
     media.width;    //Helper
-    query.size.width;
-
+    //query.size.width;
     media.height;   //Helper
-    query.size.height;
-
+    //query.size.height;
     media.padding;  //Helper
-    query.padding;
-
+    //query.padding;
     media.size;     //Helper
-    query.size;
+    //query.size;
 
     ... //+10 MEDIAQUERIES
 ```
 
 <br>
 
-- ### **GetColor Class:**
+- ### **BuildColor Class:**
 
 It is a simplification of the _Theme.of(context)_ statement.
 
 ```dart
-    final GetColor color = GetColor(context);
+    final BuildColor color = BuildColor(context);
     final ThemeData theme = Theme.of(context);
 
     color.primary;      //Helper
-    theme.primaryColor;
-
+    //theme.primaryColor;
     color.primaryLight; //Helper
-    theme.primaryColorLight;
-
+    //theme.primaryColorLight;
     color.accent;       //Helper
-    theme.accentColor;
-
+    //theme.accentColor;
     color.disabled;     //Helper
-    theme.disabledColor;
-
+    //theme.disabledColor;
     color.scaffold;     //Helper
-    theme.scaffoldBackgroundColor;
+    //theme.scaffoldBackgroundColor;
 
     ... //+20 COLORS
 ```
 
 <br>
 
+- ### **BuildKey Class:**
+  It is a simplification of the _GlobalKey()_ statement.
+
+```dart
+    final GlobalKey key = GlobalKey();
+    final BuildKey data = BuildKey(key);
+
+    data.width;   //Helper
+    //key.currentContext.size.width;
+
+    data.height;  //Helper
+    //key.currentContext.size.height;
+
+    data.size;    //Helper
+    //key.currentContext.size;
+
+    data.context; //Helper
+    //key.currentContext;
+
+    data.state;   //Helper
+    //key.currentState;
+```
+
+<br>
+
+- ### **BuildRoute Class:**
+  It is a simplification of _BuildContext and Navigator_ statement.
+
+```dart
+    final BuildContext context;
+    final Widget page;
+
+    //REPLACE THAT: Navigator.push(context, page);
+    context.to(page); 
+    context.goBack();
+    context.toReplacement(page);
+    context.toAndRemoveUntil(page);
+    context.toTransparentPage(page);
+    context.toNamedAndRemoveUntil("/");
+    context.toReplacement("/");
+
+    //If you will use BuildRoute, then need navigatorKey
+    MaterialApp(
+      navigatorKey: BuildRoute.key, 
+      home: App(),
+    );
+
+    //REPLACE THAT: Navigator.push(context, page);
+    BuildRoute.to(page); 
+    BuildRoute.goBack(); 
+    BuildRoute.toReplacement(page); 
+    BuildRoute.toAndRemoveUntil(page); 
+    BuildRoute.toTransparentPage(page); //NOTE: Push a Route with transparent background
+    BuildRoute.toNamedAndRemoveUntil("/"); 
+    BuildRoute.toNamed("/"); 
+```
+
+<br>
 ---
 
 <br>
 
 ## Size Helpers
 
-- ### **GetKey Class:**
-  It is a simplification of the _GlobalKey()_ statement.
-
-```dart
-    final GlobalKey key = GlobalKey();
-    final GetKey data = GetKey(key);
-
-    data.width;   //Helper
-    key.currentContext.size.width;
-
-    data.height;  //Helper
-    key.currentContext.size.height;
-
-    data.size;    //Helper
-    key.currentContext.size;
-
-    data.context; //Helper
-    key.currentContext;
-
-    data.state;   //Helper
-    key.currentState;
-```
-
-<br>
 
 - ### **Margin Class:**
   It is a simplification of the _EdgeInsets_ statement.
@@ -259,38 +295,31 @@ It is a simplification of the _Theme.of(context)_ statement.
 
 
     Margin.zero; //Helper
-    EdgeInsets.zero;
-
+    //EdgeInsets.zero;
     Margin.all(amount); //Helper
-    EdgeInsets.all(amount);
+    //EdgeInsets.all(amount);
 
 
     //SYMETRIC
     Margin.vertical(amount);   //Helper
-    EdgeInsets.symmetric(vertical: amount);
-
+    //EdgeInsets.symmetric(vertical: amount);
     Margin.horizontal(amount); //Helper
-    EdgeInsets.symmetric(horizontal: amount);
-
+    //EdgeInsets.symmetric(horizontal: amount);
     Margin.symmetric(...);     //Helper
-    EdgeInsets.symmetric(...);
+    //EdgeInsets.symmetric(...);
 
 
     //ONLY
     Margin.top(amount);    //Helper
-    EdgeInsets.only(top: amount);
-
+    //EdgeInsets.only(top: amount);
     Margin.bottom(amount); //Helper
-    EdgeInsets.only(bottom: amount);
-
+    //EdgeInsets.only(bottom: amount);
     Margin.left(amount);   //Helper
-    EdgeInsets.only(left: amount);
-
+    //EdgeInsets.only(left: amount);
     Margin.right(amount);  //Helper
-    EdgeInsets.only(right: amount);
-
+    //EdgeInsets.only(right: amount);
     Margin.only(...);      //Helper
-    EdgeInsets.only(...);
+    //EdgeInsets.only(...);
 ```
 
 <br>
@@ -303,22 +332,20 @@ It is a simplification of the _Theme.of(context)_ statement.
 
 
     EdgeRadius.zero;        //Helper
-    BorderRadius.zero;
-
+    //BorderRadius.zero;
     EdgeRadius.all(amount); //Helper
-    BorderRadius.all(Radius.circular(amount));
+    //BorderRadius.all(Radius.circular(amount));
 
 
     //SYMETRIC
     EdgeRadius.vertical(top: amount, bottom: amount);   //Helper
-    BorderRadius.vertical(
-      top: Radius.circular(top),
-      bottom: Radius.circular(bottom));
-
+    //BorderRadius.vertical(
+    //  top: Radius.circular(top),
+    //  bottom: Radius.circular(bottom));
     EdgeRadius.horizontal(left: amount, right: amount); //Helper
-    BorderRadius.horizontal(
-      left: Radius.circular(left),
-      right: Radius.circular(right));
+    //BorderRadius.horizontal(
+    //  left: Radius.circular(left),
+    //  right: Radius.circular(right));
 
 
     //ONLY
@@ -327,52 +354,17 @@ It is a simplification of the _Theme.of(context)_ statement.
       topRight: amount,
       bottomLeft: amount,
       bottomRight: amount);
-    BorderRadius.only(
-      topLeft: Radius.circular(topLeft),
-      topRight: Radius.circular(topRight),
-      bottomLeft: Radius.circular(bottomLeft),
-      bottomRight: Radius.circular(bottomRight));
+    //BorderRadius.only(
+    //  topLeft: Radius.circular(topLeft),
+    //  topRight: Radius.circular(topRight),
+    //  bottomLeft: Radius.circular(bottomLeft),
+    //  bottomRight: Radius.circular(bottomRight));
 ```
 
 <br>
 
 ---
 
-<br>
-
-## Routes Helpers
-
-- ### **PushRoute Class:**
-  It is a simplification of the _Navigator.push()_ statement.
-  **TranparentPage** solved the bug of MaterialPageRoute with a black background
-
-```dart
-    Widget page;
-    BuildContext context;
-
-
-    PushRoute.page(context, page); //Helper
-    Navigator.push(context,
-      transition
-          ? MaterialPageRoute(builder: (_) => page)
-          : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
-
-
-    PushRoute.replacement(context, page); //Helper
-    Navigator.pushReplacement(context,
-      transition
-          ? MaterialPageRoute(builder: (_) => page)
-          : PageRouteBuilder(pageBuilder: (_, __, ___) => page))
-
-
-    PushRoute.transparentPage(context, page) //Helper
-    Navigator.push(context,
-      TransparentRoute(builder: (_) => page, transitionMs: transitionMs))
-```
-
-<br>
-
----
 
 <br>
 
@@ -390,8 +382,7 @@ It is a simplification of the _Theme.of(context)_ statement.
       underline: true,
       color: Colors.white,
     );
-
-    //NORMAL WIDGET
+    /*
     Text(
       "Hello",
       style: TextStyle(
@@ -400,8 +391,7 @@ It is a simplification of the _Theme.of(context)_ statement.
         fontWeight: FontWeight.bold,
         decoration: TextDecoration.underline,
       ),
-    );
-
+    );*/
 ```
 
 <br>
@@ -412,49 +402,40 @@ It is a simplification of the _Theme.of(context)_ statement.
 ```dart
     //HEADLINES
     Headline1("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline1);
-
+    //Text("Hi", style: Misc.textTheme(context).headline1);
     Headline2("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline2);
-
+    //Text("Hi", style: Misc.textTheme(context).headline2);
     Headline3("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline3);
-
+    //Text("Hi", style: Misc.textTheme(context).headline3);
     Headline4("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline4);
-
+    //Text("Hi", style: Misc.textTheme(context).headline4);
     Headline5("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline5);
-
+    //Text("Hi", style: Misc.textTheme(context).headline5);
     Headline6("Hi");
-    Text("Hi", style: Misc.textTheme(context).headline6);
+    //Text("Hi", style: Misc.textTheme(context).headline6);
 
 
     //SUBTITLES
     Subtitle1("Hi");
-    Text("Hi", style: Misc.textTheme(context).subtitle1);
-
+    //Text("Hi", style: Misc.textTheme(context).subtitle1);
     Subtitle2("Hi");
-    Text("Hi", style: Misc.textTheme(context).subtitle2);
+    //Text("Hi", style: Misc.textTheme(context).subtitle2);
 
 
     //BODYTEXTS
     BodyText1("Hi");
-    Text("Hi", style: Misc.textTheme(context).bodytext1);
-
+    //Text("Hi", style: Misc.textTheme(context).bodytext1);
     BodyText2("Hi");
-    Text("Hi", style: Misc.textTheme(context).bodytext2);
+    //Text("Hi", style: Misc.textTheme(context).bodytext2);
 
 
     //OTHER
-    Overlinetext("Hi");
-    Text("Hi", style: Misc.textTheme(context).overline);
-
-    CaptionText("Hi");
-    Text("Hi", style: Misc.textTheme(context).caption);
-
-    ButtonText("Hi");
-    Text("Hi", style: Misc.textTheme(context).button);
+    Overline//Text("Hi");
+    //Text("Hi", style: Misc.textTheme(context).overline);
+    Caption//Text("Hi");
+    //Text("Hi", style: Misc.textTheme(context).caption);
+    Button//Text("Hi");
+    //Text("Hi", style: Misc.textTheme(context).button);
 ```
 
 <br>
@@ -464,14 +445,43 @@ It is a simplification of the _Theme.of(context)_ statement.
 <br>
 
 ## Widgets Helpers
+- ### **SlidingPanelPage Widget:**
+  Create a SlidingPanel like a AlertDialog.
+  This widget is using the [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
+
+```dart
+    //EXAMPLE
+    openSlidingPanelPage(
+      context,
+      SlidingPanelPage(builder: (_, __) => SlidingPanelContainer(height: 600)),
+    );
+```
+
+<br>
+
+- ### **SlidingPanelContainer Widget:**
+  Useful for entering content to the [SlidingPanelPage](#slidingpanelpage-widget) [builder]
+
+```dart
+    //WIDGET RETURN THAT
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: Container(
+        height: height,
+        width: double.infinity,
+        child: child,
+        padding: padding,
+        decoration: BoxDecoration(boxShadow: boxShadow, color: color),
+      ),
+    );
+```
+
+<br>
 
 - ### **RemoveScrollGlow Widget:**
   Eliminate the Splash Effect or Glow Effect when reaching the limit of a PageView, ScrollView, ListView, etc.
 
 ```dart
-    //EXAMPLE
-    RemoveScrollGlow(child: PageView(...));
-
     //WIDGET RETURN THAT
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
@@ -488,18 +498,17 @@ It is a simplification of the _Theme.of(context)_ statement.
   Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
 
 ```dart
-    //EXAMPLE
-    DismissKeyboard(child: Container());
-
     //WIDGET RETURN THAT
     return GestureDetector(
       onTap: () {
         FocusScopeNode focus = FocusScope.of(context);
         if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
       },
-      child: Container(),
+      child: child,
     );
 ```
+
+<br>
 
 - ### **SizeBuilder Widget:**
   It works like the LayoutBuilder but only returns the _maxWidth_ and _maxHeight_
@@ -507,7 +516,6 @@ It is a simplification of the _Theme.of(context)_ statement.
 ```dart
     //EXAMPLE
     SizeBuilder(builder: (width, height) {
-      Size layout = Size(width, height);
       return Container(
         width: width,
         height: height,
@@ -515,25 +523,17 @@ It is a simplification of the _Theme.of(context)_ statement.
       );
     });
 
-    //WIDGET RETURN THAT
-    return LayoutBuilder(builder: (_, constraints) {
-      return widget.builder(constraints.maxWidth, constraints.maxHeight);
-    });
+    /*WIDGET RETURN THAT
+    return LayoutBuilder(builder: (context, constraints) {
+      return Container(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        color: Colors.red,
+      );
+    });*/
 ```
 
-- ### **TransparentBox Widget:**
-  It is normally used within a GestureDetector to detect the tap.
-
-```dart
-    //EXAMPLE
-    GestureDetector(
-      onTap: () => print("hello"),
-      child: TransparentBox(child: Text("Hello!"))
-    )
-
-    //WIDGET RETURN THAT
-    return Container(color: Colors.transparent);
-```
+<br>
 
 - ### **ExpandedSpacer Widget:**
   It is used as a spacer within a [Row] or [Column].
@@ -548,10 +548,12 @@ It is a simplification of the _Theme.of(context)_ statement.
     ])
 
     //WIDGET RETURN THAT
-    return Expanded(child: SizedBox());
+    //return Expanded(child: SizedBox());
 ```
 
-- ### **ExpandedTap Widget:**
+<br>
+
+- ### **ExpandedAlign Widget:**
   It is normally used for icons or texts within a [Row].
 
 ```dart
@@ -559,38 +561,140 @@ It is a simplification of the _Theme.of(context)_ statement.
     Row(children: [
       ExpandedTap(
         onTap:  () => print("CANCEL"),
-        child: TransparentBox(
-          child:Center(
-            child: TextDesigned(
-              "CANCEL",
-              color: Colors.white,
-              bold: true,
-            ),
+        child: Center(
+          child: TextDesigned(
+            "CANCEL",
+            color: Colors.white,
+            bold: true,
           ),
         ),
       ),
       ExpandedTap(
-        onTap: () => print("CALL CALLBACK"),
-        child: TransparentBox(
-          child: Center(
-            child: TextDesigned(
-              "OK",
-              color: Colors.white,
-              bold: true,
-            ),
+        onTap: () => print("OK"),
+        child: Center(
+          child: TextDesigned(
+            "OK",
+            color: Colors.white,
+            bold: true,
           ),
         ),
       ),
     ])
 
-    //WIDGET RETURN THAT
+    /*WIDGET RETURN THAT
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
         child: child,
       ),
+    );*/
+```
+
+<br>
+
+- ### **ExpandedAlign Widget:**
+  It´s an [Align] wrapped inside an [Expanded].
+
+```dart
+    //EXAMPLE
+    Row(children: [
+      ExpandedAlign(
+        alignment: Alignment.centerLeft,
+        child: TextDesigned(
+          "CANCEL",
+          color: Colors.white,
+          bold: true,
+        ),
+      ),
+      ExpandedAlign(
+        alignment: Alignment.centerRight,
+        child: TextDesigned(
+          "CANCEL",
+          color: Colors.white,
+          bold: true,
+        ),
+      ),
+    ])
+
+    /*WIDGET RETURN THAT
+    return Expanded(
+      child: Align(
+        alignment: alignment, 
+        child: child,
+      ),
+    );*/
+```
+
+<br>
+
+- ### **SplashTap Widget:**
+
+```dart
+    //WIDGET RETURN THAT
+    return Material(
+      type: MaterialType.transparency,
+      child: Ink(
+        decoration: BoxDecoration(color: color, shape: shape),
+        child: InkWell(
+          child: child,
+          onTap: onTap,
+          customBorder: shape == BoxShape.circle ? CircleBorder() : null,
+        ),
+      ),
     );
 ```
+<br>
+
+- ### **SplashButton Widget:**
+
+```dart
+    //WIDGET RETURN THAT
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        shape: shape,
+        borderRadius: shape != BoxShape.circle ? borderRadius : null,
+        boxShadow: boxShadow,
+      ),
+      child: ClipRRect(
+        borderRadius: borderRadius,
+        child: SplashTap(
+          onTap: onTap,
+          color: color,
+          shape: shape,
+          child: Padding(
+            padding: padding,
+            child: child,
+          ),
+        ),
+      ),
+    );
+```
+
+<br>
+
+- ### **TileDesigned Widget:**
+
+```dart
+    //WIDGET RETURN THAT
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: SplashTap(
+        onTap: onTap,
+        color: background,
+        child: Container(
+          padding: padding,
+          child: Row(children: [
+            if (prefix != null) prefix,
+            if (child != null) child,
+            if (suffix != null) suffix
+          ]),
+        ),
+      ),
+    );
+```
+
+<br>
 
 - ### **SafeAreaColor Widget:**
   Used to create your own AppBar
@@ -612,7 +716,7 @@ It is a simplification of the _Theme.of(context)_ statement.
       ),
     ])
 
-    //WIDGET RETURN THAT
+    /*WIDGET RETURN THAT
     return Container(
       color: color,
       width: width,
@@ -622,7 +726,7 @@ It is a simplification of the _Theme.of(context)_ statement.
           child: child,
         ),
       ),
-    );
+    );*/
 ```
 
 - ### **AnimatedInteractiveViewer Widget:**

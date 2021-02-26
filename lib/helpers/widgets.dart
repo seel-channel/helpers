@@ -114,20 +114,6 @@ class _SizeBuilderState extends State<SizeBuilder> {
   }
 }
 
-class TransparentBox extends StatelessWidget {
-  ///```dart
-  ///return Container(color: Colors.transparent)
-  ///```
-  const TransparentBox({Key key, this.child}) : super(key: key);
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(color: Colors.transparent, child: child);
-  }
-}
-
 //--------//
 //EXPANDED//
 //--------//

@@ -12,6 +12,7 @@ class App extends StatelessWidget {
       statusBarIconBrightness: Brightness.dark,
     );
     return MaterialApp(
+      navigatorKey: BuildRoute.key,
       home: HomePage(),
       theme: ThemeData(
         accentColor: Color(0xFF0253f5),
@@ -19,6 +20,11 @@ class App extends StatelessWidget {
         scaffoldBackgroundColor: Colors.grey[100],
         textTheme: TextTheme(
           bodyText1: TextStyle(color: Colors.white),
+          headline4: TextStyle(
+            color: Colors.black,
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       title: 'HELPERS EXAMPLE',
@@ -39,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: GetColor(context).accent,
+        backgroundColor: BuildColor(context).accent,
         onPressed: () => setState(() => visible = !visible),
         child: TurnTransition(turn: visible, child: Icon(Icons.chevron_left)),
       ),
@@ -88,7 +94,30 @@ class _HomePageState extends State<HomePage> {
               context,
               SlidingPanelPage(
                 backgroundBlur: 4.4,
-                builder: (_, __) => SlidingPanelContainer(height: 600),
+                builder: (newContext, __) => SlidingPanelContainer(
+                  height: 600,
+                  padding: Margin.all(100),
+                  child: Column(children: [
+                    SplashTap(
+                      onTap: () {
+                        //Need on MaterialApp the navigationKey
+                        BuildRoute.toTransparentPage(Center(
+                          child: Headline4("GG"),
+                        ));
+                      },
+                      child: Text("Using BuildRoute"),
+                    ),
+                    ExpandedSpacer(),
+                    SplashTap(
+                      onTap: () {
+                        newContext.toTransparentPage(Center(
+                          child: Headline4("GG"),
+                        ));
+                      },
+                      child: Text("Using BuildContext"),
+                    ),
+                  ]),
+                ),
               ),
             );
           },

@@ -1,47 +1,5 @@
 import 'package:flutter/material.dart';
 
-@optionalTypeArgs
-class GetKey<T extends State<StatefulWidget>> {
-  final GlobalKey key;
-  GetKey(this.key) : assert(key != null);
-
-  ///Do that:
-  ///```dart
-  ///key.currentContext
-  ///```
-  BuildContext get context => key.currentContext;
-
-  ///Do that:
-  ///```dart
-  ///key.currentContext.size.height
-  ///```
-  double get height => key.currentContext.size.height;
-
-  ///Do that:
-  ///```dart
-  ///key.currentContext.size.width
-  ///```
-  double get width => key.currentContext.size.width;
-
-  ///Do that:
-  ///```dart
-  ///key.currentContext.size
-  ///```
-  Size get size => key.currentContext.size;
-
-  ///Do that:
-  ///```dart
-  ///key.currentContext.widget
-  ///```
-  Widget get widget => key.currentContext.widget;
-
-  ///Do that:
-  ///```dart
-  ///key.currentState
-  ///```
-  T get state => key.currentState;
-}
-
 //PADDINGS - MARGINS
 class Margin {
   ///Do that:

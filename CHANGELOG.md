@@ -1,3 +1,20 @@
+## [1.0.5]
+
+- Added:
+
+  - BuildKey
+  - BuildColor
+  - BuildMedia
+  - BuildRoute
+  - BuildContext extension for Navigation replace
+
+- Removed:
+  - GetKey
+  - GetColor
+  - GetMedia
+  - PushRoute
+
+
 ## [1.0.4]
 
 - Added:

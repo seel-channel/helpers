@@ -201,7 +201,7 @@ class _SwipeTransitionState extends State<SwipeTransition> {
   void _changeData() {
     Misc.onLayoutRendered(() {
       if (_containerKey != null && _tweenKey != null) {
-        final Size size = GetKey(_containerKey).size;
+        final Size size = BuildKey(_containerKey).size;
         if (_swipeDirection != widget.direction || _size != size)
           setState(() {
             _size = size;
