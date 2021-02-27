@@ -45,7 +45,7 @@ class TextDesigned extends StatelessWidget {
 class Headline1 extends StatelessWidget {
   ///`Text Widget` with the **headline1** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline1);
+  ///return Text(text, style: context.textTheme.headline1);
   ///```
   const Headline1(
     this.text, {
@@ -168,14 +168,14 @@ class Headline1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline1.merge(style));
+        style: context.textTheme.headline1.merge(style));
   }
 }
 
 class Headline2 extends StatelessWidget {
   ///`Text Widget` with the **headline2** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline2);
+  ///return Text(text, style: context.textTheme.headline2);
   ///```
   const Headline2(this.text,
       {Key key,
@@ -296,14 +296,14 @@ class Headline2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline2.merge(style));
+        style: context.textTheme.headline2.merge(style));
   }
 }
 
 class Headline3 extends StatelessWidget {
   ///`Text Widget` with the **headline3** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline3);
+  ///return Text(text, style: context.textTheme.headline3);
   ///```
   const Headline3(this.text,
       {Key key,
@@ -424,14 +424,14 @@ class Headline3 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline3.merge(style));
+        style: context.textTheme.headline3.merge(style));
   }
 }
 
 class Headline4 extends StatelessWidget {
   ///`Text Widget` with the **headline4** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline4);
+  ///return Text(text, style: context.textTheme.headline4);
   ///```
   const Headline4(this.text,
       {Key key,
@@ -552,14 +552,14 @@ class Headline4 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline4.merge(style));
+        style: context.textTheme.headline4.merge(style));
   }
 }
 
 class Headline5 extends StatelessWidget {
   ///`Text Widget` with the **headline5** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline5);
+  ///return Text(text, style: context.textTheme.headline5);
   ///```
   const Headline5(this.text,
       {Key key,
@@ -680,14 +680,14 @@ class Headline5 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline5.merge(style));
+        style: context.textTheme.headline5.merge(style));
   }
 }
 
 class Headline6 extends StatelessWidget {
   ///`Text Widget` with the **headline6** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).headline6);
+  ///return Text(text, style: context.textTheme.headline6);
   ///```
   const Headline6(this.text,
       {Key key,
@@ -808,14 +808,14 @@ class Headline6 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).headline6.merge(style));
+        style: context.textTheme.headline6.merge(style));
   }
 }
 
 class Subtitle1 extends StatelessWidget {
   ///`Text Widget` with the **subtitle1** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).subtitle1);
+  ///return Text(text, style: context.textTheme.subtitle1);
   ///```
   const Subtitle1(this.text,
       {Key key,
@@ -936,14 +936,14 @@ class Subtitle1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).subtitle1.merge(style));
+        style: context.textTheme.subtitle1.merge(style));
   }
 }
 
 class Subtitle2 extends StatelessWidget {
   ///`Text Widget` with the **subtitle2** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).subtitle2);
+  ///return Text(text, style: context.textTheme.subtitle2);
   ///```
   const Subtitle2(this.text,
       {Key key,
@@ -1064,14 +1064,14 @@ class Subtitle2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).subtitle2.merge(style));
+        style: context.textTheme.subtitle2.merge(style));
   }
 }
 
 class BodyText1 extends StatelessWidget {
   ///`Text Widget` with the **bodyText1** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).bodyText1);
+  ///return Text(text, style: context.textTheme.bodyText1);
   ///```
   const BodyText1(this.text,
       {Key key,
@@ -1192,14 +1192,14 @@ class BodyText1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).bodyText1.merge(style));
+        style: context.textTheme.bodyText1.merge(style));
   }
 }
 
 class BodyText2 extends StatelessWidget {
   ///`Text Widget` with the **bodyText2** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).bodyText2);
+  ///return Text(text, style: context.textTheme.bodyText2);
   ///```
   const BodyText2(this.text,
       {Key key,
@@ -1320,14 +1320,14 @@ class BodyText2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).bodyText2.merge(style));
+        style: context.textTheme.bodyText2.merge(style));
   }
 }
 
 class CaptionText extends StatelessWidget {
   ///`Text Widget` with the **caption** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).caption);
+  ///return Text(text, style: context.textTheme.caption);
   ///```
   const CaptionText(this.text,
       {Key key,
@@ -1448,14 +1448,14 @@ class CaptionText extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).caption.merge(style));
+        style: context.textTheme.caption.merge(style));
   }
 }
 
 class ButtonText extends StatelessWidget {
   ///`Text Widget` with the **button** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).button);
+  ///return Text(text, style: context.textTheme.button);
   ///```
   const ButtonText(this.text,
       {Key key,
@@ -1576,14 +1576,14 @@ class ButtonText extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: Misc.textTheme(context).button.merge(style));
+        style: context.textTheme.button.merge(style));
   }
 }
 
 class OverlineText extends StatelessWidget {
   ///`Text Widget` with the **overline** theme style.
   ///```dart
-  ///return Text(text, style: Misc.textTheme(context).overline);
+  ///return Text(text, style: context.textTheme.overline);
   ///```
   const OverlineText(
     this.text, {
@@ -1706,7 +1706,7 @@ class OverlineText extends StatelessWidget {
       strutStyle: strutStyle,
       textWidthBasis: textWidthBasis,
       semanticsLabel: semanticsLabel,
-      style: Misc.textTheme(context).overline.merge(style),
+      style: context.textTheme.overline.merge(style),
     );
   }
 }

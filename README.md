@@ -19,7 +19,7 @@
 
 ## Table of Contents
 
-- [BuildContext Extension](#buildcontext-extension) **FAVORITE**
+- [BuildContext Extension](#buildcontext-extension) **FAVORITE Plus**
 - [Build Classes](#build-helpers) 
   - [BuildMedia](#buildmedia-class)
   - [BuildColor](#buildcolor-class) 
@@ -80,11 +80,39 @@
     }
 
 
+    context.theme //DOES THIS: Theme.of(context)
+    context.textTheme //DOES THIS: Theme.of(context).textTheme
+
     context.goBack(); //DOES THIS: Navigator.pop(context);
     context.to(page); //DOES THIS: Navigator.push(context, MaterialPageRoute(builder: (_) => page));
     ... //+5 Navigator Locations
 
 ```
+<!-- 
+<br>
+
+### **GlobalKey Extension**
+  It is a simplification of _GlobalKey_.
+
+```dart
+
+  key.widget
+  //key.currentWidget
+  key.state
+  //key.currentState
+  key.context
+  //key.currentContext
+
+  key.size
+  //key.currentContext.size
+  key.width
+  //key.currentContext.size.width
+  key.height
+  //key.currentContext.size.height
+
+```
+
+-->
 
 <br><br>
 
@@ -746,9 +774,7 @@ It is a simplification of the _Theme.of(context)_ statement.
     BooleanTween(
       animate: animate,
       tween: ColorTween(begin: Colors.blue, end: Colors.red),
-      builder: (dynamic color) {
-        return Container(color: color);
-      },
+      builder: (_, Color color, __) => Container(color: color),
     );
 ```
 

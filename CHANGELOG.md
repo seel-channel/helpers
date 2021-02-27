@@ -1,3 +1,8 @@
+## [1.0.7]
+
+- Updated:
+  - BuildContext extension: Add context.theme and context.textTheme
+
 ## [1.0.6]
 
 - Added:

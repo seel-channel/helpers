@@ -20,6 +20,18 @@ extension BuildContextHelperExtension on BuildContext {
   ///```
   BuildMedia get media => BuildMedia(this);
 
+  ///DO THAT:
+  ///```dart
+  ///Theme.of(context);
+  ///```
+  ThemeData get theme => Theme.of(this);
+
+  ///DO THAT:
+  ///```dart
+  ///Theme.of(context).textTheme;
+  ///```
+  TextTheme get textTheme => Theme.of(this).textTheme;
+
   ///Do that:
   ///```dart
   ///return context.size.width

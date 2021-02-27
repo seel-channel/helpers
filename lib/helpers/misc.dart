@@ -11,22 +11,6 @@ abstract class Misc {
     WidgetsBinding.instance.addPostFrameCallback((d) => callback());
   }
 
-  ///DO THAT:
-  ///```dart
-  ///Theme.of(context);
-  ///```
-  static ThemeData theme(BuildContext context) {
-    return Theme.of(context);
-  }
-
-  ///DO THAT:
-  ///```dart
-  ///Theme.of(context).textTheme;
-  ///```
-  static TextTheme textTheme(BuildContext context) {
-    return Theme.of(context).textTheme;
-  }
-
   ///```dart
   ///return "Lorem ipsum dolor sit amet, consectetur
   ///adipiscing elit, sed do eiusmod tempor incididunt
