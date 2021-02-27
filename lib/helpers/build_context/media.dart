@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 
 class BuildMedia {
-  BuildMedia(this.context) : assert(context != null);
-  final BuildContext context;
+  /// It is a simplification of the **_MediaQuery.of(_context)_** statement.
+  BuildMedia(BuildContext context)
+      : assert(context != null),
+        this._context = context;
+
+  final BuildContext _context;
 
   ///```dart
   ///return MediaQuery.of(context)
   ///```
-  MediaQueryData get data => MediaQuery.of(context);
+  MediaQueryData get data => MediaQuery.of(_context);
 
   ///```dart
   ///return MediaQuery.of(context).size
   ///```
-  Size get size => MediaQuery.of(context).size;
+  Size get size => data.size;
 
   ///```dart
   ///return MediaQuery.of(context).size.width
   ///```
-  double get width => MediaQuery.of(context).size.width;
+  double get width => data.size.width;
 
   ///```dart
   ///return MediaQuery.of(context).size.height
   ///```
-  double get height => MediaQuery.of(context).size.height;
+  double get height => data.size.height;
 
   ///```dart
   ///return MediaQuery.of(context).padding
@@ -42,8 +46,7 @@ class BuildMedia {
   ///```dart
   ///return MediaQuery.of(context).platformBrightness
   ///```
-  Brightness get platformBrightness =>
-      MediaQuery.of(context).platformBrightness;
+  Brightness get platformBrightness => data.platformBrightness;
 
   ///```dart
   ///return MediaQuery.of(context).viewInsets
@@ -53,10 +56,9 @@ class BuildMedia {
   ///```dart
   ///return MediaQuery.of(context).systemGestureInsets
   ///```
-  EdgeInsets get systemGestureInsets =>
-      MediaQuery.of(context).systemGestureInsets;
+  EdgeInsets get systemGestureInsets => data.systemGestureInsets;
 
-  ///Do that:  MediaQuery.of(context).viewPadding
+  ///Do that:  MediaQuery.of(_context).viewPadding
   ///```
   EdgeInsets get viewPadding => viewPadding;
 

@@ -19,17 +19,17 @@
 
 ## Table of Contents
 
+- [BuildContext Extension](#buildcontext-extension) **FAVORITE**
 - [Build Classes](#build-helpers) 
   - [BuildMedia](#buildmedia-class)
-  - [BuildColor](#buildcolor-class) **FAVORITE**
-  - [BuildKey](#buildkey-class)
-  - [BuildRoute](#buildroute-class) **FAVORITE**
+  - [BuildColor](#buildcolor-class) 
+  - [BuildRoute](#buildroute-class) 
 - [Misc Classes](#misc-helpers)
   - [Misc](#misc-class) **FAVORITE**
   - [SystemOverlay](#systemoverlay-class)
   - [SystemOrientation](#systemorientation-class)
 - [Size Classes](#size-helpers)
-  - [Margin](#margin-class)
+  - [Margin](#margin-class) **FAVORITE**
   - [EdgeRadius](#edgeradius-class)
 - [Text Helpers](#text-helpers)
   - [TextDesigned](#textdesigned-widget)
@@ -62,6 +62,32 @@
 <br><br>
 
 # Documentation
+## **BuildContext Extension**
+  It is a simplification of _Theme.of(context), MediaQuery.of(context) and Navigator_.
+
+```dart
+   
+    @override
+    Widget build(BuildContext context) {
+      final BuildColor color = context.color; //DOES THIS: BuildColor(context)
+      final BuildMedia media = context.media; //DOES THIS: BuildMedia(context)
+
+      return Container(
+        color: color.primary,    //DOES THIS: Theme.of(context).primaryColor
+        width: media.width / 2,  //DOES THIS: MediaQuery.of(context).size.width / 2
+        height: media.height / 2 //DOES THIS: MediaQuery.of(context).size.height / 2
+      );
+    }
+
+
+    context.goBack(); //DOES THIS: Navigator.pop(context);
+    context.to(page); //DOES THIS: Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+    ... //+5 Navigator Locations
+
+```
+
+<br><br>
+
 
 ## Misc Helpers
 
@@ -172,10 +198,6 @@
 <br>
 
 ## Build Helpers
-
-
-
-
 - ### **BuildMedia Class:**
   It is a simplification of the _MediaQuery.of(context)_ statement.
 
@@ -220,56 +242,19 @@ It is a simplification of the _Theme.of(context)_ statement.
     ... //+20 COLORS
 ```
 
-<br>
-
-- ### **BuildKey Class:**
-  It is a simplification of the _GlobalKey()_ statement.
-
-```dart
-    final GlobalKey key = GlobalKey();
-    final BuildKey data = BuildKey(key);
-
-    data.width;   //Helper
-    //key.currentContext.size.width;
-
-    data.height;  //Helper
-    //key.currentContext.size.height;
-
-    data.size;    //Helper
-    //key.currentContext.size;
-
-    data.context; //Helper
-    //key.currentContext;
-
-    data.state;   //Helper
-    //key.currentState;
-```
 
 <br>
 
 - ### **BuildRoute Class:**
-  It is a simplification of _BuildContext and Navigator_ statement.
+  It is a simplification of _Navigator without BuildContext_ statement.
 
 ```dart
-    final BuildContext context;
-    final Widget page;
-
-    //REPLACE THAT: Navigator.push(context, page);
-    context.to(page); 
-    context.goBack();
-    context.toReplacement(page);
-    context.toAndRemoveUntil(page);
-    context.toTransparentPage(page);
-    context.toNamedAndRemoveUntil("/");
-    context.toReplacement("/");
-
     //If you will use BuildRoute, then need navigatorKey
     MaterialApp(
       navigatorKey: BuildRoute.key, 
       home: App(),
     );
 
-    //REPLACE THAT: Navigator.push(context, page);
     BuildRoute.to(page); 
     BuildRoute.goBack(); 
     BuildRoute.toReplacement(page); 

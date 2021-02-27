@@ -1,6 +1,6 @@
 name: helpers
 description: Helpers is a tool that allows you to convert repetitive and tedious statements into easy-to-read and intuitive statements.
-version: 1.0.5+1
+version: 1.0.6
 homepage: https://github.com/seel-channel/helpers
 
 environment:

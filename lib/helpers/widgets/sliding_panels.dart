@@ -251,7 +251,7 @@ class _SlidingPanelState extends State<_SlidingPanel> {
   void _updateSize([void Function() callback]) {
     Misc.onLayoutRendered(() {
       if (_contentKey != null) {
-        final double height = BuildKey(_contentKey).height;
+        final double height = _contentKey.height;
         if (_contentHeight != height) setState(() => _contentHeight = height);
         callback?.call();
       }

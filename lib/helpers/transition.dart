@@ -48,7 +48,7 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
   Animation<T> _animation;
 
   //Change the tween
-  set changeTween(Tween<dynamic> tween) {
+  set changeTween(Tween<T> tween) {
     setState(() {
       _animation = tween.animate(
         CurvedAnimation(parent: _controller, curve: widget.curve),
@@ -179,9 +179,8 @@ class SwipeTransition extends StatefulWidget {
 }
 
 class _SwipeTransitionState extends State<SwipeTransition> {
-  final GlobalKey<_BooleanTweenState> _tweenKey =
-      GlobalKey<_BooleanTweenState>();
-  final GlobalKey _containerKey = GlobalKey();
+  final _tweenKey = GlobalKey<_BooleanTweenState<Offset>>();
+  final _containerKey = GlobalKey();
   SwipeDirection _swipeDirection;
   Offset _direction = Offset.zero;
   Size _size = Size.zero;
@@ -201,7 +200,7 @@ class _SwipeTransitionState extends State<SwipeTransition> {
   void _changeData() {
     Misc.onLayoutRendered(() {
       if (_containerKey != null && _tweenKey != null) {
-        final Size size = BuildKey(_containerKey).size;
+        final Size size = _containerKey.size;
         if (_swipeDirection != widget.direction || _size != size)
           setState(() {
             _size = size;
@@ -220,7 +219,7 @@ class _SwipeTransitionState extends State<SwipeTransition> {
                 _direction = Offset(0.0, _size.height);
                 break;
             }
-            _tweenKey.currentState.changeTween = _createTween();
+            _tweenKey.state.changeTween = _createTween();
           });
       }
     });

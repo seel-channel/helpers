@@ -1,3 +1,11 @@
+## [1.0.6]
+
+- Added:
+  - GlobalKey extension
+
+- Removed:
+  - BuildKey
+
 ## [1.0.5+1]
 
 - Unable to locate the directory FIXED
