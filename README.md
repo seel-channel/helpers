@@ -57,14 +57,16 @@
 
 <br><br>
 
-![](./assets/readme/video_example.gif)
+| Video Preview                         | 
+| ----------------------------------- | 
+| !["Video Viewer Example"](./assets/readme/video_example.gif) |
+
 
 <br><br>
 
 # Documentation
 ## **BuildContext Extension**
   It is a simplification of _Theme.of(context), MediaQuery.of(context) and Navigator_.
-
 ```dart
    
     @override
