@@ -8,7 +8,7 @@ abstract class Misc {
   /// WidgetsBinding.instance.addPostFrameCallback((d) => callback());
   /// ```
   static void onLayoutRendered(void Function() callback) {
-    WidgetsBinding.instance.addPostFrameCallback((d) => callback());
+    WidgetsBinding.instance!.addPostFrameCallback((d) => callback());
   }
 
   ///```dart
@@ -117,12 +117,12 @@ abstract class Misc {
   ///SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(...));
   ///```
   static void setSystemOverlayStyle({
-    Brightness statusBarBrightness,
-    Brightness statusBarIconBrightness,
-    Brightness navigationBarIconBrightness,
-    Color statusBarColor,
-    Color navigationBarColor,
-    Color navigationBarDividerColor,
+    Brightness? statusBarBrightness,
+    Brightness? statusBarIconBrightness,
+    Brightness? navigationBarIconBrightness,
+    Color? statusBarColor,
+    Color? navigationBarColor,
+    Color? navigationBarDividerColor,
   }) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: navigationBarColor,

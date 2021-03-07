@@ -4,7 +4,7 @@ import 'package:helpers/helpers.dart';
 class TextDesigned extends StatelessWidget {
   const TextDesigned(
     this.text, {
-    Key key,
+    Key? key,
     this.color,
     this.size = 16,
     this.bold = false,
@@ -16,7 +16,7 @@ class TextDesigned extends StatelessWidget {
     this.letterSpacing = 0,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
   final String text;
   final double size, letterSpacing;
   final bool bold, italic, justify, center, uppercase, underline;
@@ -24,7 +24,7 @@ class TextDesigned extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      (uppercase ? text.toUpperCase() : text) ?? "",
+      (uppercase ? text.toUpperCase() : text),
       textAlign: justify
           ? TextAlign.justify
           : center
@@ -49,7 +49,7 @@ class Headline1 extends StatelessWidget {
   ///```
   const Headline1(
     this.text, {
-    Key key,
+    Key? key,
     this.style,
     this.textAlign,
     this.textSpan,
@@ -68,18 +68,18 @@ class Headline1 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline1** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -94,7 +94,7 @@ class Headline1 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -103,17 +103,17 @@ class Headline1 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -123,7 +123,7 @@ class Headline1 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -136,7 +136,7 @@ class Headline1 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -150,10 +150,10 @@ class Headline1 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
 
   @override
   Widget build(BuildContext context) {
@@ -168,7 +168,7 @@ class Headline1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline1.merge(style));
+        style: context.textTheme.headline1!.merge(style));
   }
 }
 
@@ -178,7 +178,7 @@ class Headline2 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.headline2);
   ///```
   const Headline2(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -197,18 +197,18 @@ class Headline2 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline2** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -223,7 +223,7 @@ class Headline2 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -232,17 +232,17 @@ class Headline2 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -252,7 +252,7 @@ class Headline2 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -265,7 +265,7 @@ class Headline2 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -279,10 +279,10 @@ class Headline2 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -296,7 +296,7 @@ class Headline2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline2.merge(style));
+        style: context.textTheme.headline2!.merge(style));
   }
 }
 
@@ -306,7 +306,7 @@ class Headline3 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.headline3);
   ///```
   const Headline3(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -325,18 +325,18 @@ class Headline3 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline3** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -351,7 +351,7 @@ class Headline3 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -360,17 +360,17 @@ class Headline3 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -380,7 +380,7 @@ class Headline3 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -393,7 +393,7 @@ class Headline3 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -407,10 +407,10 @@ class Headline3 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -424,7 +424,7 @@ class Headline3 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline3.merge(style));
+        style: context.textTheme.headline3!.merge(style));
   }
 }
 
@@ -434,7 +434,7 @@ class Headline4 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.headline4);
   ///```
   const Headline4(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -453,18 +453,18 @@ class Headline4 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline4** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -479,7 +479,7 @@ class Headline4 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -488,17 +488,17 @@ class Headline4 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -508,7 +508,7 @@ class Headline4 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -521,7 +521,7 @@ class Headline4 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -535,10 +535,10 @@ class Headline4 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -552,7 +552,7 @@ class Headline4 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline4.merge(style));
+        style: context.textTheme.headline4!.merge(style));
   }
 }
 
@@ -562,7 +562,7 @@ class Headline5 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.headline5);
   ///```
   const Headline5(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -581,18 +581,18 @@ class Headline5 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline5** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -607,7 +607,7 @@ class Headline5 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -616,17 +616,17 @@ class Headline5 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -636,7 +636,7 @@ class Headline5 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -649,7 +649,7 @@ class Headline5 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -663,10 +663,10 @@ class Headline5 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -680,7 +680,7 @@ class Headline5 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline5.merge(style));
+        style: context.textTheme.headline5!.merge(style));
   }
 }
 
@@ -690,7 +690,7 @@ class Headline6 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.headline6);
   ///```
   const Headline6(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -709,18 +709,18 @@ class Headline6 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **headline6** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -735,7 +735,7 @@ class Headline6 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -744,17 +744,17 @@ class Headline6 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -764,7 +764,7 @@ class Headline6 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -777,7 +777,7 @@ class Headline6 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -791,10 +791,10 @@ class Headline6 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -808,7 +808,7 @@ class Headline6 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.headline6.merge(style));
+        style: context.textTheme.headline6!.merge(style));
   }
 }
 
@@ -818,7 +818,7 @@ class Subtitle1 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.subtitle1);
   ///```
   const Subtitle1(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -837,18 +837,18 @@ class Subtitle1 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **subtitle1** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -863,7 +863,7 @@ class Subtitle1 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -872,17 +872,17 @@ class Subtitle1 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -892,7 +892,7 @@ class Subtitle1 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -905,7 +905,7 @@ class Subtitle1 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -919,10 +919,10 @@ class Subtitle1 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -936,7 +936,7 @@ class Subtitle1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.subtitle1.merge(style));
+        style: context.textTheme.subtitle1!.merge(style));
   }
 }
 
@@ -946,7 +946,7 @@ class Subtitle2 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.subtitle2);
   ///```
   const Subtitle2(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -965,18 +965,18 @@ class Subtitle2 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **subtitle2** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -991,7 +991,7 @@ class Subtitle2 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1000,17 +1000,17 @@ class Subtitle2 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1020,7 +1020,7 @@ class Subtitle2 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1033,7 +1033,7 @@ class Subtitle2 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1047,10 +1047,10 @@ class Subtitle2 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -1064,7 +1064,7 @@ class Subtitle2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.subtitle2.merge(style));
+        style: context.textTheme.subtitle2!.merge(style));
   }
 }
 
@@ -1074,7 +1074,7 @@ class BodyText1 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.bodyText1);
   ///```
   const BodyText1(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -1093,18 +1093,18 @@ class BodyText1 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **bodyText1** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -1119,7 +1119,7 @@ class BodyText1 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1128,17 +1128,17 @@ class BodyText1 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1148,7 +1148,7 @@ class BodyText1 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1161,7 +1161,7 @@ class BodyText1 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1175,10 +1175,10 @@ class BodyText1 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -1192,7 +1192,7 @@ class BodyText1 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.bodyText1.merge(style));
+        style: context.textTheme.bodyText1!.merge(style));
   }
 }
 
@@ -1202,7 +1202,7 @@ class BodyText2 extends StatelessWidget {
   ///return Text(text, style: context.textTheme.bodyText2);
   ///```
   const BodyText2(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -1221,18 +1221,18 @@ class BodyText2 extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **bodyText2** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -1247,7 +1247,7 @@ class BodyText2 extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1256,17 +1256,17 @@ class BodyText2 extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1276,7 +1276,7 @@ class BodyText2 extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1289,7 +1289,7 @@ class BodyText2 extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1303,10 +1303,10 @@ class BodyText2 extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -1320,7 +1320,7 @@ class BodyText2 extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.bodyText2.merge(style));
+        style: context.textTheme.bodyText2!.merge(style));
   }
 }
 
@@ -1330,7 +1330,7 @@ class CaptionText extends StatelessWidget {
   ///return Text(text, style: context.textTheme.caption);
   ///```
   const CaptionText(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -1349,18 +1349,18 @@ class CaptionText extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **caption** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -1375,7 +1375,7 @@ class CaptionText extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1384,17 +1384,17 @@ class CaptionText extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1404,7 +1404,7 @@ class CaptionText extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1417,7 +1417,7 @@ class CaptionText extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1431,10 +1431,10 @@ class CaptionText extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -1448,7 +1448,7 @@ class CaptionText extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.caption.merge(style));
+        style: context.textTheme.caption!.merge(style));
   }
 }
 
@@ -1458,7 +1458,7 @@ class ButtonText extends StatelessWidget {
   ///return Text(text, style: context.textTheme.button);
   ///```
   const ButtonText(this.text,
-      {Key key,
+      {Key? key,
       this.style,
       this.textAlign,
       this.textSpan,
@@ -1477,18 +1477,18 @@ class ButtonText extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **button** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -1503,7 +1503,7 @@ class ButtonText extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1512,17 +1512,17 @@ class ButtonText extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1532,7 +1532,7 @@ class ButtonText extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1545,7 +1545,7 @@ class ButtonText extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1559,10 +1559,10 @@ class ButtonText extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(text,
@@ -1576,7 +1576,7 @@ class ButtonText extends StatelessWidget {
         strutStyle: strutStyle,
         textWidthBasis: textWidthBasis,
         semanticsLabel: semanticsLabel,
-        style: context.textTheme.button.merge(style));
+        style: context.textTheme.button!.merge(style));
   }
 }
 
@@ -1587,7 +1587,7 @@ class OverlineText extends StatelessWidget {
   ///```
   const OverlineText(
     this.text, {
-    Key key,
+    Key? key,
     this.style,
     this.textAlign,
     this.textSpan,
@@ -1606,18 +1606,18 @@ class OverlineText extends StatelessWidget {
   final String text;
 
   ///Returns a new text style that is a combination of this **overline** theme style and the given [other] style.
-  final TextStyle style;
+  final TextStyle? style;
 
   /// How the text should be aligned horizontally.
-  final TextAlign textAlign;
+  final TextAlign? textAlign;
 
   /// The text to display as a [InlineSpan].
   ///
   /// This will be null if [data] is provided instead.
-  final InlineSpan textSpan;
+  final InlineSpan? textSpan;
 
   /// {@macro flutter.painting.textPainter.strutStyle}
-  final StrutStyle strutStyle;
+  final StrutStyle? strutStyle;
 
   /// The directionality of the text.
   ///
@@ -1632,7 +1632,7 @@ class OverlineText extends StatelessWidget {
   /// its left.
   ///
   /// Defaults to the ambient [Directionality], if any.
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// Used to select a font when the same Unicode character can
   /// be rendered differently, depending on the locale.
@@ -1641,17 +1641,17 @@ class OverlineText extends StatelessWidget {
   /// is inherited from the enclosing app with `Localizations.localeOf(context)`.
   ///
   /// See [RenderParagraph.locale] for more information.
-  final Locale locale;
+  final Locale? locale;
 
   /// Whether the text should break at soft line breaks.
   ///
   /// If false, the glyphs in the text will be positioned as if there was unlimited horizontal space.
-  final bool softWrap;
+  final bool? softWrap;
 
   /// How visual overflow should be handled.
   ///
   /// Defaults to retrieving the value from the nearest [DefaultTextStyle] ancestor.
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   /// The number of font pixels for each logical pixel.
   ///
@@ -1661,7 +1661,7 @@ class OverlineText extends StatelessWidget {
   /// The value given to the constructor as textScaleFactor. If null, will
   /// use the [MediaQueryData.textScaleFactor] obtained from the ambient
   /// [MediaQuery], or 1.0 if there is no [MediaQuery] in scope.
-  final double textScaleFactor;
+  final double? textScaleFactor;
 
   /// An optional maximum number of lines for the text to span, wrapping if necessary.
   /// If the text exceeds the given number of lines, it will be truncated according
@@ -1674,7 +1674,7 @@ class OverlineText extends StatelessWidget {
   /// an explicit number for its [DefaultTextStyle.maxLines], then the
   /// [DefaultTextStyle] value will take precedence. You can use a [RichText]
   /// widget directly to entirely override the [DefaultTextStyle].
-  final int maxLines;
+  final int? maxLines;
 
   /// An alternative semantics label for this text.
   ///
@@ -1688,10 +1688,10 @@ class OverlineText extends StatelessWidget {
   /// ```dart
   /// Text(r'$$', semanticsLabel: 'Double dollars')
   /// ```
-  final String semanticsLabel;
+  final String? semanticsLabel;
 
   /// {@macro flutter.painting.textPainter.textWidthBasis}
-  final TextWidthBasis textWidthBasis;
+  final TextWidthBasis? textWidthBasis;
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -1706,7 +1706,7 @@ class OverlineText extends StatelessWidget {
       strutStyle: strutStyle,
       textWidthBasis: textWidthBasis,
       semanticsLabel: semanticsLabel,
-      style: context.textTheme.overline.merge(style),
+      style: context.textTheme.overline!.merge(style),
     );
   }
 }

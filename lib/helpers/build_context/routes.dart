@@ -8,11 +8,10 @@ Route pageRoute(Widget page, bool withTransition) {
 
 class TransparentRoute extends PageRoute<Future<void>> {
   TransparentRoute({
-    @required this.builder,
-    RouteSettings settings,
+    required this.builder,
+    RouteSettings? settings,
     this.duration = Duration.zero,
-  })  : assert(builder != null),
-        super(settings: settings, fullscreenDialog: false);
+  }) : super(settings: settings, fullscreenDialog: false);
 
   final WidgetBuilder builder;
   final Duration duration;
@@ -21,10 +20,10 @@ class TransparentRoute extends PageRoute<Future<void>> {
   bool get opaque => false;
 
   @override
-  Color get barrierColor => null;
+  Color? get barrierColor => null;
 
   @override
-  String get barrierLabel => null;
+  String? get barrierLabel => null;
 
   @override
   bool get maintainState => true;
@@ -54,7 +53,7 @@ class TransparentRoute extends PageRoute<Future<void>> {
 //----------------------//
 class BuildRoute {
   static GlobalKey<NavigatorState> key = GlobalKey<NavigatorState>();
-  static NavigatorState state = key.currentState;
+  static NavigatorState? state = key.currentState;
 
   ///Do that:
   ///```dart
@@ -65,7 +64,7 @@ class BuildRoute {
   ///);
   /// ```
   static Future<void> to(Widget page, {bool transition = true}) async {
-    await state.push(pageRoute(page, transition));
+    await state!.push(pageRoute(page, transition));
   }
 
   ///Do that:
@@ -80,7 +79,7 @@ class BuildRoute {
     Widget page, {
     bool transition = true,
   }) async {
-    await state.pushReplacement(pageRoute(page, transition));
+    await state!.pushReplacement(pageRoute(page, transition));
   }
 
   ///Do that:
@@ -89,9 +88,9 @@ class BuildRoute {
   /// ```
   static Future<void> toNamed(
     String routeName, {
-    Object arguments,
+    Object? arguments,
   }) async {
-    await state.pushNamed(routeName, arguments: arguments);
+    await state!.pushNamed(routeName, arguments: arguments);
   }
 
   ///Do that:
@@ -108,7 +107,7 @@ class BuildRoute {
     bool Function(Route<dynamic>) predicate, {
     bool transition = true,
   }) async {
-    await state.pushAndRemoveUntil(pageRoute(page, transition), predicate);
+    await state!.pushAndRemoveUntil(pageRoute(page, transition), predicate);
   }
 
   ///Do that:
@@ -118,9 +117,9 @@ class BuildRoute {
   static Future<void> toNamedAndRemoveUntil(
     String newRouteName,
     bool Function(Route<dynamic>) predicate, {
-    Object arguments,
+    Object? arguments,
   }) async {
-    await state.pushNamedAndRemoveUntil(
+    await state!.pushNamedAndRemoveUntil(
       newRouteName,
       predicate,
       arguments: arguments,
@@ -139,7 +138,7 @@ class BuildRoute {
     Widget page, {
     Duration duration = Duration.zero,
   }) async {
-    await state.push(
+    await state!.push(
       TransparentRoute(builder: (_) => page, duration: duration),
     );
   }
@@ -148,5 +147,5 @@ class BuildRoute {
   ///```dart
   ///navigationKey.currentState.pop();
   /// ```
-  static void goBack() => state.pop();
+  static void goBack() => state!.pop();
 }

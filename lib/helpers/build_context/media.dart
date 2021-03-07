@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class BuildMedia {
   /// It is a simplification of the **_MediaQuery.of(_context)_** statement.
-  BuildMedia(BuildContext context)
-      : assert(context != null),
-        this._context = context;
+  BuildMedia(BuildContext context) : this._context = context;
 
   final BuildContext _context;
 

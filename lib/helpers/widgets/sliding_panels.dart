@@ -19,13 +19,13 @@ class SlidingPanelContainer extends StatelessWidget {
   ///);
   /// ```
   const SlidingPanelContainer({
-    Key key,
+    Key? key,
     this.child,
     this.height,
     this.boxShadow,
     this.color = Colors.white,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius,
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
   })  : this.padding = padding ?? const EdgeInsets.all(20.0),
         this.borderRadius = borderRadius ??
             const BorderRadius.vertical(top: Radius.circular(20.0)),
@@ -35,15 +35,15 @@ class SlidingPanelContainer extends StatelessWidget {
   final Color color;
 
   /// The [child] contained by the container.
-  final Widget child;
+  final Widget? child;
 
   ///Creates a widget that combines common painting, positioning, and sizing widgets.
   ///The height value include the padding.
-  final double height;
+  final double? height;
 
   ///A list of shadows cast by this box behind the box.
   ///The shadow follows the [shape] of the box.
-  final List<BoxShadow> boxShadow;
+  final List<BoxShadow>? boxShadow;
 
   ///The border radius of the rounded corners.
   ///Values are clamped so that horizontal and vertical radii sums do not exceed width/height.
@@ -80,7 +80,7 @@ class SlidingPanelContainer extends StatelessWidget {
 
 class SlidingPanel extends StatefulWidget {
   ///Create a SlidingPanel like a AlertDialog.
-  ///This widget is using the [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
+  ///This widget is similar than [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
   ///
   ///Example:
   ///```dart
@@ -89,20 +89,19 @@ class SlidingPanel extends StatefulWidget {
   ///);
   ///```
   SlidingPanel({
-    Key key,
-    @required this.builder,
+    Key? key,
+    required this.builder,
     this.chevron = const SlidingPanelChevron(),
-    SlidingPanelController controller,
+    SlidingPanelController? controller,
     this.isDraggable = true,
-    Color backgroundColor,
+    Color? backgroundColor,
     this.backgroundBlur = 0.0,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.decelerate,
     this.onPanelOpened,
     this.onPanelClosed,
     this.onPanelSlide,
-  })  : assert(builder != null),
-        this.controller = controller ?? SlidingPanelController(),
+  })  : this.controller = controller ?? SlidingPanelController(),
         this.backgroundColor = backgroundColor ?? Colors.black.withOpacity(0.2),
         super(key: key);
 
@@ -133,15 +132,15 @@ class SlidingPanel extends StatefulWidget {
   /// is called as the panel slides around with the
   /// current position of the panel. The position is a double
   /// between 0.0 and 1.0 where 0.0 is fully collapsed and 1.0 is fully open.
-  final void Function(double position) onPanelSlide;
+  final void Function(double position)? onPanelSlide;
 
   /// If non-null, this callback is called when the
   /// panel is fully opened
-  final VoidCallback onPanelOpened;
+  final VoidCallback? onPanelOpened;
 
   /// If non-null, this callback is called when the panel
   /// is fully collapsed.
-  final VoidCallback onPanelClosed;
+  final VoidCallback? onPanelClosed;
 
   ///Creates an animation controller. This controller allows move the panel.
   ///
@@ -166,7 +165,7 @@ class _SlidingPanelState extends State<SlidingPanel>
   final ScrollController _sc = ScrollController();
   final GlobalKey _key = GlobalKey();
 
-  AnimationController _controller;
+  late AnimationController _controller;
   double _builderHeight = 1500.0;
   VelocityTracker _tracker = VelocityTracker.withKind(
     PointerDeviceKind.unknown,
@@ -276,7 +275,7 @@ class _SlidingPanelState extends State<SlidingPanel>
                 key: _key,
                 onPointerMove: _onVerticalDragUpdate,
                 onPointerUp: _onVerticalDragEnd,
-                child: widget.builder?.call(context, _sc),
+                child: widget.builder(context, _sc),
               ),
             ]),
             builder: (_, child) {
@@ -293,7 +292,7 @@ class _SlidingPanelState extends State<SlidingPanel>
 }
 
 class SlidingPanelChevron extends StatelessWidget {
-  const SlidingPanelChevron({Key key, this.color = Colors.white})
+  const SlidingPanelChevron({Key? key, this.color = Colors.white})
       : super(key: key);
   final Color color;
 
@@ -312,7 +311,7 @@ class SlidingPanelChevron extends StatelessWidget {
 }
 
 class SlidingPanelController {
-  _SlidingPanelState _panelState;
+  _SlidingPanelState? _panelState;
 
   void _addState(_SlidingPanelState panelState) {
     this._panelState = panelState;
@@ -325,17 +324,17 @@ class SlidingPanelController {
 
   Future<void> close() {
     assert(isAttached, "PanelController must be attached to a SlidingPanel");
-    return _panelState._closePanel();
+    return _panelState!._closePanel();
   }
 
   Future<void> open() {
     assert(isAttached, "PanelController must be attached to a SlidingPanel");
-    return _panelState._openPanel();
+    return _panelState!._openPanel();
   }
 
   ///[position] will be between 0.0 to 1.0
   Future<void> animateTo(double position) {
     assert(isAttached, "PanelController must be attached to a SlidingPanel");
-    return _panelState._animateTo(position);
+    return _panelState!._animateTo(position);
   }
 }

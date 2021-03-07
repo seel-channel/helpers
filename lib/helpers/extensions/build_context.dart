@@ -36,13 +36,13 @@ extension BuildContextHelperExtension on BuildContext {
   ///```dart
   ///return context.size.width
   ///```
-  double get width => this.size.width;
+  double get width => this.size!.width;
 
   ///Do that:
   ///```dart
   ///return context.size.height
   ///```
-  double get height => this.size.height;
+  double get height => this.size!.height;
 
   ///Do that:
   ///```dart
@@ -77,7 +77,7 @@ extension BuildContextHelperExtension on BuildContext {
   /// ```
   Future<void> toNamed(
     String routeName, {
-    Object arguments,
+    Object? arguments,
   }) async {
     await Navigator.pushNamed(this, routeName, arguments: arguments);
   }
@@ -107,7 +107,7 @@ extension BuildContextHelperExtension on BuildContext {
   Future<void> toNamedAndRemoveUntil(
     String newRouteName,
     bool Function(Route<dynamic>) predicate, {
-    Object arguments,
+    Object? arguments,
   }) async {
     await Navigator.pushNamedAndRemoveUntil(
       this,

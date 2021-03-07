@@ -8,12 +8,12 @@ class BooleanTween<T> extends StatefulWidget {
   ///(controller.forward()),
   ///if it is FALSE it will execute the Tween from end to begin (controller.reverse())
   BooleanTween({
-    Key key,
-    @required this.animate,
-    @required this.tween,
-    @required this.builder,
+    Key? key,
+    required this.animate,
+    required this.tween,
+    required this.builder,
     this.child,
-    Duration duration,
+    Duration? duration,
     this.curve = Curves.linear,
   })  : this.duration = duration ?? Duration(milliseconds: 200),
         super(key: key);
@@ -33,7 +33,7 @@ class BooleanTween<T> extends StatefulWidget {
   ///Return a Widget and receive the interpolation value as a parameter.
   final ValueWidgetBuilder<T> builder;
 
-  final Widget child;
+  final Widget? child;
 
   /// It is the curve that will carry out the interpolation.
   final Curve curve;
@@ -42,10 +42,10 @@ class BooleanTween<T> extends StatefulWidget {
   _BooleanTweenState<T> createState() => _BooleanTweenState<T>();
 }
 
-class _BooleanTweenState<T> extends State<BooleanTween<T>>
+class _BooleanTweenState<T> extends State<BooleanTween<T?>>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<T> _animation;
+  late AnimationController _controller;
+  late Animation<T?> _animation;
 
   //Change the tween
   set changeTween(Tween<T> tween) {
@@ -76,7 +76,7 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
 
   @override
   void didUpdateWidget(BooleanTween oldWidget) {
-    super.didUpdateWidget(oldWidget);
+    super.didUpdateWidget(oldWidget as BooleanTween<T>);
     if (!oldWidget.animate && widget.animate)
       _controller.forward();
     else if (oldWidget.animate && !widget.animate) _controller.reverse();
@@ -105,10 +105,10 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
 class OpacityTransition extends StatefulWidget {
   /// It is a FadeTransition but this will be shown when receiving a Boolean value.
   OpacityTransition({
-    Key key,
-    @required this.visible,
-    @required this.child,
-    Duration duration,
+    Key? key,
+    required this.visible,
+    required this.child,
+    Duration? duration,
     this.curve = Curves.linear,
   })  : this.duration = duration ?? Duration(milliseconds: 200),
         super(key: key);
@@ -156,10 +156,10 @@ class SwipeTransition extends StatefulWidget {
   /// that is, if you performed the effect inside a 100x100 container the child widget
   /// of the SwipeTransition would pop out of the container and be overexposed on top of its other widgets.
   SwipeTransition({
-    Key key,
-    @required this.visible,
-    @required this.child,
-    Duration duration,
+    Key? key,
+    required this.visible,
+    required this.child,
+    Duration? duration,
     this.curve = Curves.ease,
     this.direction = SwipeDirection.fromBottom,
   })  : this.duration = duration ?? Duration(milliseconds: 400),
@@ -188,9 +188,9 @@ class SwipeTransition extends StatefulWidget {
 class _SwipeTransitionState extends State<SwipeTransition> {
   final _tweenKey = GlobalKey<_BooleanTweenState<Offset>>();
   final _containerKey = GlobalKey();
-  SwipeDirection _swipeDirection;
+  SwipeDirection? _swipeDirection;
   Offset _direction = Offset.zero;
-  Size _size = Size.zero;
+  Size? _size = Size.zero;
 
   @override
   void initState() {
@@ -206,29 +206,27 @@ class _SwipeTransitionState extends State<SwipeTransition> {
 
   void _changeData() {
     Misc.onLayoutRendered(() {
-      if (_containerKey != null && _tweenKey != null) {
-        final Size size = _containerKey.size;
-        if (_swipeDirection != widget.direction || _size != size)
-          setState(() {
-            _size = size;
-            _swipeDirection = widget.direction;
-            switch (widget.direction) {
-              case SwipeDirection.fromTop:
-                _direction = Offset(0.0, -_size.height);
-                break;
-              case SwipeDirection.fromLeft:
-                _direction = Offset(-_size.width, 0.0);
-                break;
-              case SwipeDirection.fromRight:
-                _direction = Offset(_size.width, 0.0);
-                break;
-              case SwipeDirection.fromBottom:
-                _direction = Offset(0.0, _size.height);
-                break;
-            }
-            _tweenKey.state.changeTween = _createTween();
-          });
-      }
+      final Size? size = _containerKey.size;
+      if (_swipeDirection != widget.direction || _size != size)
+        setState(() {
+          _size = size;
+          _swipeDirection = widget.direction;
+          switch (widget.direction) {
+            case SwipeDirection.fromTop:
+              _direction = Offset(0.0, -_size!.height);
+              break;
+            case SwipeDirection.fromLeft:
+              _direction = Offset(-_size!.width, 0.0);
+              break;
+            case SwipeDirection.fromRight:
+              _direction = Offset(_size!.width, 0.0);
+              break;
+            case SwipeDirection.fromBottom:
+              _direction = Offset(0.0, _size!.height);
+              break;
+          }
+          _tweenKey.state!.changeTween = _createTween();
+        });
     });
   }
 
@@ -257,13 +255,13 @@ class _SwipeTransitionState extends State<SwipeTransition> {
 class TurnTransition extends StatefulWidget {
   /// It is a RotationTransition but this will be animate when receiving a Boolean value.
   TurnTransition({
-    Key key,
-    @required this.turn,
-    @required this.child,
+    Key? key,
+    required this.turn,
+    required this.child,
     this.begin = 90,
     this.end = -90,
     this.curve = Curves.ease,
-    Duration duration,
+    Duration? duration,
   })  : this.duration = duration ?? Duration(milliseconds: 200),
         super(key: key);
 

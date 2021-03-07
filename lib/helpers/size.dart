@@ -32,34 +32,32 @@ class Margin {
   ///```dart
   ///EdgeInsets.only(top: amount ?? 0.0)
   ///```
-  static EdgeInsets top(double amount) => EdgeInsets.only(top: amount ?? 0.0);
+  static EdgeInsets top(double amount) => EdgeInsets.only(top: amount);
 
   ///Do that:
   ///```dart
   ///EdgeInsets.only(right: amount ?? 0.0)
   ///```
-  static EdgeInsets right(double amount) =>
-      EdgeInsets.only(right: amount ?? 0.0);
+  static EdgeInsets right(double amount) => EdgeInsets.only(right: amount);
 
   ///Do that:
   ///```dart
   /// EdgeInsets.only(bottom: amount ?? 0.0)
   /// ```
-  static EdgeInsets bottom(double amount) =>
-      EdgeInsets.only(bottom: amount ?? 0.0);
+  static EdgeInsets bottom(double amount) => EdgeInsets.only(bottom: amount);
 
   ///Do that:
   ///```dart
   ///EdgeInsets.only(left: amount ?? 0.0)
   ///```
-  static EdgeInsets left(double amount) => EdgeInsets.only(left: amount ?? 0.0);
+  static EdgeInsets left(double amount) => EdgeInsets.only(left: amount);
 
   ///Do that:
   ///```dart
   ///EdgeInsets.symmetric(horizontal: horizontal ?? 0.0,
   ///vertical: vertical ?? 0.0);
   ///```
-  static EdgeInsets symmetric({double horizontal, double vertical}) {
+  static EdgeInsets symmetric({double? horizontal, double? vertical}) {
     return EdgeInsets.symmetric(
         horizontal: horizontal ?? 0.0, vertical: vertical ?? 0.0);
   }
@@ -74,10 +72,10 @@ class Margin {
   ///)
   ///```
   static EdgeInsets only({
-    double top,
-    double bottom,
-    double left,
-    double right,
+    double? top,
+    double? bottom,
+    double? left,
+    double? right,
   }) {
     return EdgeInsets.only(
       top: top ?? 0.0,
@@ -111,7 +109,7 @@ abstract class EdgeRadius {
   ///  bottom: Radius.circular(bottom ?? 0.0),
   ///)
   ///```
-  static BorderRadius vertical({double top, double bottom}) {
+  static BorderRadius vertical({double? top, double? bottom}) {
     return BorderRadius.vertical(
       bottom: Radius.circular(bottom ?? 0.0),
       top: Radius.circular(top ?? 0.0),
@@ -125,9 +123,7 @@ abstract class EdgeRadius {
   ///)
   ///```
   static BorderRadius top(double top) {
-    return BorderRadius.vertical(
-      top: Radius.circular(top ?? 0.0),
-    );
+    return BorderRadius.vertical(top: Radius.circular(top));
   }
 
   ///Do that:
@@ -137,9 +133,7 @@ abstract class EdgeRadius {
   ///)
   ///```
   static BorderRadius bottom(double bottom) {
-    return BorderRadius.vertical(
-      bottom: Radius.circular(bottom ?? 0.0),
-    );
+    return BorderRadius.vertical(bottom: Radius.circular(bottom));
   }
 
   ///Do that:
@@ -149,7 +143,7 @@ abstract class EdgeRadius {
   ///  right: Radius.circular(right ?? 0.0),
   ///)
   ///```
-  static BorderRadius horizontal({double left, double right}) {
+  static BorderRadius horizontal({double? left, double? right}) {
     return BorderRadius.horizontal(
       left: Radius.circular(left ?? 0.0),
       right: Radius.circular(right ?? 0.0),
@@ -163,9 +157,7 @@ abstract class EdgeRadius {
   ///)
   ///```
   static BorderRadius left(double left) {
-    return BorderRadius.horizontal(
-      left: Radius.circular(left ?? 0.0),
-    );
+    return BorderRadius.horizontal(left: Radius.circular(left));
   }
 
   ///Do that:
@@ -175,9 +167,7 @@ abstract class EdgeRadius {
   ///)
   ///```
   static BorderRadius right(double right) {
-    return BorderRadius.horizontal(
-      right: Radius.circular(right ?? 0.0),
-    );
+    return BorderRadius.horizontal(right: Radius.circular(right));
   }
 
   ///Do that:
@@ -190,10 +180,10 @@ abstract class EdgeRadius {
   ///)
   /// ```
   static BorderRadius only({
-    double topLeft,
-    double topRight,
-    double bottomLeft,
-    double bottomRight,
+    double? topLeft,
+    double? topRight,
+    double? bottomLeft,
+    double? bottomRight,
   }) {
     return BorderRadius.only(
         topLeft: Radius.circular(topLeft ?? 0.0),

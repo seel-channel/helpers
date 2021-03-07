@@ -460,7 +460,7 @@ It is a simplification of the _Theme.of(context)_ statement.
 ## Widgets Helpers
 - ### **SlidingPanelPage Widget:**
   Create a SlidingPanel like a AlertDialog.
-  This widget is using the [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
+  This widget is similar than [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
 
 ```dart
     //EXAMPLE

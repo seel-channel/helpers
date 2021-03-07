@@ -10,7 +10,7 @@ class DoubleColumn extends StatelessWidget {
   /// ]);
   ///```
   const DoubleColumn({
-    Key key,
+    Key? key,
     this.leftColumn,
     this.rightColumn,
     this.spaceBeetween = 20,
@@ -19,21 +19,21 @@ class DoubleColumn extends StatelessWidget {
 
   final double spaceBeetween;
   final MainAxisSize columnSize;
-  final List<Widget> leftColumn;
-  final List<Widget> rightColumn;
+  final List<Widget>? leftColumn;
+  final List<Widget>? rightColumn;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Column(
-          children: leftColumn,
+          children: leftColumn!,
           mainAxisSize: columnSize,
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
         SizedBox(width: spaceBeetween),
         Column(
-          children: rightColumn,
+          children: rightColumn!,
           mainAxisSize: columnSize,
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
@@ -45,25 +45,25 @@ class DoubleColumn extends StatelessWidget {
 class RemoveScrollGlow extends StatelessWidget {
   ///Eliminate the Splash Effect or Glow Effect when reaching
   ///the limit of a PageView, ScrollView, ListView, etc.
-  const RemoveScrollGlow({Key key, this.child}) : super(key: key);
-  final Widget child;
+  const RemoveScrollGlow({Key? key, this.child}) : super(key: key);
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(
-      child: child,
+      child: child!,
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowGlow();
         return;
-      },
+      } as bool Function(OverscrollIndicatorNotification)?,
     );
   }
 }
 
 class DismissKeyboard extends StatelessWidget {
   ///Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
-  const DismissKeyboard({Key key, this.child}) : super(key: key);
-  final Widget child;
+  const DismissKeyboard({Key? key, this.child}) : super(key: key);
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -96,10 +96,10 @@ class SizeBuilder extends StatefulWidget {
   ///   return widget.builder(constraints.maxWidth, constraints.maxHeight);
   ///});
   ///```
-  SizeBuilder({Key key, this.builder}) : super(key: key);
+  SizeBuilder({Key? key, this.builder}) : super(key: key);
 
   ///Argument `(double width, double height)`
-  final Widget Function(double width, double height) builder;
+  final Widget Function(double width, double height)? builder;
 
   @override
   _SizeBuilderState createState() => _SizeBuilderState();
@@ -109,7 +109,7 @@ class _SizeBuilderState extends State<SizeBuilder> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (_, constraints) {
-      return widget.builder(constraints.maxWidth, constraints.maxHeight);
+      return widget.builder!(constraints.maxWidth, constraints.maxHeight);
     });
   }
 }
@@ -121,7 +121,7 @@ class ExpandedSpacer extends StatelessWidget {
   ///```dart
   ///return Expanded(child: SizedBox())
   ///```
-  const ExpandedSpacer({Key key}) : super(key: key);
+  const ExpandedSpacer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -138,10 +138,10 @@ class ExpandedTap extends StatelessWidget {
   ///   ),
   ///);
   ///```
-  const ExpandedTap({Key key, this.onTap, this.child}) : super(key: key);
+  const ExpandedTap({Key? key, this.onTap, this.child}) : super(key: key);
 
-  final Widget child;
-  final void Function() onTap;
+  final Widget? child;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -161,12 +161,12 @@ class ExpandedAlign extends StatelessWidget {
   ///);
   ///```
   const ExpandedAlign({
-    Key key,
+    Key? key,
     this.alignment = Alignment.centerRight,
     this.child,
   }) : super(key: key);
   final Alignment alignment;
-  final Widget child;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -189,7 +189,7 @@ class SafeAreaColor extends StatelessWidget {
   ///  );
   /// ```
   const SafeAreaColor(
-      {Key key,
+      {Key? key,
       this.child,
       this.color = Colors.white,
       this.height,
@@ -197,9 +197,9 @@ class SafeAreaColor extends StatelessWidget {
       : super(key: key);
 
   final Color color;
-  final Widget child;
+  final Widget? child;
   final double width;
-  final double height;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
@@ -228,9 +228,9 @@ class OpaqueTap extends StatelessWidget {
   ///);
   ///```
   const OpaqueTap({
-    Key key,
-    @required this.onTap,
-    @required this.child,
+    Key? key,
+    required this.onTap,
+    required this.child,
   }) : super(key: key);
 
   final void Function() onTap;
@@ -248,21 +248,21 @@ class OpaqueTap extends StatelessWidget {
 
 class SplashTap extends StatelessWidget {
   const SplashTap({
-    Key key,
-    @required this.onTap,
-    @required this.child,
+    Key? key,
+    required this.onTap,
+    required this.child,
     this.color,
     this.shape = BoxShape.rectangle,
   }) : super(key: key);
 
-  final Color color;
+  final Color? color;
 
   final Widget child;
 
   final BoxShape shape;
 
   ///Creates an ink well.
-  final void Function() onTap;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -282,12 +282,12 @@ class SplashTap extends StatelessWidget {
 
 class SplashButton extends StatelessWidget {
   const SplashButton({
-    Key key,
-    @required this.onTap,
-    @required this.child,
+    Key? key,
+    required this.onTap,
+    required this.child,
     this.color = Colors.blue,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius,
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
     this.boxShadow,
     this.shape = BoxShape.rectangle,
   })  : this.padding = padding ?? const EdgeInsets.all(20.0),
@@ -323,7 +323,7 @@ class SplashButton extends StatelessWidget {
   ///A list of shadows cast by this box behind the box.
   ///
   ///The shadow follows the [shape] of the box.
-  final List<BoxShadow> boxShadow;
+  final List<BoxShadow>? boxShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -352,14 +352,14 @@ class SplashButton extends StatelessWidget {
 
 class TileDesigned extends StatelessWidget {
   const TileDesigned({
-    Key key,
+    Key? key,
     this.onTap,
     this.prefix,
     this.child,
     this.suffix,
     this.background = Colors.transparent,
-    EdgeInsetsGeometry padding,
-    BorderRadius borderRadius,
+    EdgeInsetsGeometry? padding,
+    BorderRadius? borderRadius,
   })  : this.padding = padding ?? const EdgeInsets.all(20.0),
         this.borderRadius =
             borderRadius ?? const BorderRadius.all(Radius.circular(20.0)),
@@ -368,10 +368,10 @@ class TileDesigned extends StatelessWidget {
   final Color background;
 
   ///You can wrap it in an Expanded.
-  final Widget prefix, suffix, child;
+  final Widget? prefix, suffix, child;
 
   ///Creates an ink well.
-  final void Function() onTap;
+  final void Function()? onTap;
 
   ///The border radius of the rounded corners.
   ///Values are clamped so that horizontal and vertical radii sums do not exceed width/height.
@@ -401,9 +401,9 @@ class TileDesigned extends StatelessWidget {
         child: Container(
           padding: padding,
           child: Row(children: [
-            if (prefix != null) prefix,
-            if (child != null) child,
-            if (suffix != null) suffix
+            if (prefix != null) prefix!,
+            if (child != null) child!,
+            if (suffix != null) suffix!
           ]),
         ),
       ),
@@ -415,12 +415,12 @@ class AnimatedInteractiveViewer extends StatefulWidget {
   ///It is very similar to the InteractiveViewer except the AnimatedInteractiveViewer
   ///have a double-tap animated zoom
   AnimatedInteractiveViewer({
-    Key key,
+    Key? key,
     this.child,
     this.controller,
     this.maxScale = 2.0,
     this.minScale = 0.8,
-    Duration duration,
+    Duration? duration,
     this.curve = Curves.ease,
     this.onInteractionStart,
     this.onInteractionUpdate,
@@ -438,7 +438,7 @@ class AnimatedInteractiveViewer extends StatefulWidget {
   final Curve curve;
 
   /// It is the child that will be affected by the SwipeTransition
-  final Widget child;
+  final Widget? child;
 
   ///The length of time than the double-tap zoom
   ///
@@ -446,16 +446,16 @@ class AnimatedInteractiveViewer extends StatefulWidget {
   final Duration duration;
 
   ///If you pass the TransformationController then can control the InteractiveViewer outside it
-  final TransformationController controller;
+  final TransformationController? controller;
 
   ///Called when the user ends a pan or scale gesture on the widget.
-  final void Function(ScaleEndDetails) onInteractionEnd;
+  final void Function(ScaleEndDetails)? onInteractionEnd;
 
   ///Called when the user begins a pan or scale gesture on the widget.
-  final void Function(ScaleStartDetails) onInteractionStart;
+  final void Function(ScaleStartDetails)? onInteractionStart;
 
   ///Called when the user updates a pan or scale gesture on the widget.
-  final void Function(ScaleUpdateDetails) onInteractionUpdate;
+  final void Function(ScaleUpdateDetails)? onInteractionUpdate;
 
   @override
   _AnimatedInteractiveViewerState createState() =>
@@ -464,9 +464,9 @@ class AnimatedInteractiveViewer extends StatefulWidget {
 
 class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
     with TickerProviderStateMixin {
-  TransformationController _controller;
-  AnimationController _animationController;
-  Animation<Matrix4> _animationMatrix4;
+  TransformationController? _controller;
+  late AnimationController _animationController;
+  Animation<Matrix4>? _animationMatrix4;
 
   @override
   void initState() {
@@ -477,13 +477,13 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
 
   //Clear Matrix4 animation
   void _onInteractionStart(ScaleStartDetails details) {
-    if (widget.onInteractionStart != null) widget.onInteractionStart(details);
+    if (widget.onInteractionStart != null) widget.onInteractionStart!(details);
     if (_animationController.status == AnimationStatus.forward)
       _clearAnimation();
   }
 
   void _changeControllerMatrix4() {
-    _controller.value = _animationMatrix4.value;
+    _controller!.value = _animationMatrix4!.value;
     if (!_animationController.isAnimating) _clearAnimation();
   }
 
@@ -496,7 +496,7 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
 
   //Animate MATRIX4
   void _onDoubleTapHandle(TapDownDetails details) {
-    if (_controller.value == Matrix4.identity()) {
+    if (_controller!.value == Matrix4.identity()) {
       final Offset position = details.localPosition;
       final Matrix4 matrix = Matrix4(
           //Column1
@@ -526,13 +526,13 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
 
   void animateMatrix4(Matrix4 value) {
     _animationMatrix4 = Matrix4Tween(
-      begin: _controller.value,
+      begin: _controller!.value,
       end: value,
     ).animate(
       CurvedAnimation(parent: _animationController, curve: widget.curve),
     );
     _animationController.duration = widget.duration;
-    _animationMatrix4.addListener(_changeControllerMatrix4);
+    _animationMatrix4!.addListener(_changeControllerMatrix4);
     _animationController.forward();
   }
 

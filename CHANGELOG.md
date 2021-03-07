@@ -1,3 +1,11 @@
+## [1.1.0]
+
+- Sound Null Safety migration
+- Updated:
+  - Transisions: Added reverseCurve with the same [curve]
+  - SlidingPanel: Create my own SlidingUpPanel
+
+
 ## [1.0.7]
 
 - Updated:
