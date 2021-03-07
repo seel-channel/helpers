@@ -55,14 +55,14 @@
   - [AnimatedInteractiveViewer](#animatedinteractiveviewer-widget)
 
 
-<br>
+<br><br>
 
-| Video Preview                          | 
-| -------------------------------------- | 
-| ![](./assets/readme/video_example.gif) |
+# Video Preview
+
+![](./assets/readme/video_example.gif)
 
 
-<br>
+<br><br>
 
 # Documentation
 ## **BuildContext Extension**
