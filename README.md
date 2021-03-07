@@ -40,7 +40,7 @@
   - [SwipeTransition](#swipetransition-widget)
   - [TurnTransition](#turntransition-widget)
 - [Widgets Helpers](#widgets-helpers)
-  - [SlidingPanelPage](#slidingpanelpage-widget) **FAVORITE**
+  - [SlidingPanel](#slidingpanel-widget) **FAVORITE**
   - [SlidingPanelContainer](#slidingpanelcontainer-widget)
   - [RemoveScrollGlow](#removescrollglow-widget)
   - [DismissKeyboard](#dismisskeyboard-widget)
@@ -57,7 +57,7 @@
 
 <br><br>
 
-![](./assets/readme/example.gif)
+![](./assets/readme/video_example.gif)
 
 <br><br>
 
@@ -124,13 +124,6 @@
 
 ```dart
     double milliseconds = 200;
-
-    //THEME
-    Misc.theme(context);          //Helper
-    Theme.of(context);
-
-    Misc.textTheme(context);      //Helper
-    Theme.of(context).textTheme;
 
 
     //CALLBACKS
@@ -458,15 +451,14 @@ It is a simplification of the _Theme.of(context)_ statement.
 <br>
 
 ## Widgets Helpers
-- ### **SlidingPanelPage Widget:**
+- ### **SlidingPanel Widget:**
   Create a SlidingPanel like a AlertDialog.
   This widget is similar than [sliding_up_panel](https://pub.dev/packages/sliding_up_panel) package.
 
 ```dart
     //EXAMPLE
-    openSlidingPanelPage(
-      context,
-      SlidingPanelPage(builder: (_, __) => SlidingPanelContainer(height: 600)),
+    context.toTransparentPage(
+      SlidingPanel(builder: (_, __) => SlidingPanelContainer(height: 600)),
     );
 ```
 
