@@ -127,6 +127,8 @@ class BuildRoute {
     );
   }
 
+  ///Usually used with a **[SlidingPanel]**
+  ///
   ///Do that:
   ///```dart
   ///navigationKey.currentState.push(

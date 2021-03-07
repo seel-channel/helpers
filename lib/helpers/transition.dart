@@ -50,18 +50,25 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
   //Change the tween
   set changeTween(Tween<T> tween) {
     setState(() {
-      _animation = tween.animate(
-        CurvedAnimation(parent: _controller, curve: widget.curve),
-      );
+      _animation = tween.animate(CurvedAnimation(
+        parent: _controller,
+        curve: widget.curve,
+        reverseCurve: widget.curve,
+      ));
     });
   }
 
   @override
   void initState() {
-    _controller = AnimationController(duration: widget.duration, vsync: this);
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+      reverseDuration: widget.duration,
+    );
     _animation = widget.tween.animate(CurvedAnimation(
       parent: _controller,
       curve: widget.curve,
+      reverseCurve: widget.curve,
     ));
     widget.animate ? _controller.forward() : _controller.reverse();
     super.initState();

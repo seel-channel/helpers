@@ -90,9 +90,8 @@ class _HomePageState extends State<HomePage> {
         ),
         SplashButton(
           onTap: () {
-            openSlidingPanelPage(
-              context,
-              SlidingPanelPage(
+            context.toTransparentPage(
+              SlidingPanel(
                 backgroundBlur: 4.4,
                 builder: (newContext, __) => SlidingPanelContainer(
                   height: 600,

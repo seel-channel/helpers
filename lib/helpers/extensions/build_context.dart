@@ -117,6 +117,8 @@ extension BuildContextHelperExtension on BuildContext {
     );
   }
 
+  ///Usually used with a **[SlidingPanel]**
+  ///
   ///Do that:
   ///```dart
   ///Navigator.push(
