@@ -1,3 +1,7 @@
+## [1.1.0+1]
+
+- Transitions fix bugs
+
 ## [1.1.0]
 
 - Sound Null Safety migration

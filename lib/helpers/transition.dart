@@ -61,6 +61,7 @@ class _BooleanTweenState<T> extends State<BooleanTween<T?>>
   @override
   void initState() {
     _controller = AnimationController(
+      value: widget.animate ? 1.0 : 0.0,
       vsync: this,
       duration: widget.duration,
       reverseDuration: widget.duration,
@@ -70,7 +71,6 @@ class _BooleanTweenState<T> extends State<BooleanTween<T?>>
       curve: widget.curve,
       reverseCurve: widget.curve,
     ));
-    widget.animate ? _controller.forward() : _controller.reverse();
     super.initState();
   }
 
