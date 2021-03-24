@@ -1,6 +1,10 @@
-## [1.1.0+1]
+## [1.1.0+2]
 
 - Transitions fix bugs
+
+## [1.1.0+1]
+
+- README.md video preview added
 
 ## [1.1.0]
 
