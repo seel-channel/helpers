@@ -7,20 +7,19 @@ class BooleanTween<T> extends StatefulWidget {
   ///If it is TRUE, it will execute the Tween from begin to end
   ///(controller.forward()),
   ///if it is FALSE it will execute the Tween from end to begin (controller.reverse())
-  BooleanTween({
+  const BooleanTween({
     Key? key,
     required this.animate,
     required this.tween,
     required this.builder,
     this.child,
-    Duration? duration,
+    this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.linear,
-  })  : this.duration = duration ?? Duration(milliseconds: 200),
-        super(key: key);
+  }) : super(key: key);
 
-  ///If it is TRUE, it will execute the Tween from begin to end.
+  ///If it is **TRUE**, it will execute the Tween from begin to end.
   ///
-  ///If it is FALSE it will execute the Tween from end to begin
+  ///If it is **FALSE** it will execute the Tween from end to begin
   final bool animate;
 
   /// It is the time it takes to execute the animation from beginning to end or vice versa.
@@ -42,10 +41,10 @@ class BooleanTween<T> extends StatefulWidget {
   _BooleanTweenState<T> createState() => _BooleanTweenState<T>();
 }
 
-class _BooleanTweenState<T> extends State<BooleanTween<T?>>
+class _BooleanTweenState<T> extends State<BooleanTween<T>>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<T?> _animation;
+  late Animation<T> _animation;
 
   //Change the tween
   set changeTween(Tween<T> tween) {
@@ -104,14 +103,13 @@ class _BooleanTweenState<T> extends State<BooleanTween<T?>>
 
 class OpacityTransition extends StatefulWidget {
   /// It is a FadeTransition but this will be shown when receiving a Boolean value.
-  OpacityTransition({
+  const OpacityTransition({
     Key? key,
     required this.visible,
     required this.child,
-    Duration? duration,
+    this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.linear,
-  })  : this.duration = duration ?? Duration(milliseconds: 200),
-        super(key: key);
+  }) : super(key: key);
 
   /// If true, it will show the widget.
   /// If false, it will hide the widget.
@@ -155,15 +153,14 @@ class SwipeTransition extends StatefulWidget {
   /// always hides the elements on the screen and not on the parent widget,
   /// that is, if you performed the effect inside a 100x100 container the child widget
   /// of the SwipeTransition would pop out of the container and be overexposed on top of its other widgets.
-  SwipeTransition({
+  const SwipeTransition({
     Key? key,
     required this.visible,
     required this.child,
-    Duration? duration,
+    this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.ease,
     this.direction = SwipeDirection.fromBottom,
-  })  : this.duration = duration ?? Duration(milliseconds: 400),
-        super(key: key);
+  }) : super(key: key);
 
   /// If true, it will show the widget in its position.
   /// If false, it will hide the widget.
@@ -254,16 +251,15 @@ class _SwipeTransitionState extends State<SwipeTransition> {
 
 class TurnTransition extends StatefulWidget {
   /// It is a RotationTransition but this will be animate when receiving a Boolean value.
-  TurnTransition({
+  const TurnTransition({
     Key? key,
     required this.turn,
     required this.child,
     this.begin = 90,
     this.end = -90,
     this.curve = Curves.ease,
-    Duration? duration,
-  })  : this.duration = duration ?? Duration(milliseconds: 200),
-        super(key: key);
+    this.duration = const Duration(milliseconds: 200),
+  }) : super(key: key);
 
   ///**If** true, animate to end degrees, **else** animate to begin degrees.
   final bool turn;
