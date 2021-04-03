@@ -765,10 +765,10 @@ It is a simplification of the _Theme.of(context)_ statement.
     //EXAMPLE
     bool animate = true;
 
-    BooleanTween(
+    BooleanTween<Color>(
       animate: animate,
       tween: ColorTween(begin: Colors.blue, end: Colors.red),
-      builder: (_, Color color, __) => Container(color: color),
+      builder: (_, color, __) => Container(color: color),
     );
 ```
 

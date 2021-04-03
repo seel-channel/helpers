@@ -1,6 +1,11 @@
+## [1.1.1]
+
+- Transitions bugs fixed
+- AnimatedInteractiveViewer bugs fixed
+
 ## [1.1.0+2]
 
-- Transitions fix bugs
+- Transitions bugs fixed
 
 ## [1.1.0+1]
 
