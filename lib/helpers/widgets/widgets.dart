@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart' as vector;
 
 class DoubleColumn extends StatelessWidget {
   ///It's create a double column with a space beetween.
@@ -500,14 +499,35 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
     if (_controller.value == Matrix4.identity()) {
       final double scale = widget.maxScale;
       final Offset position = details.localPosition;
-      final Matrix4 matrix = Matrix4.diagonal3Values(scale, scale, 1.0);
+      // final Matrix4 matrix = Matrix4.diagonal3Values(scale, scale, 1.0);
 
-      if (scale > 2.4) {
-        matrix.translate(-position.dx, -position.dy);
-      } else {
-        matrix.setTranslation(vector.Vector3(-position.dx, -position.dy, 0.0));
-      }
+      // if (scale > 2.4) {
+      //   matrix.translate(-position.dx, -position.dy);
+      // } else {
+      //   matrix.setTranslation(vector.Vector3(-position.dx, -position.dy, 0.0));
+      // }
 
+      final Matrix4 matrix = Matrix4(
+          //Column1
+          scale,
+          0.0,
+          0.0,
+          0.0,
+          //Column2
+          0.0,
+          scale,
+          0.0,
+          0.0,
+          //Column3
+          0.0,
+          0.0,
+          scale,
+          0.0,
+          //Column4
+          scale < 2.4 ? -position.dx : -position.dx * scale,
+          scale < 2.4 ? -position.dy : -position.dy * scale,
+          0.0,
+          1.0);
       animateMatrix4(matrix);
     } else {
       animateMatrix4(Matrix4.identity());
