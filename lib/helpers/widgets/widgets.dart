@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart' as vector;
 
 class DoubleColumn extends StatelessWidget {
   ///It's create a double column with a space beetween.
@@ -464,7 +465,7 @@ class AnimatedInteractiveViewer extends StatefulWidget {
 
 class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
     with TickerProviderStateMixin {
-  TransformationController? _controller;
+  late TransformationController _controller;
   late AnimationController _animationController;
   Animation<Matrix4>? _animationMatrix4;
 
@@ -483,7 +484,7 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
   }
 
   void _changeControllerMatrix4() {
-    _controller!.value = _animationMatrix4!.value;
+    _controller.value = _animationMatrix4!.value;
     if (!_animationController.isAnimating) _clearAnimation();
   }
 
@@ -496,41 +497,31 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
 
   //Animate MATRIX4
   void _onDoubleTapHandle(TapDownDetails details) {
-    if (_controller!.value == Matrix4.identity()) {
+    if (_controller.value == Matrix4.identity()) {
+      final double scale = widget.maxScale;
       final Offset position = details.localPosition;
-      final Matrix4 matrix = Matrix4(
-          //Column1
-          widget.maxScale,
-          0.0,
-          0.0,
-          0.0,
-          //Column2
-          0.0,
-          widget.maxScale,
-          0.0,
-          0.0,
-          //Column3
-          0.0,
-          0.0,
-          widget.maxScale,
-          0.0,
-          //Column4
-          -position.dx,
-          -position.dy,
-          0.0,
-          1.0);
+      final Matrix4 matrix = Matrix4.diagonal3Values(scale, scale, 1.0);
+
+      if (scale > 2.4) {
+        matrix.translate(-position.dx, -position.dy);
+      } else {
+        matrix.setTranslation(vector.Vector3(-position.dx, -position.dy, 0.0));
+      }
+
       animateMatrix4(matrix);
-    } else
+    } else {
       animateMatrix4(Matrix4.identity());
+    }
   }
 
   void animateMatrix4(Matrix4 value) {
     _animationMatrix4 = Matrix4Tween(
-      begin: _controller!.value,
+      begin: _controller.value,
       end: value,
-    ).animate(
-      CurvedAnimation(parent: _animationController, curve: widget.curve),
-    );
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: widget.curve,
+    ));
     _animationController.duration = widget.duration;
     _animationMatrix4!.addListener(_changeControllerMatrix4);
     _animationController.forward();
