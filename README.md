@@ -20,6 +20,7 @@
 ## Table of Contents
 
 - [BuildContext Extension](#buildcontext-extension) **FAVORITE Plus**
+- [Console Color Log](#console-color-log) **FAVORITE**
 - [Build Classes](#build-helpers) 
   - [BuildMedia](#buildmedia-class)
   - [BuildColor](#buildcolor-class) 
@@ -57,8 +58,12 @@
 
 <br><br>
 
-# Video Preview
+# Preview
 
+#### **Color log example**
+![](./assets/readme/log_example.png)
+
+#### **Widgets example**
 ![](./assets/readme/video_example.gif)
 
 
@@ -89,6 +94,63 @@
     context.to(page); //DOES THIS: Navigator.push(context, MaterialPageRoute(builder: (_) => page));
     ... //+5 Navigator Locations
 
+```
+<!-- 
+<br>
+
+### **GlobalKey Extension**
+  It is a simplification of _GlobalKey_.
+
+```dart
+
+  key.widget
+  //key.currentWidget
+  key.state
+  //key.currentState
+  key.context
+  //key.currentContext
+
+  key.size
+  //key.currentContext.size
+  key.width
+  //key.currentContext.size.width
+  key.height
+  //key.currentContext.size.height
+
+```
+
+-->
+
+<br><br>
+
+## **Console Color Log**
+  It is a personalization for console log.
+
+  ![](./assets/readme/log_example.png)
+
+```dart
+  printPink("I'm an error 凸-_-凸", true);
+  printYellow("I'm an alert (¯―¯٥)");
+  printCyan("I'm an info (✿◠‿◠)");
+  printColor(
+    "I'm a weird boy ¯\\(°_o)/¯",
+    PrintColorStyle(
+      prefix: "Hola baby!",
+      foreground: Colors.green,
+      background: Colors.black,
+      underline: true,
+      bold: true,
+      italic: true,
+    ),
+  );
+  printColor(
+    "Controller disposed!",
+    PrintColorStyle(
+      bold: true,
+      prefix: "HELPERS",
+      foreground: Colors.orangeAccent,
+    ),
+  );
 ```
 <!-- 
 <br>

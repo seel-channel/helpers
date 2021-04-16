@@ -1,5 +1,10 @@
 ## [1.1.1]
 
+- printColor functions added!
+- Margin const constructors added
+
+## [1.1.1]
+
 - Transitions bugs fixed
 - AnimatedInteractiveViewer bugs fixed
 
