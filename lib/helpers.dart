@@ -2,6 +2,7 @@ library helpers;
 
 export 'package:helpers/helpers/size.dart';
 export 'package:helpers/helpers/misc.dart';
+export 'package:helpers/helpers/print.dart';
 export 'package:helpers/helpers/transition.dart';
 
 export 'package:helpers/helpers/widgets/text.dart';

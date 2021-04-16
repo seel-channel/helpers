@@ -122,6 +122,16 @@ class _HomePageState extends State<HomePage> {
           },
           child: BodyText1("Open Sliding Panel"),
         ),
+        SizedBox(height: 20),
+        SplashButton(
+          onTap: () {
+            printPink("I'm an error 凸-_-凸");
+            printYellow("I'm an alert (¯―¯٥)");
+            printCyan("I'm an info (✿◠‿◠)");
+            printColor("I'm a weird boy ¯\\(°_o)/¯", Colors.red, Colors.black);
+          },
+          child: BodyText1("Test console color text"),
+        ),
         SizedBox(height: 60),
       ]),
     );
