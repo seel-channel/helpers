@@ -1,12 +1,15 @@
+## [1.1.2]
+
+- Added:
+  - Color hex extension
+  - printColor functions
+  - Margin const constructors
+
 ## [1.1.1]
 
-- printColor functions added!
-- Margin const constructors added
-
-## [1.1.1]
-
-- Transitions bugs fixed
-- AnimatedInteractiveViewer bugs fixed
+- Fixed:
+  - Transitions bugs
+  - AnimatedInteractiveViewer bugs
 
 ## [1.1.0+2]
 
