@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class _AnsiColor {
@@ -39,11 +41,16 @@ class _AnsiColor {
 }
 
 void printColor(Object object, PrintColorStyle style) {
-  print(_AnsiColor(style)(object));
+  final value = _AnsiColor(style)(object);
+  if (style.prefix.isEmpty)
+    print(value);
+  else
+    log(value, name: style.prefix);
 }
 
 class PrintColorStyle {
   final bool bold, underline, italic;
+  final String prefix;
   final Color foreground;
   final Color? background;
 
@@ -53,6 +60,7 @@ class PrintColorStyle {
     this.bold = false,
     this.italic = false,
     this.underline = false,
+    this.prefix = "",
   });
 }
 

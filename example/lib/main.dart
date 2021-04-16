@@ -125,10 +125,28 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: 20),
         SplashButton(
           onTap: () {
-            printPink("I'm an error 凸-_-凸");
+            printPink("I'm an error 凸-_-凸", true);
             printYellow("I'm an alert (¯―¯٥)");
             printCyan("I'm an info (✿◠‿◠)");
-            printColor("I'm a weird boy ¯\\(°_o)/¯", Colors.red, Colors.black);
+            printColor(
+              "I'm a weird boy ¯\\(°_o)/¯",
+              PrintColorStyle(
+                prefix: "Hola baby!",
+                foreground: Colors.green,
+                background: Colors.black,
+                underline: true,
+                bold: true,
+                italic: true,
+              ),
+            );
+            printColor(
+              "Controller disposed!",
+              PrintColorStyle(
+                prefix: "HELPERS",
+                foreground: Colors.orangeAccent,
+                bold: true,
+              ),
+            );
           },
           child: BodyText1("Test console color text"),
         ),
