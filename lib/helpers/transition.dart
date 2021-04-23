@@ -204,22 +204,22 @@ class _SwipeTransitionState extends State<SwipeTransition> {
   void _changeData() {
     Misc.onLayoutRendered(() {
       final Size? size = _containerKey.size;
-      if (_swipeDirection != widget.direction || _size != size)
+      if (size != null && (_swipeDirection != widget.direction || _size != size))
         setState(() {
           _size = size;
           _swipeDirection = widget.direction;
           switch (widget.direction) {
             case SwipeDirection.fromTop:
-              _direction = Offset(0.0, -_size!.height);
+              _direction = Offset(0.0, -size.height);
               break;
             case SwipeDirection.fromLeft:
-              _direction = Offset(-_size!.width, 0.0);
+              _direction = Offset(-size.width, 0.0);
               break;
             case SwipeDirection.fromRight:
-              _direction = Offset(_size!.width, 0.0);
+              _direction = Offset(size.width, 0.0);
               break;
             case SwipeDirection.fromBottom:
-              _direction = Offset(0.0, _size!.height);
+              _direction = Offset(0.0, size.height);
               break;
           }
           _tweenKey.state!.changeTween = _createTween();
