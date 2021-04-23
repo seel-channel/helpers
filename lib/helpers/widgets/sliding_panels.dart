@@ -162,11 +162,13 @@ class SlidingPanel extends StatefulWidget {
 
 class _SlidingPanelState extends State<SlidingPanel>
     with SingleTickerProviderStateMixin {
+  static const _defaultBuilderHeight = 1500.0;
+
   final ScrollController _sc = ScrollController();
   final GlobalKey _key = GlobalKey();
 
   late AnimationController _controller;
-  double _builderHeight = 1500.0;
+  double _builderHeight = _defaultBuilderHeight;
   VelocityTracker _tracker = VelocityTracker.withKind(
     PointerDeviceKind.unknown,
   );
@@ -182,7 +184,7 @@ class _SlidingPanelState extends State<SlidingPanel>
     widget.controller._addState(this);
     Misc.onLayoutRendered(() {
       setState(() {
-        _builderHeight = _key.height;
+        _builderHeight = _key.height ?? _defaultBuilderHeight;
         _openPanel();
       });
     });
