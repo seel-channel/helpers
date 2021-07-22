@@ -8,8 +8,59 @@ extension BuildContextHelperExtension on BuildContext {
         : PageRouteBuilder(pageBuilder: (_, __, ___) => page);
   }
 
+  //----------//
+  //NAVIGATION//
+  //----------//
+  Object? get arguments => ModalRoute.of(this)?.settings.arguments;
+
   NavigatorState get navigator => Navigator.of(this);
 
+  //---------//
+  //SNACKBARS//
+  //---------//
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
+    SnackBar snackBar, {
+    void Function(SnackBarClosedReason)? onClosed,
+    VoidCallback? onVisible,
+  }) {
+    final controller = ScaffoldMessenger.of(this).showSnackBar(snackBar);
+    onVisible?.call();
+    controller.closed.then((reason) => onClosed?.call(reason));
+    return controller;
+  }
+
+  void hideCurrentSnackBar(
+      [SnackBarClosedReason reason = SnackBarClosedReason.remove]) {
+    ScaffoldMessenger.of(this).hideCurrentSnackBar(reason: reason);
+  }
+
+  void removeCurrentSnackBar(
+      [SnackBarClosedReason reason = SnackBarClosedReason.remove]) {
+    ScaffoldMessenger.of(this).removeCurrentSnackBar(reason: reason);
+  }
+
+  void clearSnackBars() {
+    ScaffoldMessenger.of(this).clearSnackBars();
+  }
+
+  //----------//
+  //DIMENSIONS//
+  //----------//
+  ///Do that:
+  ///```dart
+  ///return context.size.width
+  ///```
+  double? get width => this.size?.width;
+
+  ///Do that:
+  ///```dart
+  ///return context.size.height
+  ///```
+  double? get height => this.size?.height;
+
+  //-----//
+  //THEME//
+  //-----//
   /// It is a simplification of the **_Theme.of(context)_** statement.
   ///
   ///Do that:
@@ -38,18 +89,11 @@ extension BuildContextHelperExtension on BuildContext {
   ///```
   TextTheme get textTheme => Theme.of(this).textTheme;
 
-  ///Do that:
-  ///```dart
-  ///return context.size.width
-  ///```
-  double? get width => this.size?.width;
+  IconThemeData get iconTheme => theme.iconTheme;
 
-  ///Do that:
-  ///```dart
-  ///return context.size.height
-  ///```
-  double? get height => this.size?.height;
-
+  //----------//
+  //DEPRECATED//
+  //----------//
   ///Usually used with a **[SlidingPanel]**
   ///
   ///Do that:

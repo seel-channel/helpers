@@ -12,7 +12,6 @@ class App extends StatelessWidget {
       statusBarIconBrightness: Brightness.dark,
     );
     return MaterialApp(
-      navigatorKey: BuildRoute.key,
       home: HomePage(),
       theme: ThemeData(
         accentColor: const Color(0xFF0253f5),
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> {
         ),
         SplashButton(
           onTap: () {
-            context.toTransparentPage(
+            context.navigator.pushOpaque(
               SlidingBottomSheet(
                 backgroundBlur: 4.4,
                 builder: (newContext, __) => SlidingBottomSheetContainer(
@@ -100,17 +99,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(children: [
                     SplashTap(
                       onTap: () {
-                        //Need on MaterialApp the navigationKey
-                        BuildRoute.toTransparentPage(Center(
-                          child: Headline4("GG"),
-                        ));
-                      },
-                      child: Text("Using BuildRoute"),
-                    ),
-                    ExpandedSpacer(),
-                    SplashTap(
-                      onTap: () {
-                        newContext.toTransparentPage(Center(
+                        context.navigator.pushOpaque(Center(
                           child: Headline4("GG"),
                         ));
                       },

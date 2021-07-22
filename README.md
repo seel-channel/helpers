@@ -521,7 +521,7 @@ It is a simplification of the _Theme.of(context)_ statement.
 
 ```dart
     //EXAMPLE
-    context.toTransparentPage(
+    navigator.pushOpaque(
       SlidingPanel(builder: (_, __) => SlidingPanelContainer(height: 600)),
     );
 ```
