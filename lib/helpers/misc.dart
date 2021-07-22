@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 abstract class Misc {
   ///DO THAT:
   ///```dart
-  /// WidgetsBinding.instance.addPostFrameCallback((d) => callback());
+  ///  WidgetsBinding.instance?.endOfFrame.then((_) => callback);
   /// ```
   static void onLayoutRendered(void Function() callback) {
-    WidgetsBinding.instance!.addPostFrameCallback((d) => callback());
+    WidgetsBinding.instance?.endOfFrame.then((_) => callback);
   }
 
   ///```dart
@@ -73,7 +73,9 @@ abstract class Misc {
   ///````
   static Timer periodic(int milliseconds, void Function() callback) {
     return Timer.periodic(
-        Duration(milliseconds: milliseconds), (_) => callback());
+      Duration(milliseconds: milliseconds),
+      (_) => callback(),
+    );
   }
 
   /// Allows you to pause instructions for a set time.
@@ -92,7 +94,7 @@ abstract class Misc {
   ///   Navigator.pop(context);
   ///````
   ///
-  static Future<void> wait(int milliseconds) async {
+  static Future<Null> wait(int milliseconds) async {
     await Future.delayed(Duration(milliseconds: milliseconds), () {});
   }
 

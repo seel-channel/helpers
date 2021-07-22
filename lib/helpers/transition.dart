@@ -9,8 +9,8 @@ class BooleanTween<T> extends StatefulWidget {
   ///if it is FALSE it will execute the Tween from end to begin (controller.reverse())
   const BooleanTween({
     Key? key,
-    required this.animate,
     required this.tween,
+    required this.animate,
     required this.builder,
     this.child,
     this.duration = const Duration(milliseconds: 200),
@@ -132,10 +132,10 @@ class _OpacityTransitionState extends State<OpacityTransition> {
   @override
   Widget build(BuildContext context) {
     return BooleanTween<double>(
-      curve: widget.curve,
+      tween: LerpTween(),
       animate: widget.visible,
+      curve: widget.curve,
       duration: widget.duration,
-      tween: Tween<double>(begin: 0.0, end: 1.0),
       builder: (_, opacity, child) => Opacity(
         opacity: opacity,
         child: opacity > 0.0 ? child : null,
