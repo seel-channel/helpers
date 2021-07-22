@@ -6,35 +6,35 @@ extension GlobalKeyHelperExtension<T extends State<StatefulWidget>>
   ///```dart
   ///return key.currentContext
   ///```
-  BuildContext? get context => this.currentContext;
+  BuildContext? get context => currentContext;
 
   ///Do that:
   ///```dart
   ///return key.currentWidget
   ///```
-  Widget? get widget => this.currentWidget;
+  Widget? get widget => currentWidget;
 
   ///Do that:
   ///```dart
   ///return key.currentContext.size.height
   ///```
-  double? get height => this.currentContext?.size?.height;
+  double? get height => currentContext?.size?.height;
 
   ///Do that:
   ///```dart
   ///return key.currentContext.size.width
   ///```
-  double? get width => this.currentContext?.size?.width;
+  double? get width => currentContext?.size?.width;
 
   ///Do that:
   ///```dart
   ///return key.currentContext.size
   ///```
-  Size? get size => this.currentContext?.size;
+  Size? get size => currentContext?.size;
 
   ///Do that:
   ///```dart
   ///return key.currentState
   ///```
-  T? get state => this.currentState;
+  T? get state => currentState;
 }

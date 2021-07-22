@@ -15,10 +15,10 @@ class App extends StatelessWidget {
       navigatorKey: BuildRoute.key,
       home: HomePage(),
       theme: ThemeData(
-        accentColor: Color(0xFF0253f5),
-        primaryColor: Color(0xFF37393d),
+        accentColor: const Color(0xFF0253f5),
+        primaryColor: const Color(0xFF37393d),
         scaffoldBackgroundColor: Colors.grey[100],
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           bodyText1: TextStyle(color: Colors.white),
           headline4: TextStyle(
             color: Colors.black,
@@ -47,11 +47,11 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: context.color.accent,
         onPressed: () => setState(() => visible = !visible),
-        child: TurnTransition(turn: visible, child: Icon(Icons.chevron_left)),
+        child: TurnTransition(
+            turn: visible, child: const Icon(Icons.chevron_left)),
       ),
       body: Column(children: [
         SafeAreaColor(
-          color: Colors.white,
           height: 60,
           child: Center(
             child: BooleanTween<double>(
@@ -67,7 +67,8 @@ class _HomePageState extends State<HomePage> {
           child: SwipeTransition(
             visible: visible,
             direction: SwipeDirection.fromTop,
-            child: Center(child: TextDesigned("Swipe Transition", bold: true)),
+            child: const Center(
+                child: TextDesigned("Swipe Transition", bold: true)),
           ),
         ),
         Expanded(
@@ -91,9 +92,9 @@ class _HomePageState extends State<HomePage> {
         SplashButton(
           onTap: () {
             context.toTransparentPage(
-              SlidingPanel(
+              SlidingBottomSheet(
                 backgroundBlur: 4.4,
-                builder: (newContext, __) => SlidingPanelContainer(
+                builder: (newContext, __) => SlidingBottomSheetContainer(
                   height: 600,
                   padding: Margin.all(100),
                   child: Column(children: [
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
         SizedBox(height: 20),
         SplashButton(
           onTap: () {
-            printPink("I'm an error 凸-_-凸", true);
+            printPink("I'm an error 凸-_-凸", bold: true);
             printYellow("I'm an alert (¯―¯٥)");
             printCyan("I'm an info (✿◠‿◠)");
             printColor(

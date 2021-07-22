@@ -29,6 +29,7 @@ abstract class Misc {
   /// nisi ut aliquip ex ea commodo consequat."
   /// ```
   static String extendedLoremIpsum() {
+    // ignore: prefer_interpolation_to_compose_strings
     return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
         "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
         "Ut enim ad minim veniam, quis nostrud exercitation " +
@@ -135,6 +136,7 @@ abstract class Misc {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
 abstract class SystemOverlay {
   ///```dart
   ///return [SystemUiOverlay.top]
@@ -152,6 +154,7 @@ abstract class SystemOverlay {
   static List<SystemUiOverlay> bottom = [SystemUiOverlay.bottom];
 }
 
+// ignore: avoid_classes_with_only_static_members
 abstract class SystemOrientation {
   ///```dart
   ///return [DeviceOrientation.values]

@@ -13,8 +13,9 @@ class _AnsiColor {
 
   _AnsiColor(this.style) {
     _fg = _fromRgbColorTo8bitColor(style.foreground);
-    if (style.background != null)
+    if (style.background != null) {
       _bg = _fromRgbColorTo8bitColor(style.background!);
+    }
   }
 
   int _fromRgbColorTo8bitColor(Color color) {
@@ -37,15 +38,17 @@ class _AnsiColor {
     return sb.toString();
   }
 
-  String call(Object msg) => '${this}$msg$ansiDefault';
+  String call(Object? msg) => '${this}$msg$ansiDefault';
 }
 
-void printColor(Object object, PrintColorStyle style) {
+void printColor(Object? object, PrintColorStyle style) {
   final value = _AnsiColor(style)(object);
-  if (style.prefix.isEmpty)
+  if (style.prefix.isEmpty) {
+    // ignore: avoid_print
     print(value);
-  else
+  } else {
     log(value, name: style.prefix);
+  }
 }
 
 class PrintColorStyle {
@@ -64,44 +67,44 @@ class PrintColorStyle {
   });
 }
 
-void printWhite(Object object, [bool bold = false]) =>
+void printWhite(Object? object, {bool bold = false}) =>
     printColor(object, PrintColorStyle(foreground: Colors.white, bold: bold));
-void printBlack(Object object, [bool bold = false]) =>
+void printBlack(Object? object, {bool bold = false}) =>
     printColor(object, PrintColorStyle(foreground: Colors.black, bold: bold));
-void printBrown(Object object, [bool bold = false]) =>
+void printBrown(Object? object, {bool bold = false}) =>
     printColor(object, PrintColorStyle(foreground: Colors.brown, bold: bold));
 
-void printRed(Object object, [bool bold = false]) => printColor(
+void printRed(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.redAccent, bold: bold));
-void printBlue(Object object, [bool bold = false]) => printColor(
+void printBlue(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.blueAccent, bold: bold));
-void printPink(Object object, [bool bold = false]) => printColor(
+void printPink(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.pinkAccent, bold: bold));
-void printLime(Object object, [bool bold = false]) => printColor(
+void printLime(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.limeAccent, bold: bold));
-void printTeal(Object object, [bool bold = false]) => printColor(
+void printTeal(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.tealAccent, bold: bold));
-void printCyan(Object object, [bool bold = false]) => printColor(
+void printCyan(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.cyanAccent, bold: bold));
-void printGreen(Object object, [bool bold = false]) => printColor(
+void printGreen(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.greenAccent, bold: bold));
-void printAmber(Object object, [bool bold = false]) => printColor(
+void printAmber(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.amberAccent, bold: bold));
-void printOrange(Object object, [bool bold = false]) => printColor(
+void printOrange(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.orangeAccent, bold: bold));
-void printYellow(Object object, [bool bold = false]) => printColor(
+void printYellow(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.yellowAccent, bold: bold));
-void printIndigo(Object object, [bool bold = false]) => printColor(
+void printIndigo(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.indigoAccent, bold: bold));
-void printPurple(Object object, [bool bold = false]) => printColor(
+void printPurple(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.purpleAccent, bold: bold));
-void printBlueGrey(Object object, [bool bold = false]) => printColor(
+void printBlueGrey(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.blueGrey, bold: bold));
-void printDeepPurple(Object object, [bool bold = false]) => printColor(
+void printDeepPurple(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.deepPurpleAccent, bold: bold));
-void printLightGreen(Object object, [bool bold = false]) => printColor(
+void printLightGreen(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.lightGreenAccent, bold: bold));
-void printLightBlue(Object object, [bool bold = false]) => printColor(
+void printLightBlue(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.lightBlueAccent, bold: bold));
-void printDeepOrange(Object object, [bool bold = false]) => printColor(
+void printDeepOrange(Object? object, {bool bold = false}) => printColor(
     object, PrintColorStyle(foreground: Colors.deepOrangeAccent, bold: bold));

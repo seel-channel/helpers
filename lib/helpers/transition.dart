@@ -47,7 +47,7 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
   late Animation<T> _animation;
 
   //Change the tween
-  set changeTween(Tween<T> tween) {
+  void changeTween(Tween<T> tween) {
     setState(() {
       _animation = tween.animate(CurvedAnimation(
         parent: _controller,
@@ -76,13 +76,13 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
   @override
   void didUpdateWidget(BooleanTween oldWidget) {
     super.didUpdateWidget(oldWidget as BooleanTween<T>);
-    if (!oldWidget.animate && widget.animate)
+    if (!oldWidget.animate && widget.animate) {
       _controller.forward();
-    else if (oldWidget.animate && !widget.animate) _controller.reverse();
+    } else if (oldWidget.animate && !widget.animate) _controller.reverse();
   }
 
   @override
-  dispose() {
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
@@ -91,12 +91,12 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _animation,
-      child: widget.child,
       builder: (newContext, child) => widget.builder(
         newContext,
         _animation.value,
         child,
       ),
+      child: widget.child,
     );
   }
 }
@@ -136,11 +136,11 @@ class _OpacityTransitionState extends State<OpacityTransition> {
       animate: widget.visible,
       duration: widget.duration,
       tween: Tween<double>(begin: 0.0, end: 1.0),
-      child: widget.child,
       builder: (_, opacity, child) => Opacity(
         opacity: opacity,
         child: opacity > 0.0 ? child : null,
       ),
+      child: widget.child,
     );
   }
 }
@@ -204,7 +204,8 @@ class _SwipeTransitionState extends State<SwipeTransition> {
   void _changeData() {
     Misc.onLayoutRendered(() {
       final Size? size = _containerKey.size;
-      if (size != null && (_swipeDirection != widget.direction || _size != size))
+      if (size != null &&
+          (_swipeDirection != widget.direction || _size != size)) {
         setState(() {
           _size = size;
           _swipeDirection = widget.direction;
@@ -222,8 +223,9 @@ class _SwipeTransitionState extends State<SwipeTransition> {
               _direction = Offset(0.0, size.height);
               break;
           }
-          _tweenKey.state!.changeTween = _createTween();
+          _tweenKey.state!.changeTween(_createTween());
         });
+      }
     });
   }
 
@@ -239,11 +241,11 @@ class _SwipeTransitionState extends State<SwipeTransition> {
         curve: widget.curve,
         animate: widget.visible,
         duration: widget.duration,
-        child: Container(key: _containerKey, child: widget.child),
         builder: (_, value, child) => Transform.translate(
           offset: value,
           child: child,
         ),
+        child: Container(key: _containerKey, child: widget.child),
       ),
     );
   }
@@ -295,11 +297,11 @@ class _TurnTransitionState extends State<TurnTransition> {
         begin: widget.begin * degrees2radians,
         end: widget.end * degrees2radians,
       ),
-      child: widget.child,
       builder: (_, angle, child) => Transform.rotate(
         angle: angle,
         child: child,
       ),
+      child: widget.child,
     );
   }
 }

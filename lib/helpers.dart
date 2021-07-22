@@ -7,7 +7,7 @@ export 'package:helpers/helpers/transition.dart';
 
 export 'package:helpers/helpers/widgets/text.dart';
 export 'package:helpers/helpers/widgets/widgets.dart';
-export 'package:helpers/helpers/widgets/sliding_panels.dart';
+export 'package:helpers/helpers/widgets/sliding_bottom_sheet.dart';
 
 export 'package:helpers/helpers/extensions/global_key.dart';
 export 'package:helpers/helpers/extensions/build_context.dart';
