@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
+@Deprecated("Please don't use it, you should use Text(...)")
 class TextDesigned extends StatelessWidget {
   const TextDesigned(
     this.text, {

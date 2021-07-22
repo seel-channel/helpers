@@ -57,7 +57,10 @@ class _HomePageState extends State<HomePage> {
               animate: visible,
               tween: Tween<double>(begin: 16, end: 20),
               builder: (_, value, __) {
-                return TextDesigned("HELPERS EXAMPLE", bold: true, size: value);
+                return BodyText1(
+                  "HELPERS EXAMPLE",
+                  style: TextStyle(fontSize: value),
+                );
               },
             ),
           ),
@@ -66,8 +69,7 @@ class _HomePageState extends State<HomePage> {
           child: SwipeTransition(
             visible: visible,
             direction: SwipeDirection.fromTop,
-            child: const Center(
-                child: TextDesigned("Swipe Transition", bold: true)),
+            child: const Center(child: BodyText1("Swipe Transition")),
           ),
         ),
         Expanded(
@@ -85,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           child: SwipeTransition(
             visible: visible,
             direction: SwipeDirection.fromBottom,
-            child: Center(child: TextDesigned("Swipe Transition", bold: true)),
+            child: Center(child: BodyText1("Swipe Transition")),
           ),
         ),
         SplashButton(

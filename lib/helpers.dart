@@ -6,8 +6,11 @@ export 'package:helpers/helpers/print.dart';
 export 'package:helpers/helpers/transition.dart';
 
 export 'package:helpers/helpers/widgets/text.dart';
+export 'package:helpers/helpers/widgets/align.dart';
 export 'package:helpers/helpers/widgets/widgets.dart';
+export 'package:helpers/helpers/widgets/carousel.dart';
 export 'package:helpers/helpers/widgets/sliding_bottom_sheet.dart';
+export 'package:helpers/helpers/widgets/animated_interactive_viewer.dart';
 
 export 'package:helpers/helpers/extensions/global_key.dart';
 export 'package:helpers/helpers/extensions/double.dart';
