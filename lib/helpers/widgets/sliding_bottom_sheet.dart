@@ -167,7 +167,7 @@ class SlidingBottomSheet extends StatefulWidget {
   ///
   ///Example:
   ///```dart
-  ///context.toTransparentPage(
+  ///navigator.pushOpaque(
   ///   SlidingBottomSheetPage(builder: (_, __) => SlidingBottomSheetContainer(...)),
   ///);
   ///```
@@ -333,7 +333,7 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
 
   Future<void> _closePanel() async {
     await _animateTo(0.0);
-    context.goBack();
+    context.navigator.pop();
   }
 
   Future<void> _animateTo(double position) async {
