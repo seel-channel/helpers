@@ -1,4 +1,29 @@
 extension ListListMerging<T> on List<List<T>> {
+  ///Do that:
+  ///```dart
+  /// //Input
+  /// final output = [
+  ///   [elementT, elementT],
+  ///   [elementT, elementT, elementT, elementT],
+  ///   [elementT, elementT, elementT],
+  /// ].merge();
+  ///
+  ///
+  /// //Printing result
+  /// print(output);
+  ///
+  /// [
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  ///   elementT,
+  /// ]
+  ///```
   List<T> merge() {
     return fold<List<T>>(
       [],
@@ -6,8 +31,39 @@ extension ListListMerging<T> on List<List<T>> {
     );
   }
 
-  List<E> fuse<E>(E Function(T e) element,
-      {E? sepatarorBetweenItems, E? separatorBetweenLists}) {
+  ///Do that:
+  ///```dart
+  /// //Input
+  /// final List<Widget> children = [
+  ///   [SidebarMenuItem(), SidebarMenuItem, SidebarMenuItem()]
+  ///   [SidebarMenuItem(), SidebarMenuItem()]
+  /// ].fuse<Widget>(
+  ///     (item) => SidebarMenuTile(item),
+  ///     sepatarorBetweenItems: const Spacer(),
+  ///     separatorBetweenLists: const BigSpacer()
+  ///   );
+  ///
+  ///
+  /// //Printing result
+  /// print(children);
+  ///
+  /// [
+  ///   SidebarMenuItem(),
+  ///   const Spacer(),
+  ///   SidebarMenuItem(),
+  ///   const Spacer(),
+  ///   SidebarMenuItem(),
+  ///   const BigSpacer(),
+  ///   SidebarMenuItem(),
+  ///   const Spacer(),
+  ///   SidebarMenuItem(),
+  /// ]
+  ///```
+  List<E> fuse<E>(
+    E Function(T e) element, {
+    E? sepatarorBetweenItems,
+    E? separatorBetweenLists,
+  }) {
     final List<E> items = [];
     for (int i = 0; i < length; i++) {
       items.addAll([
@@ -21,10 +77,40 @@ extension ListListMerging<T> on List<List<T>> {
 }
 
 extension ListMerging<T> on List<T> {
+  ///Do that:
+  ///```dart
+  /// if (!contains(element)) add(element);
+  ///```
   void addIfNotContains(T element) {
     if (!contains(element)) add(element);
   }
 
+  ///Do that:
+  ///```dart
+  /// //Input
+  /// final List<Widget> children = [
+  ///   ProductModel(),
+  ///   ProductModel(),
+  ///   ProductModel(),
+  ///   ProductModel(),
+  /// ].fuse<Widget>((index, product) {
+  ///   return ProductTile(product);
+  /// }, const Spacer());
+  ///
+  ///
+  /// //Printing result
+  /// print(children);
+  ///
+  /// [
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  /// ]
+  ///```
   List<E> fuse<E>(E Function(int index, T e) element, [E? separator]) {
     final List<E> items = [];
     for (int i = 0; i < length; i++) {
@@ -36,6 +122,30 @@ extension ListMerging<T> on List<T> {
     return items;
   }
 
+  ///Do that:
+  ///```dart
+  /// //Input
+  /// final output = [
+  ///   ProductTile(),
+  ///   ProductTile(),
+  ///   ProductTile(),
+  ///   ProductTile(),
+  /// ].separete(const Spacer());
+  ///
+  ///
+  /// //Printing result
+  /// print(output);
+  ///
+  /// [
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  ///   const Spacer(),
+  ///   ProductTile(),
+  /// ]
+  ///```
   List<T> separete(T separator) {
     final List<T> items = [];
     for (int i = 0; i < length; i++) {
