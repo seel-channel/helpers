@@ -6,7 +6,7 @@ class Margin extends EdgeInsets {
   ///```dart
   ///EdgeInsets.zero
   ///```
-  static EdgeInsets zero = EdgeInsets.zero;
+  static const EdgeInsets zero = EdgeInsets.zero;
 
   ///Do that:
   ///```dart
@@ -83,7 +83,7 @@ class EdgeRadius extends BorderRadius {
   ///```dart
   ///BorderRadius.zero
   ///```
-  static BorderRadius zero = BorderRadius.zero;
+  static const BorderRadius zero = BorderRadius.zero;
 
   ///Do that:
   ///```dart

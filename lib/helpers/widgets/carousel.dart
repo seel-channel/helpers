@@ -1,4 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:helpers/helpers.dart';
+
+class CarouselContainer extends StatelessWidget {
+  const CarouselContainer({
+    Key? key,
+    required this.carousel,
+    this.aspectRatio = 1.0,
+    this.padding = const Margin.all(0),
+  }) : super(key: key);
+
+  final EdgeInsets padding;
+  final double aspectRatio;
+  final Widget Function(double viewportFraction) carousel;
+
+  @override
+  Widget build(BuildContext context) {
+    final BuildMedia media = context.media;
+    final double width = media.width;
+    final double viewportFraction = (width - padding.horizontal) / width;
+
+    return SizedBox(
+      width: width,
+      height: (width / aspectRatio) * viewportFraction,
+      child: OverflowBox(
+        maxWidth: width,
+        child: carousel(viewportFraction),
+      ),
+    );
+  }
+}
 
 class Carousel extends StatefulWidget {
   Carousel({

@@ -14,6 +14,7 @@ export 'package:helpers/helpers/widgets/sliding_bottom_sheet.dart';
 export 'package:helpers/helpers/widgets/animated_interactive_viewer.dart';
 export 'package:helpers/helpers/widgets/numeric_pad.dart';
 
+export 'package:helpers/helpers/extensions/axis.dart';
 export 'package:helpers/helpers/extensions/global_key.dart';
 export 'package:helpers/helpers/extensions/double.dart';
 export 'package:helpers/helpers/extensions/build_context.dart';
