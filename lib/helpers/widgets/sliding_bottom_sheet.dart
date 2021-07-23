@@ -97,7 +97,9 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   final Duration animatedSizeDuration;
 
   final ScrollPhysics? scrollPhysics;
+
   final ScrollBehavior scrollBehavior;
+
   final ScrollController? controller;
 
   @override

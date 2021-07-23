@@ -68,7 +68,6 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: SwipeTransition(
             visible: visible,
-            direction: SwipeDirection.fromTop,
             child: const Center(child: BodyText1("Swipe Transition")),
           ),
         ),
@@ -86,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         Expanded(
           child: SwipeTransition(
             visible: visible,
-            direction: SwipeDirection.fromBottom,
+            axisAlignment: 1.0,
             child: Center(child: BodyText1("Swipe Transition")),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
-import 'package:helpers/helpers.dart';
+
 import 'package:flutter/material.dart';
+import 'package:helpers/helpers.dart';
 
 class BooleanTween<T> extends StatefulWidget {
   ///It is an AnimatedBuilder.
@@ -145,9 +146,7 @@ class _OpacityTransitionState extends State<OpacityTransition> {
   }
 }
 
-enum SwipeDirection { fromTop, fromLeft, fromRight, fromBottom }
-
-class SwipeTransition extends StatefulWidget {
+class SwipeTransition extends StatelessWidget {
   /// It is a type of transition very similar to SlideTransition.
   /// The SwipeTransition fixes the problem that arises in the SlideTransition since
   /// always hides the elements on the screen and not on the parent widget,
@@ -156,10 +155,11 @@ class SwipeTransition extends StatefulWidget {
   const SwipeTransition({
     Key? key,
     required this.visible,
+    this.curve = Curves.ease,
     required this.child,
     this.duration = const Duration(milliseconds: 200),
-    this.curve = Curves.ease,
-    this.direction = SwipeDirection.fromBottom,
+    this.axis = Axis.vertical,
+    this.axisAlignment = -1.0,
   }) : super(key: key);
 
   /// If true, it will show the widget in its position.
@@ -175,83 +175,51 @@ class SwipeTransition extends StatefulWidget {
   /// Is the time it takes to make the transition.
   final Duration duration;
 
-  /// It is in the address where the Widget will be hidden or where the widget will be displayed.
-  final SwipeDirection direction;
+  /// [Axis.horizontal] if [sizeFactor] modifies the width, otherwise
+  /// [Axis.vertical].
+  final Axis axis;
 
-  @override
-  _SwipeTransitionState createState() => _SwipeTransitionState();
-}
-
-class _SwipeTransitionState extends State<SwipeTransition> {
-  final _tweenKey = GlobalKey<_BooleanTweenState<Offset>>();
-  final _containerKey = GlobalKey();
-  SwipeDirection? _swipeDirection;
-  Offset _direction = Offset.zero;
-  Size? _size = Size.zero;
-
-  @override
-  void initState() {
-    super.initState();
-    _changeData();
-  }
-
-  @override
-  void didUpdateWidget(SwipeTransition oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _changeData();
-  }
-
-  void _changeData() {
-    Misc.onLayoutRendered(() {
-      final Size? size = _containerKey.size;
-      if (size != null &&
-          (_swipeDirection != widget.direction || _size != size)) {
-        setState(() {
-          _size = size;
-          _swipeDirection = widget.direction;
-          switch (widget.direction) {
-            case SwipeDirection.fromTop:
-              _direction = Offset(0.0, -size.height);
-              break;
-            case SwipeDirection.fromLeft:
-              _direction = Offset(-size.width, 0.0);
-              break;
-            case SwipeDirection.fromRight:
-              _direction = Offset(size.width, 0.0);
-              break;
-            case SwipeDirection.fromBottom:
-              _direction = Offset(0.0, size.height);
-              break;
-          }
-          _tweenKey.state!.changeTween(_createTween());
-        });
-      }
-    });
-  }
-
-  Tween<Offset> _createTween() =>
-      Tween<Offset>(begin: _direction, end: Offset.zero);
+  /// Describes how to align the child along the axis that [sizeFactor] is
+  /// modifying.
+  ///
+  /// A value of -1.0 indicates the top when [axis] is [Axis.vertical], and the
+  /// start when [axis] is [Axis.horizontal]. The start is on the left when the
+  /// text direction in effect is [TextDirection.ltr] and on the right when it
+  /// is [TextDirection.rtl].
+  ///
+  /// A value of 1.0 indicates the bottom or end, depending upon the [axis].
+  ///
+  /// A value of 0.0 (the default) indicates the center for either [axis] value.
+  final double axisAlignment;
 
   @override
   Widget build(BuildContext context) {
+    final AlignmentDirectional alignment;
+    if (axis == Axis.vertical) {
+      alignment = AlignmentDirectional(-1.0, axisAlignment);
+    } else {
+      alignment = AlignmentDirectional(axisAlignment, -1.0);
+    }
+
     return ClipRRect(
-      child: BooleanTween<Offset>(
-        key: _tweenKey,
-        tween: _createTween(),
-        curve: widget.curve,
-        animate: widget.visible,
-        duration: widget.duration,
-        builder: (_, value, child) => Transform.translate(
-          offset: value,
+      child: BooleanTween<double>(
+        tween: LerpTween(),
+        curve: curve,
+        animate: visible,
+        duration: duration,
+        builder: (_, value, child) => Align(
+          alignment: alignment,
+          heightFactor: axis == Axis.vertical ? math.max(value, 0.0) : null,
+          widthFactor: axis == Axis.horizontal ? math.max(value, 0.0) : null,
           child: child,
         ),
-        child: Container(key: _containerKey, child: widget.child),
+        child: child,
       ),
     );
   }
 }
 
-class TurnTransition extends StatefulWidget {
+class TurnTransition extends StatelessWidget {
   /// It is a RotationTransition but this will be animate when receiving a Boolean value.
   const TurnTransition({
     Key? key,
@@ -282,26 +250,21 @@ class TurnTransition extends StatefulWidget {
   final double end;
 
   @override
-  _TurnTransitionState createState() => _TurnTransitionState();
-}
-
-class _TurnTransitionState extends State<TurnTransition> {
-  @override
   Widget build(BuildContext context) {
     final double degrees2radians = math.pi / 180.0;
     return BooleanTween<double>(
-      duration: widget.duration,
-      animate: widget.turn,
-      curve: widget.curve,
+      duration: duration,
+      animate: turn,
+      curve: curve,
       tween: Tween<double>(
-        begin: widget.begin * degrees2radians,
-        end: widget.end * degrees2radians,
+        begin: begin * degrees2radians,
+        end: end * degrees2radians,
       ),
       builder: (_, angle, child) => Transform.rotate(
         angle: angle,
         child: child,
       ),
-      child: widget.child,
+      child: child,
     );
   }
 }

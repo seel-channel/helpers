@@ -5,10 +5,10 @@ import 'package:flutter/services.dart';
 abstract class Misc {
   ///DO THAT:
   ///```dart
-  ///  WidgetsBinding.instance?.endOfFrame.then((_) => callback);
+  /// WidgetsBinding.instance.addPostFrameCallback((d) => callback());
   /// ```
   static void onLayoutRendered(void Function() callback) {
-    WidgetsBinding.instance?.endOfFrame.then((_) => callback);
+    WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
   }
 
   ///```dart

@@ -125,7 +125,7 @@ class _NumericButton extends StatelessWidget {
         width: _numeric.style.buttonWidth,
         height: _numeric.style.buttonHeight,
         padding: _numeric.style.buttonPadding,
-        child: number.child != null
+        child: number.child == null
             ? Text(
                 number.title,
                 style: _numeric.style.style ??

@@ -13,9 +13,9 @@ extension NavigatorStateHelperExtension on NavigatorState {
   Future<T?> pushOpaque<T extends Object?>(Widget page) {
     return this.push<T>(PageRouteBuilder(
       pageBuilder: (_, __, ___) => page,
-      opaque: false,
       transitionDuration: Duration.zero,
       reverseTransitionDuration: Duration.zero,
+      opaque: false,
     ));
   }
 }

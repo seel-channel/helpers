@@ -35,10 +35,10 @@ extension ListListMerging<T> on List<List<T>> {
   ///```dart
   /// //Input
   /// final List<Widget> children = [
-  ///   [SidebarMenuItem(), SidebarMenuItem, SidebarMenuItem()]
-  ///   [SidebarMenuItem(), SidebarMenuItem()]
+  ///   [SideBarMenuItem(), SideBarMenuItem, SideBarMenuItem()]
+  ///   [SideBarMenuItem(), SideBarMenuItem()]
   /// ].fuse<Widget>(
-  ///     (item) => SidebarMenuTile(item),
+  ///     (item) => SideBarMenuTile(item),
   ///     sepatarorBetweenItems: const Spacer(),
   ///     separatorBetweenLists: const BigSpacer()
   ///   );
@@ -48,15 +48,15 @@ extension ListListMerging<T> on List<List<T>> {
   /// print(children);
   ///
   /// [
-  ///   SidebarMenuItem(),
+  ///   SideBarMenuItem(),
   ///   const Spacer(),
-  ///   SidebarMenuItem(),
+  ///   SideBarMenuItem(),
   ///   const Spacer(),
-  ///   SidebarMenuItem(),
+  ///   SideBarMenuItem(),
   ///   const BigSpacer(),
-  ///   SidebarMenuItem(),
+  ///   SideBarMenuItem(),
   ///   const Spacer(),
-  ///   SidebarMenuItem(),
+  ///   SideBarMenuItem(),
   /// ]
   ///```
   List<E> fuse<E>(
@@ -118,6 +118,14 @@ extension ListMerging<T> on List<T> {
         element(i, this[i]),
         if (i != length - 1 && separator != null) separator
       ]);
+    }
+    return items;
+  }
+
+  List<E> mapIndexed<E>(E Function(int index, T value) f) {
+    final List<E> items = [];
+    for (int i = 0; i < length; i++) {
+      items.add(f(i, this[i]));
     }
     return items;
   }
