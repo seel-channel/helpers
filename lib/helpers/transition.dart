@@ -26,7 +26,11 @@ class BooleanTween<T> extends StatefulWidget {
   /// It is the time it takes to execute the animation from beginning to end or vice versa.
   final Duration duration;
 
-  ///Es el tipo de interpolación que llevará acabo
+  /// A linear interpolation between a beginning and ending value.
+  ///
+  /// [Tween] is useful if you want to interpolate across a range.
+  ///
+  ///You should use `LerpTween()` instead `Tween<double>(begin: 0.0, end: 1.0)`
   final Tween<T> tween;
 
   ///Called every time the animation changes value.
