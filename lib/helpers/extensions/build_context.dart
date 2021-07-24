@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
 extension BuildContextHelperExtension on BuildContext {
-  Route pageRoute(Widget page, bool withTransition) {
+  Route _pageRoute(Widget page, bool withTransition) {
     return withTransition
         ? MaterialPageRoute(builder: (_) => page)
         : PageRouteBuilder(pageBuilder: (_, __, ___) => page);
@@ -122,7 +122,7 @@ extension BuildContextHelperExtension on BuildContext {
   @Deprecated(
       "Avoid use this instance, you should use context.navigator.push(...)")
   Future<void> to(Widget page, {bool transition = true}) async {
-    await Navigator.push(this, pageRoute(page, transition));
+    await Navigator.push(this, _pageRoute(page, transition));
   }
 
   ///Do that:
@@ -139,7 +139,7 @@ extension BuildContextHelperExtension on BuildContext {
     Widget page, {
     bool transition = true,
   }) async {
-    await Navigator.pushReplacement(this, pageRoute(page, transition));
+    await Navigator.pushReplacement(this, _pageRoute(page, transition));
   }
 
   ///Do that:
@@ -173,7 +173,7 @@ extension BuildContextHelperExtension on BuildContext {
   }) async {
     await Navigator.pushAndRemoveUntil(
       this,
-      pageRoute(page, transition),
+      _pageRoute(page, transition),
       predicate,
     );
   }
