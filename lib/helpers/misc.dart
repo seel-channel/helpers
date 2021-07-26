@@ -94,7 +94,7 @@ abstract class Misc {
   ///   Navigator.pop(context);
   ///````
   ///
-  static Future<Null> wait(int milliseconds) async {
+  static Future<void> wait(int milliseconds) async {
     await Future.delayed(Duration(milliseconds: milliseconds), () {});
   }
 

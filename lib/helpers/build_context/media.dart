@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BuildMedia {
   /// It is a simplification of the **_MediaQuery.of(_context)_** statement.
-  BuildMedia(BuildContext context) : this._context = context;
+  BuildMedia(BuildContext context) : _context = context;
 
   final BuildContext _context;
 
@@ -58,7 +58,7 @@ class BuildMedia {
 
   ///Do that:  MediaQuery.of(_context).viewPadding
   ///```
-  EdgeInsets get viewPadding => viewPadding;
+  EdgeInsets get viewPadding => data.viewPadding;
 
   ///```dart
   ///return MediaQuery.of(context).alwaysUse24HourFormat

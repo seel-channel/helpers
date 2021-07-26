@@ -27,15 +27,15 @@ class DoubleColumn extends StatelessWidget {
     return Row(
       children: [
         Column(
-          children: leftColumn!,
           mainAxisSize: columnSize,
           crossAxisAlignment: CrossAxisAlignment.start,
+          children: leftColumn!,
         ),
         SizedBox(width: spaceBeetween),
         Column(
-          children: rightColumn!,
           mainAxisSize: columnSize,
           crossAxisAlignment: CrossAxisAlignment.start,
+          children: rightColumn!,
         ),
       ],
     );
@@ -45,17 +45,17 @@ class DoubleColumn extends StatelessWidget {
 class RemoveScrollGlow extends StatelessWidget {
   ///Eliminate the Splash Effect or Glow Effect when reaching
   ///the limit of a PageView, ScrollView, ListView, etc.
-  const RemoveScrollGlow({Key? key, this.child}) : super(key: key);
-  final Widget? child;
+  const RemoveScrollGlow({Key? key, required this.child}) : super(key: key);
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(
-      child: child!,
       onNotification: (OverscrollIndicatorNotification overscroll) {
         overscroll.disallowGlow();
         return;
       } as bool Function(OverscrollIndicatorNotification)?,
+      child: child,
     );
   }
 }
@@ -69,7 +69,7 @@ class DismissKeyboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScopeNode focus = FocusScope.of(context);
+        final FocusScopeNode focus = FocusScope.of(context);
         if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
       },
       behavior: HitTestBehavior.opaque,
@@ -96,7 +96,7 @@ class SizeBuilder extends StatefulWidget {
   ///   return widget.builder(constraints.maxWidth, constraints.maxHeight);
   ///});
   ///```
-  SizeBuilder({Key? key, this.builder}) : super(key: key);
+  const SizeBuilder({Key? key, this.builder}) : super(key: key);
 
   ///Argument `(double width, double height)`
   final Widget Function(double width, double height)? builder;
@@ -125,7 +125,7 @@ class ExpandedSpacer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: SizedBox());
+    return const Expanded(child: SizedBox());
   }
 }
 
@@ -207,7 +207,7 @@ class SafeAreaColor extends StatelessWidget {
       color: color,
       width: width,
       child: SafeArea(
-        child: Container(
+        child: SizedBox(
           height: height,
           child: child,
         ),
@@ -240,8 +240,8 @@ class OpaqueTap extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: child,
       behavior: HitTestBehavior.opaque,
+      child: child,
     );
   }
 }
@@ -271,9 +271,9 @@ class SplashTap extends StatelessWidget {
       child: Ink(
         decoration: BoxDecoration(color: color, shape: shape),
         child: InkWell(
-          child: child,
           onTap: onTap,
-          customBorder: shape == BoxShape.circle ? CircleBorder() : null,
+          customBorder: shape == BoxShape.circle ? const CircleBorder() : null,
+          child: child,
         ),
       ),
     );
@@ -290,8 +290,8 @@ class SplashButton extends StatelessWidget {
     BorderRadius? borderRadius,
     this.boxShadow,
     this.shape = BoxShape.rectangle,
-  })  : this.padding = padding ?? const EdgeInsets.all(20.0),
-        this.borderRadius =
+  })  : padding = padding ?? const EdgeInsets.all(20.0),
+        borderRadius =
             borderRadius ?? const BorderRadius.all(Radius.circular(20.0)),
         super(key: key);
 
@@ -358,12 +358,9 @@ class TileDesigned extends StatelessWidget {
     this.child,
     this.suffix,
     this.background = Colors.transparent,
-    EdgeInsetsGeometry? padding,
-    BorderRadius? borderRadius,
-  })  : this.padding = padding ?? const EdgeInsets.all(20.0),
-        this.borderRadius =
-            borderRadius ?? const BorderRadius.all(Radius.circular(20.0)),
-        super(key: key);
+    this.padding = const EdgeInsets.all(20.0),
+    this.borderRadius = const BorderRadius.all(Radius.circular(20.0)),
+  }) : super(key: key);
 
   final Color background;
 

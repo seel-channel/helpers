@@ -157,7 +157,7 @@ class _CarouselState extends State<Carousel> {
 class CarouselController {
   _CarouselState? _carouselState;
 
-  // ignore: unused_element
+  // ignore: use_setters_to_change_properties
   void _addState(_CarouselState state) => _carouselState = state;
 
   _CarouselState get _state {

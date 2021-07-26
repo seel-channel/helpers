@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BuildColor {
   /// It is a simplification of the **_Theme.of(_context)_** statement.
-  BuildColor(BuildContext context) : this._context = context;
+  BuildColor(BuildContext context) : _context = context;
 
   final BuildContext _context;
 

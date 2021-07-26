@@ -50,13 +50,13 @@ extension BuildContextHelperExtension on BuildContext {
   ///```dart
   ///return context.size.width
   ///```
-  double? get width => this.size?.width;
+  double? get width => size?.width;
 
   ///Do that:
   ///```dart
   ///return context.size.height
   ///```
-  double? get height => this.size?.height;
+  double? get height => size?.height;
 
   //-----//
   //THEME//

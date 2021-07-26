@@ -25,7 +25,7 @@ class TextDesigned extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      (uppercase ? text.toUpperCase() : text),
+      uppercase ? text.toUpperCase() : text,
       textAlign: justify
           ? TextAlign.justify
           : center

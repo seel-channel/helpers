@@ -11,7 +11,7 @@ extension NavigatorStateHelperExtension on NavigatorState {
   /// ```
   @optionalTypeArgs
   Future<T?> pushOpaque<T extends Object?>(Widget page) {
-    return this.push<T>(PageRouteBuilder(
+    return push<T>(PageRouteBuilder(
       pageBuilder: (_, __, ___) => page,
       transitionDuration: Duration.zero,
       reverseTransitionDuration: Duration.zero,
