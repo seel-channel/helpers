@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
@@ -44,20 +45,102 @@ class Carousel extends StatefulWidget {
     this.viewportFraction = 1.0,
     this.scrollDirection = Axis.horizontal,
     this.physics = const BouncingScrollPhysics(),
+    this.reverse = false,
+    this.pageSnapping = true,
+    this.dragStartBehavior = DragStartBehavior.start,
+    this.allowImplicitScrolling = false,
+    this.restorationId,
+    this.clipBehavior = Clip.none,
+    this.scrollBehavior,
   })  : controller = controller ?? CarouselController(),
         super(key: key);
 
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final void Function(int index)? onPageChanged;
-  final CarouselController controller;
   final Curve curve;
   final bool isInfinite;
   final int itemCount;
   final double minScale;
   final bool parallaxEffect;
-  final ScrollPhysics? physics;
-  final Axis scrollDirection;
   final double viewportFraction;
+
+  /// Controls whether the widget's pages will respond to
+  /// [RenderObject.showOnScreen], which will allow for implicit accessibility
+  /// scrolling.
+  ///
+  /// With this flag set to false, when accessibility focus reaches the end of
+  /// the current page and the user attempts to move it to the next element, the
+  /// focus will traverse to the next widget outside of the page view.
+  ///
+  /// With this flag set to true, when accessibility focus reaches the end of
+  /// the current page and user attempts to move it to the next element, focus
+  /// will traverse to the next page in the page view.
+  final bool allowImplicitScrolling;
+
+  /// {@macro flutter.widgets.scrollable.restorationId}
+  final String? restorationId;
+
+  /// The axis along which the page view scrolls.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis scrollDirection;
+
+  /// Whether the page view scrolls in the reading direction.
+  ///
+  /// For example, if the reading direction is left-to-right and
+  /// [scrollDirection] is [Axis.horizontal], then the page view scrolls from
+  /// left to right when [reverse] is false and from right to left when
+  /// [reverse] is true.
+  ///
+  /// Similarly, if [scrollDirection] is [Axis.vertical], then the page view
+  /// scrolls from top to bottom when [reverse] is false and from bottom to top
+  /// when [reverse] is true.
+  ///
+  /// Defaults to false.
+  final bool reverse;
+
+  /// An object that can be used to control the position to which this page
+  /// view is scrolled.
+  final CarouselController controller;
+
+  /// How the page view should respond to user input.
+  ///
+  /// For example, determines how the page view continues to animate after the
+  /// user stops dragging the page view.
+  ///
+  /// The physics are modified to snap to page boundaries using
+  /// [PageScrollPhysics] prior to being used.
+  ///
+  /// If an explicit [ScrollBehavior] is provided to [scrollBehavior], the
+  /// [ScrollPhysics] provided by that behavior will take precedence after
+  /// [physics].
+  ///
+  /// Defaults to matching platform conventions.
+  final ScrollPhysics? physics;
+
+  /// Set to false to disable page snapping, useful for custom scroll behavior.
+  final bool pageSnapping;
+
+  /// Called whenever the page in the center of the viewport changes.
+  final ValueChanged<int>? onPageChanged;
+
+  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
+  final DragStartBehavior dragStartBehavior;
+
+  /// {@macro flutter.material.Material.clipBehavior}
+  ///
+  /// Defaults to [Clip.hardEdge].
+  final Clip clipBehavior;
+
+  /// {@macro flutter.widgets.shadow.scrollBehavior}
+  ///
+  /// [ScrollBehavior]s also provide [ScrollPhysics]. If an explicit
+  /// [ScrollPhysics] is provided in [physics], it will take precedence,
+  /// followed by [scrollBehavior], and then the inherited ancestor
+  /// [ScrollBehavior].
+  ///
+  /// The [ScrollBehavior] of the inherited [ScrollConfiguration] will be
+  /// modified by default to not apply a [Scrollbar].
+  final ScrollBehavior? scrollBehavior;
 
   @override
   _CarouselState createState() => _CarouselState();
@@ -107,9 +190,14 @@ class _CarouselState extends State<Carousel> {
       return PageView.builder(
         onPageChanged: _onPageChanged,
         controller: _pageController,
-        clipBehavior: Clip.none,
+        clipBehavior: widget.clipBehavior,
         physics: widget.physics,
-        allowImplicitScrolling: true,
+        allowImplicitScrolling: widget.allowImplicitScrolling,
+        scrollBehavior: widget.scrollBehavior,
+        pageSnapping: widget.pageSnapping,
+        restorationId: widget.restorationId,
+        reverse: widget.reverse,
+        dragStartBehavior: widget.dragStartBehavior,
         scrollDirection: widget.scrollDirection,
         itemCount: widget.isInfinite ? null : widget.itemCount,
         itemBuilder: (_, int index) {
