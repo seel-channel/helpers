@@ -1,3 +1,13 @@
+## [1.1.4]
+
+- Added:
+  - List, List<List>, double, FocusNode, Color, Navigator, BuildContext extensions
+  - Numeric Pad added
+  - Align widgets added
+  - LerpDouble added
+  - Carousel added
+
+
 ## [1.1.3]
 
   - It fixed transition null-check error
