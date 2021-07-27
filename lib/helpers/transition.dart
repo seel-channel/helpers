@@ -215,7 +215,7 @@ class SwipeTransition extends StatelessWidget {
           alignment: alignment,
           heightFactor: axis == Axis.vertical ? math.max(value, 0.0) : null,
           widthFactor: axis == Axis.horizontal ? math.max(value, 0.0) : null,
-          child: child,
+          child: value > 0.0 ? child : null,
         ),
         child: child,
       ),
