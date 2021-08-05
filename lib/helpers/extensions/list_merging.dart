@@ -77,6 +77,17 @@ extension ListListMerging<T> on List<List<T>> {
 }
 
 extension ListMerging<T> on List<T> {
+  List<T> suggestions(String query, String Function(T e) test) {
+    final List<T> items = [];
+    final String queryLowerCase = query.toLowerCase();
+    for (final item in this) {
+      if (test(item).toLowerCase().contains(queryLowerCase)) {
+        items.add(item);
+      }
+    }
+    return items;
+  }
+
   ///Do that:
   ///```dart
   /// if (!contains(element)) add(element);
