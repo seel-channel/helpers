@@ -1,11 +1,29 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-abstract class Misc {
+class Misc {
+  DateTime? _init;
+  String? _prefix;
+
+  ///Similar to `console.time("TIMER")` (javascript)
+  void timeStart([String prefix = "TIMER"]) {
+    _prefix = prefix;
+    log("Initialized", name: _prefix ?? "");
+    _init = DateTime.now();
+  }
+
+  ///Similar to `console.timeEnd()` (javascript)
+  void timeEnd() {
+    final int ms =
+        DateTime.now().difference(_init ?? DateTime.now()).inMilliseconds;
+    log("Completed in ${ms / 1000} seconds", name: _prefix ?? "");
+  }
+
   ///DO THAT:
   ///```dart
-  /// WidgetsBinding.instance.addPostFrameCallback((d) => callback());
+  /// WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
   /// ```
   static void onLayoutRendered(void Function() callback) {
     WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
