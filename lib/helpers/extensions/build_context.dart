@@ -25,7 +25,9 @@ extension BuildContextHelperExtension on BuildContext {
   }) {
     final controller = ScaffoldMessenger.of(this).showSnackBar(snackBar);
     onVisible?.call();
-    controller.closed.then((reason) => onClosed?.call(reason));
+    if (onClosed != null) {
+      controller.closed.then((reason) => onClosed.call(reason));
+    }
     return controller;
   }
 
