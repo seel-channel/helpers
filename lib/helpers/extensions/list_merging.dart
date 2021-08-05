@@ -77,6 +77,12 @@ extension ListListMerging<T> on List<List<T>> {
 }
 
 extension ListMerging<T> on List<T> {
+  T? getFirst(bool Function(T) test) {
+    for (final item in this) {
+      if (test(item)) return item;
+    }
+  }
+
   List<T> suggestions(String query, String Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
