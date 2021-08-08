@@ -83,12 +83,15 @@ extension ListMerging<T> on List<T> {
     }
   }
 
-  List<T> suggestions(String query, String Function(T e) test) {
+  List<T> textSearch(String query, List<String> Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
     for (final item in this) {
-      if (test(item).toLowerCase().contains(queryLowerCase)) {
-        items.add(item);
+      for (final text in test(item)) {
+        if (text.toLowerCase().contains(queryLowerCase)) {
+          items.add(item);
+          break;
+        }
       }
     }
     return items;

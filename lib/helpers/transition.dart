@@ -23,6 +23,15 @@ class BooleanTween<T> extends StatefulWidget {
   ///If it is **FALSE** it will execute the Tween from end to begin
   final bool animate;
 
+  ///Called every time the animation changes value.
+  ///Return a Widget and receive the interpolation value as a parameter.
+  final ValueWidgetBuilder<T> builder;
+
+  final Widget? child;
+
+  /// It is the curve that will carry out the interpolation.
+  final Curve curve;
+
   /// It is the time it takes to execute the animation from beginning to end or vice versa.
   final Duration duration;
 
@@ -33,33 +42,27 @@ class BooleanTween<T> extends StatefulWidget {
   ///You should use `LerpTween()` instead `Tween<double>(begin: 0.0, end: 1.0)`
   final Tween<T> tween;
 
-  ///Called every time the animation changes value.
-  ///Return a Widget and receive the interpolation value as a parameter.
-  final ValueWidgetBuilder<T> builder;
-
-  final Widget? child;
-
-  /// It is the curve that will carry out the interpolation.
-  final Curve curve;
-
   @override
   _BooleanTweenState<T> createState() => _BooleanTweenState<T>();
 }
 
 class _BooleanTweenState<T> extends State<BooleanTween<T>>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
   late Animation<T> _animation;
+  late AnimationController _controller;
 
-  //Change the tween
-  void changeTween(Tween<T> tween) {
-    setState(() {
-      _animation = tween.animate(CurvedAnimation(
-        parent: _controller,
-        curve: widget.curve,
-        reverseCurve: widget.curve,
-      ));
-    });
+  @override
+  void didUpdateWidget(BooleanTween oldWidget) {
+    super.didUpdateWidget(oldWidget as BooleanTween<T>);
+    if (!oldWidget.animate && widget.animate) {
+      _controller.forward();
+    } else if (oldWidget.animate && !widget.animate) _controller.reverse();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,18 +81,15 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(BooleanTween oldWidget) {
-    super.didUpdateWidget(oldWidget as BooleanTween<T>);
-    if (!oldWidget.animate && widget.animate) {
-      _controller.forward();
-    } else if (oldWidget.animate && !widget.animate) _controller.reverse();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  //Change the tween
+  void changeTween(Tween<T> tween) {
+    setState(() {
+      _animation = tween.animate(CurvedAnimation(
+        parent: _controller,
+        curve: widget.curve,
+        reverseCurve: widget.curve,
+      ));
+    });
   }
 
   @override
@@ -116,18 +116,18 @@ class OpacityTransition extends StatefulWidget {
     this.curve = Curves.linear,
   }) : super(key: key);
 
-  /// If true, it will show the widget.
-  /// If false, it will hide the widget.
-  final bool visible;
+  /// It is the child that will be affected by the SwipeTransition
+  final Widget child;
 
   /// It is the curve that the SwipeTransition performs
   final Curve curve;
 
-  /// It is the child that will be affected by the SwipeTransition
-  final Widget child;
-
   /// Is the time it takes to make the transition.
   final Duration duration;
+
+  /// If true, it will show the widget.
+  /// If false, it will hide the widget.
+  final bool visible;
 
   @override
   _OpacityTransitionState createState() => _OpacityTransitionState();
@@ -166,19 +166,6 @@ class SwipeTransition extends StatelessWidget {
     this.axisAlignment = -1.0,
   }) : super(key: key);
 
-  /// If true, it will show the widget in its position.
-  /// If false, it will hide the widget.
-  final bool visible;
-
-  /// It is the curve that the SwipeTransition performs
-  final Curve curve;
-
-  /// It is the child that will be affected by the SwipeTransition
-  final Widget child;
-
-  /// Is the time it takes to make the transition.
-  final Duration duration;
-
   /// [Axis.horizontal] if [sizeFactor] modifies the width, otherwise
   /// [Axis.vertical].
   final Axis axis;
@@ -196,6 +183,52 @@ class SwipeTransition extends StatelessWidget {
   /// A value of 0.0 (the default) indicates the center for either [axis] value.
   final double axisAlignment;
 
+  /// It is the child that will be affected by the SwipeTransition
+  final Widget child;
+
+  /// It is the curve that the SwipeTransition performs
+  final Curve curve;
+
+  /// Is the time it takes to make the transition.
+  final Duration duration;
+
+  /// If true, it will show the widget in its position.
+  /// If false, it will hide the widget.
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      child: BooleanTween<double>(
+        tween: LerpTween(),
+        curve: curve,
+        animate: visible,
+        duration: duration,
+        builder: (_, lerp, ___) => AlignFactor(
+          axisAlignment: axisAlignment,
+          lerp: lerp,
+          axis: axis,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+class AlignFactor extends StatelessWidget {
+  const AlignFactor({
+    Key? key,
+    required this.lerp,
+    required this.axis,
+    required this.axisAlignment,
+    required this.child,
+  }) : super(key: key);
+
+  final Axis axis;
+  final double axisAlignment;
+  final Widget child;
+  final double lerp;
+
   @override
   Widget build(BuildContext context) {
     final AlignmentDirectional alignment;
@@ -205,20 +238,11 @@ class SwipeTransition extends StatelessWidget {
       alignment = AlignmentDirectional(axisAlignment, -1.0);
     }
 
-    return ClipRRect(
-      child: BooleanTween<double>(
-        tween: LerpTween(),
-        curve: curve,
-        animate: visible,
-        duration: duration,
-        builder: (_, value, child) => Align(
-          alignment: alignment,
-          heightFactor: axis == Axis.vertical ? math.max(value, 0.0) : null,
-          widthFactor: axis == Axis.horizontal ? math.max(value, 0.0) : null,
-          child: value > 0.0 ? child : null,
-        ),
-        child: child,
-      ),
+    return Align(
+      alignment: alignment,
+      heightFactor: axis == Axis.vertical ? math.max(lerp, 0.0) : null,
+      widthFactor: axis == Axis.horizontal ? math.max(lerp, 0.0) : null,
+      child: child,
     );
   }
 }
@@ -235,23 +259,23 @@ class TurnTransition extends StatelessWidget {
     this.duration = const Duration(milliseconds: 200),
   }) : super(key: key);
 
-  ///**If** true, animate to end degrees, **else** animate to begin degrees.
-  final bool turn;
-
-  /// It is the curve that the SwipeTransition performs
-  final Curve curve;
+  ///BEGIN DEGREES (RANGE IS 0 - 359)
+  final double begin;
 
   /// It is the child that will be affected by the SwipeTransition
   final Widget child;
 
+  /// It is the curve that the SwipeTransition performs
+  final Curve curve;
+
   /// Is the time it takes to make the transition.
   final Duration duration;
 
-  ///BEGIN DEGREES (RANGE IS 0 - 359)
-  final double begin;
-
   ///END DEGREES (RANGE IS 0 - 359)
   final double end;
+
+  ///**If** true, animate to end degrees, **else** animate to begin degrees.
+  final bool turn;
 
   @override
   Widget build(BuildContext context) {

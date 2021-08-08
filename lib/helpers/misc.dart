@@ -1,11 +1,23 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Misc {
   DateTime? _init;
   String? _prefix;
+
+  static const int maxInt = 9223372036854775807;
+
+  static double dynamicToDouble(dynamic value) {
+    return value != null
+        ? value is int
+            ? value * 1.0
+            : value as double
+        : 0.0;
+  }
 
   ///Similar to `console.time("TIMER")` (javascript)
   void timeStart([String prefix = "TIMER"]) {
@@ -15,10 +27,19 @@ class Misc {
   }
 
   ///Similar to `console.timeEnd()` (javascript)
-  void timeEnd() {
+  void timeStop() {
     final int ms =
         DateTime.now().difference(_init ?? DateTime.now()).inMilliseconds;
     log("Completed in ${ms / 1000} seconds", name: _prefix ?? "");
+  }
+
+  static double lerpDouble(num a, num b, double t) {
+    return ui.lerpDouble(a, b, t)!;
+  }
+
+  static double degreesToRadians(double degrees) {
+    final double degrees2radians = math.pi / 180.0;
+    return degrees * degrees2radians;
   }
 
   ///DO THAT:
