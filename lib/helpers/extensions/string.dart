@@ -1,6 +1,10 @@
 const kNumbersString = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 extension StringHelperExtension on String {
+  String capitalizeFirstWordFromSentence() {
+    return "${this[0].toUpperCase()}${substring(1, length).toLowerCase()}";
+  }
+
   String removeAllNotNumber({List<String> exclude = const []}) {
     final List<String> valid = kNumbersString.toList()..addAll(exclude);
     final StringBuffer buffer = StringBuffer();
