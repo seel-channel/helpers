@@ -44,8 +44,7 @@ class _AnsiColor {
 void printColor(Object? object, PrintColorStyle style) {
   final value = _AnsiColor(style)(object);
   if (style.prefix.isEmpty) {
-    // ignore: avoid_print
-    print(value);
+    debugPrint(value);
   } else {
     log(value, name: style.prefix);
   }
