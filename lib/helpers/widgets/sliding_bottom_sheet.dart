@@ -51,7 +51,6 @@ class SlidingBottomSheetContainer extends StatefulWidget {
     this.animatedSizeDuration = const Duration(milliseconds: 400),
     this.controller,
     this.scrollPhysics,
-    this.scrollBehavior = const RemoveGlowScrollBehavior(),
   })  : padding = padding ?? const EdgeInsets.all(20.0),
         borderRadius = borderRadius ??
             const BorderRadius.vertical(top: Radius.circular(20.0)),
@@ -98,8 +97,6 @@ class SlidingBottomSheetContainer extends StatefulWidget {
 
   final ScrollPhysics? scrollPhysics;
 
-  final ScrollBehavior scrollBehavior;
-
   final ScrollController? controller;
 
   @override
@@ -110,10 +107,22 @@ class SlidingBottomSheetContainer extends StatefulWidget {
 class _SlidingBottomSheetContainerState
     extends State<SlidingBottomSheetContainer>
     with SingleTickerProviderStateMixin {
+  final GlobalKey _chevronKey = GlobalKey();
+  double _chevronHeight = 0;
+
+  @override
+  void initState() {
+    Misc.onLayoutRendered(() {
+      final height = _chevronKey.context?.height;
+      if (height != null) _chevronHeight = height;
+      setState(() {});
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Widget child = Column(mainAxisSize: MainAxisSize.min, children: [
-      widget.chevron,
+    final Widget child = Stack(children: [
       ClipRRect(
         borderRadius: widget.borderRadius,
         child: Container(
@@ -135,19 +144,20 @@ class _SlidingBottomSheetContainerState
           ),
         ),
       ),
+      TopCenterAlign(
+        child: Transform.translate(
+          key: _chevronKey,
+          offset: Offset(0, -_chevronHeight),
+          child: widget.chevron,
+        ),
+      ),
     ]);
 
     return widget.controller != null
-        ? ClipRRect(
-            borderRadius: widget.borderRadius,
-            child: ScrollConfiguration(
-              behavior: widget.scrollBehavior,
-              child: SingleChildScrollView(
-                controller: widget.controller,
-                physics: widget.scrollPhysics,
-                child: child,
-              ),
-            ),
+        ? SingleChildScrollView(
+            controller: widget.controller,
+            physics: widget.scrollPhysics,
+            child: child,
           )
         : child;
   }
@@ -186,6 +196,7 @@ class SlidingBottomSheet extends StatefulWidget {
     this.onPanelClosed,
     this.onPanelSlide,
     this.constraints,
+    this.resizeToAvoidBottomInset,
   })  : controller = controller ?? SlidingBottomSheetController(),
         backgroundColor = backgroundColor ?? Colors.black.withOpacity(0.2),
         super(key: key);
@@ -240,6 +251,8 @@ class SlidingBottomSheet extends StatefulWidget {
 
   final BoxConstraints? constraints;
 
+  final bool? resizeToAvoidBottomInset;
+
   @override
   _SlidingBottomSheetState createState() => _SlidingBottomSheetState();
 }
@@ -257,9 +270,7 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
 
   bool get _canScroll =>
       // ignore: avoid_bool_literals_in_conditional_expressions
-      widget.isDraggable && _scrollController.hasClients
-          ? _scrollController.offset <= 0
-          : true;
+      widget.isDraggable && _scrollController.offset <= 0;
 
   @override
   void initState() {
@@ -298,7 +309,7 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   //GESTURES//
   //--------//
   void _onVerticalDragUpdate(PointerMoveEvent details) {
-    if (_canScroll && !(details.delta.dx > 2 || details.delta.dx < -2)) {
+    if (!(details.delta.dx > 2 || details.delta.dx < -2)) {
       final dy = details.delta.dy;
       _tracker.addPosition(details.timeStamp, details.position);
       _animationController.value -= dy / _builderHeight;
@@ -306,14 +317,12 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   }
 
   void _onVerticalDragEnd(PointerUpEvent details) {
-    if (widget.isDraggable) {
-      final velocity =
-          -_tracker.getVelocity().pixelsPerSecond.dy / _builderHeight;
-      if (velocity + 1 > 0.0) {
-        _openPanel();
-      } else {
-        _closePanel();
-      }
+    final velocity =
+        -_tracker.getVelocity().pixelsPerSecond.dy / _builderHeight;
+    if (velocity + 1 > 0.0) {
+      _openPanel();
+    } else {
+      _closePanel();
     }
   }
 
@@ -354,23 +363,28 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
         return false;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         backgroundColor: Colors.transparent,
         body: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-          GestureDetector(
-            onTap: _closePanel,
-            behavior: HitTestBehavior.opaque,
-            child: ValueListenableBuilder(
-              valueListenable: _animationController,
-              builder: (_, double value, __) {
-                final color = widget.backgroundColor;
-                final blur = widget.backgroundBlur * value;
-                return BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                  child: Container(
-                    color: color.withOpacity(color.opacity * value),
-                  ),
-                );
-              },
+          Listener(
+            onPointerMove: _onVerticalDragUpdate,
+            onPointerUp: _onVerticalDragEnd,
+            child: GestureDetector(
+              onTap: _closePanel,
+              behavior: HitTestBehavior.opaque,
+              child: ValueListenableBuilder(
+                valueListenable: _animationController,
+                builder: (_, double value, __) {
+                  final color = widget.backgroundColor;
+                  final blur = widget.backgroundBlur * value;
+                  return BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                    child: Container(
+                      color: color.withOpacity(color.opacity * value),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           ConstrainedBox(
@@ -391,8 +405,12 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
                 child: SizeChangedLayoutNotifier(
                   child: Listener(
                     key: _key,
-                    onPointerMove: _onVerticalDragUpdate,
-                    onPointerUp: _onVerticalDragEnd,
+                    onPointerMove: (details) {
+                      if (_canScroll) _onVerticalDragUpdate(details);
+                    },
+                    onPointerUp: (details) {
+                      if (_canScroll) _onVerticalDragEnd(details);
+                    },
                     child: widget.builder(context, _scrollController),
                   ),
                 ),
