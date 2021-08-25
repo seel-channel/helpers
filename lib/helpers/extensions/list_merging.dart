@@ -1,3 +1,5 @@
+import 'package:helpers/helpers/extensions/string.dart';
+
 extension ListListMerging<T> on List<List<T>> {
   ///Do that:
   ///```dart
@@ -76,19 +78,23 @@ extension ListListMerging<T> on List<List<T>> {
   }
 }
 
-extension ListMerging<T> on List<T> {
+extension IterableMerging<T> on Iterable<T> {
   T? getFirst(bool Function(T) test) {
     for (final item in this) {
       if (test(item)) return item;
     }
   }
+}
 
+extension ListMerging<T> on List<T> {
   List<T> textSearch(String query, List<String> Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
-    for (final item in this) {
-      for (final text in test(item)) {
-        if (text.toLowerCase().contains(queryLowerCase)) {
+    for (final T item in this) {
+      for (final String text in test(item)) {
+        final String lowercase = text.toLowerCase();
+        if (lowercase.contains(queryLowerCase) ||
+            lowercase.removeDiacriticalMarks.contains(queryLowerCase)) {
           items.add(item);
           break;
         }
