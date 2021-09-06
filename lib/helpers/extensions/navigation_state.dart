@@ -18,4 +18,24 @@ extension NavigatorStateHelperExtension on NavigatorState {
       opaque: false,
     ));
   }
+
+  ///Usually used with a **[SlidingPanel]**
+  ///
+  ///Do that:
+  ///```dart
+  ///Navigator.pushReplacementOpaque(
+  ///  TransparentRoute(builder: (_) => page, duration: duration),
+  ///);
+  /// ```
+  @optionalTypeArgs
+  Future<T?> pushReplacementOpaque<T extends Object?, TO extends Object?>(
+    Widget page,
+  ) {
+    return pushReplacement<T, TO>(PageRouteBuilder(
+      pageBuilder: (_, __, ___) => page,
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+      opaque: false,
+    ));
+  }
 }
