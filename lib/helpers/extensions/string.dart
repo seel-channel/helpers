@@ -17,7 +17,7 @@ extension StringHelperExtension on String {
   }
 
   String removeAllNotNumber({List<String> exclude = const []}) {
-    final List<String> valid = kNumbersString..addAll(exclude);
+    final List<String> valid = kNumbersString.toList()..addAll(exclude);
     final StringBuffer buffer = StringBuffer();
     for (int i = 0; i < length; i++) {
       final String character = this[i];
@@ -27,7 +27,7 @@ extension StringHelperExtension on String {
   }
 
   String removeAllNumbers({List<String> include = const []}) {
-    final List<String> invalid = kNumbersString..addAll(include);
+    final List<String> invalid = kNumbersString.toList()..addAll(include);
     final StringBuffer buffer = StringBuffer();
     for (int i = 0; i < length; i++) {
       final String character = this[i];
