@@ -79,7 +79,7 @@ extension ListListMerging<T> on List<List<T>> {
 }
 
 extension IterableMerging<T> on Iterable<T> {
-  T? getFirst(bool Function(T) test) {
+  T? getFirst(bool Function(T e) test) {
     for (final item in this) {
       if (test(item)) return item;
     }
@@ -94,7 +94,7 @@ extension ListMerging<T> on List<T> {
       for (final String text in test(item)) {
         final String lowercase = text.toLowerCase();
         if (lowercase.contains(queryLowerCase) ||
-            lowercase.removeDiacriticalMarks.contains(queryLowerCase)) {
+            lowercase.removeDiacriticalMarks().contains(queryLowerCase)) {
           items.add(item);
           break;
         }
@@ -148,10 +148,27 @@ extension ListMerging<T> on List<T> {
     return items;
   }
 
-  List<E> mapIndexed<E>(E Function(int index, T value) f) {
+  List<E> mapIndexed<E>(E Function(int index, T e) f) {
     final List<E> items = [];
     for (int i = 0; i < length; i++) {
       items.add(f(i, this[i]));
+    }
+    return items;
+  }
+
+  List<E> removeMapDuplicates<E>(E Function(T e) f) {
+    return map(f).toSet().toList();
+  }
+
+  List<T> removeDuplicates<E>() {
+    return toSet().toList();
+  }
+
+  List<E> conditionalMap<E>(E? Function(T e) f) {
+    final List<E> items = [];
+    for (int i = 0; i < length; i++) {
+      final value = f(this[i]);
+      if (value != null) items.add(value);
     }
     return items;
   }
