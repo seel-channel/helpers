@@ -5,10 +5,14 @@ const String kNonDiacriticsString =
     'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
 
 extension StringHelperExtension on String {
-  String get removeDiacriticalMarks => splitMapJoin('',
+  String removeDiacriticalMarks() {
+    return splitMapJoin(
+      '',
       onNonMatch: (char) => char.isNotEmpty && kDiacriticsString.contains(char)
           ? kNonDiacriticsString[kDiacriticsString.indexOf(char)]
-          : char);
+          : char,
+    );
+  }
 
   String capitalizeFirstWordFromSentence() {
     return isNotEmpty
