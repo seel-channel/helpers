@@ -14,6 +14,9 @@ export 'package:helpers/helpers/widgets/sliding_bottom_sheet.dart';
 export 'package:helpers/helpers/widgets/animated_interactive_viewer.dart';
 export 'package:helpers/helpers/widgets/numeric_pad.dart';
 
+export 'package:helpers/helpers/routes/simple_cupertino_page_transition.dart';
+export 'package:helpers/helpers/routes/simple_cupertino_back_gesture_detector.dart';
+
 export 'package:helpers/helpers/extensions/axis.dart';
 export 'package:helpers/helpers/extensions/global_key.dart';
 export 'package:helpers/helpers/extensions/double.dart';

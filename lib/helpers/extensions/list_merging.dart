@@ -103,6 +103,14 @@ extension ListMerging<T> on List<T> {
     return items;
   }
 
+  List<T> repeat(int times) {
+    final List<T> items = [];
+    for (int i = 0; i < times; i++) {
+      items.addAll(this);
+    }
+    return items;
+  }
+
   ///Do that:
   ///```dart
   /// if (!contains(element)) add(element);

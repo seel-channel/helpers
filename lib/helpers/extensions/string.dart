@@ -14,6 +14,15 @@ extension StringHelperExtension on String {
     );
   }
 
+  String removeLastWord() {
+    final int cacheLenght = length;
+    if (cacheLenght > 0) {
+      return substring(0, cacheLenght - 1);
+    } else {
+      return "";
+    }
+  }
+
   String capitalizeFirstWordFromSentence() {
     return isNotEmpty
         ? "${this[0].toUpperCase()}${substring(1, length).toLowerCase()}"
