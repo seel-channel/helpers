@@ -6,8 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-const double _kBackGestureWidth = 20.0;
-
 const double _kMinFlingVelocity = 1.0; // Screen widths per second.
 
 // An eyeballed value for the maximum time it takes
@@ -24,10 +22,12 @@ class SimpleCupertinoBackGestureDetector<T> extends StatefulWidget {
     Key? key,
     required this.route,
     required this.child,
+    this.fractionalGesture = 0.1,
   }) : super(key: key);
 
   final Widget child;
   final PageRoute<T> route;
+  final double fractionalGesture;
 
   @override
   SimpleCupertinoBackGestureDetectorState<T> createState() =>
@@ -162,7 +162,10 @@ class SimpleCupertinoBackGestureDetectorState<T>
     double dragAreaWidth = Directionality.of(context) == TextDirection.ltr
         ? MediaQuery.of(context).padding.left
         : MediaQuery.of(context).padding.right;
-    dragAreaWidth = max(dragAreaWidth, _kBackGestureWidth);
+    dragAreaWidth = max(
+      dragAreaWidth,
+      MediaQuery.of(context).size.width * widget.fractionalGesture,
+    );
     return Stack(
       fit: StackFit.passthrough,
       children: <Widget>[
