@@ -2,27 +2,78 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
+class CarouselParallax extends StatelessWidget {
+  const CarouselParallax({
+    Key? key,
+    required this.child,
+    this.curve = Curves.ease,
+    required this.height,
+    required this.index,
+    this.minScale = 0.64,
+    required this.page,
+    this.parallaxEffect = false,
+  }) : super(key: key);
+
+  final Widget child;
+  final Curve curve;
+  final double height;
+  final int index;
+  final double minScale;
+  final double? page;
+  final bool parallaxEffect;
+
+  @override
+  Widget build(BuildContext context) {
+    final double itemOffset = (page ?? 0.0) - index;
+
+    final double distortionValue = curve.transform(
+      (1 - (itemOffset.abs() * (1 - minScale))).clamp(0.0, 1.0).toDouble(),
+    );
+
+    final Widget sizedBox = SizedBox(
+      height: distortionValue * height,
+      child: child,
+    );
+
+    return Transform.scale(
+      scale: distortionValue,
+      child: parallaxEffect
+          ? Align(
+              alignment: Alignment(distortionValue, 0.0),
+              child: sizedBox,
+            )
+          : sizedBox,
+    );
+  }
+}
+
 class CarouselContainer extends StatelessWidget {
   const CarouselContainer({
     Key? key,
     required this.carousel,
-    this.aspectRatio = 1.0,
-    this.padding = const Margin.all(0),
+    this.aspectRatio,
+    this.height,
+    this.padding,
   }) : super(key: key);
 
-  final EdgeInsets padding;
-  final double aspectRatio;
   final Widget Function(double viewportFraction) carousel;
+  final double? aspectRatio;
+  final double? height;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     final BuildMedia media = context.media;
     final double width = media.width;
-    final double viewportFraction = (width - padding.horizontal) / width;
+    final double viewportFraction =
+        (width - (padding?.horizontal ?? 0)) / width;
 
     return SizedBox(
       width: width,
-      height: (width / aspectRatio) * viewportFraction,
+      height: height ??
+          (aspectRatio != null
+              ? ((width / aspectRatio!) * viewportFraction)
+              : null),
       child: OverflowBox(
         maxWidth: width,
         child: carousel(viewportFraction),
@@ -37,7 +88,7 @@ class Carousel extends StatefulWidget {
     required this.itemBuilder,
     required this.itemCount,
     CarouselController? controller,
-    this.minScale = 0.68,
+    this.minScale = 0.64,
     this.onPageChanged,
     this.isInfinite = false,
     this.parallaxEffect = false,
@@ -52,16 +103,11 @@ class Carousel extends StatefulWidget {
     this.restorationId,
     this.clipBehavior = Clip.none,
     this.scrollBehavior,
+    this.initialPage = 0,
   })  : controller = controller ?? CarouselController(),
         super(key: key);
 
   final Widget Function(BuildContext context, int index) itemBuilder;
-  final Curve curve;
-  final bool isInfinite;
-  final int itemCount;
-  final double minScale;
-  final bool parallaxEffect;
-  final double viewportFraction;
 
   /// Controls whether the widget's pages will respond to
   /// [RenderObject.showOnScreen], which will allow for implicit accessibility
@@ -76,31 +122,31 @@ class Carousel extends StatefulWidget {
   /// will traverse to the next page in the page view.
   final bool allowImplicitScrolling;
 
-  /// {@macro flutter.widgets.scrollable.restorationId}
-  final String? restorationId;
-
-  /// The axis along which the page view scrolls.
+  /// {@macro flutter.material.Material.clipBehavior}
   ///
-  /// Defaults to [Axis.horizontal].
-  final Axis scrollDirection;
-
-  /// Whether the page view scrolls in the reading direction.
-  ///
-  /// For example, if the reading direction is left-to-right and
-  /// [scrollDirection] is [Axis.horizontal], then the page view scrolls from
-  /// left to right when [reverse] is false and from right to left when
-  /// [reverse] is true.
-  ///
-  /// Similarly, if [scrollDirection] is [Axis.vertical], then the page view
-  /// scrolls from top to bottom when [reverse] is false and from bottom to top
-  /// when [reverse] is true.
-  ///
-  /// Defaults to false.
-  final bool reverse;
+  /// Defaults to [Clip.hardEdge].
+  final Clip clipBehavior;
 
   /// An object that can be used to control the position to which this page
   /// view is scrolled.
   final CarouselController controller;
+
+  final Curve curve;
+
+  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
+  final DragStartBehavior dragStartBehavior;
+
+  final bool isInfinite;
+  final int itemCount;
+  final double minScale;
+
+  /// Called whenever the page in the center of the viewport changes.
+  final ValueChanged<int>? onPageChanged;
+
+  /// Set to false to disable page snapping, useful for custom scroll behavior.
+  final bool pageSnapping;
+
+  final bool parallaxEffect;
 
   /// How the page view should respond to user input.
   ///
@@ -117,19 +163,22 @@ class Carousel extends StatefulWidget {
   /// Defaults to matching platform conventions.
   final ScrollPhysics? physics;
 
-  /// Set to false to disable page snapping, useful for custom scroll behavior.
-  final bool pageSnapping;
+  /// {@macro flutter.widgets.scrollable.restorationId}
+  final String? restorationId;
 
-  /// Called whenever the page in the center of the viewport changes.
-  final ValueChanged<int>? onPageChanged;
-
-  /// {@macro flutter.widgets.scrollable.dragStartBehavior}
-  final DragStartBehavior dragStartBehavior;
-
-  /// {@macro flutter.material.Material.clipBehavior}
+  /// Whether the page view scrolls in the reading direction.
   ///
-  /// Defaults to [Clip.hardEdge].
-  final Clip clipBehavior;
+  /// For example, if the reading direction is left-to-right and
+  /// [scrollDirection] is [Axis.horizontal], then the page view scrolls from
+  /// left to right when [reverse] is false and from right to left when
+  /// [reverse] is true.
+  ///
+  /// Similarly, if [scrollDirection] is [Axis.vertical], then the page view
+  /// scrolls from top to bottom when [reverse] is false and from bottom to top
+  /// when [reverse] is true.
+  ///
+  /// Defaults to false.
+  final bool reverse;
 
   /// {@macro flutter.widgets.shadow.scrollBehavior}
   ///
@@ -141,6 +190,15 @@ class Carousel extends StatefulWidget {
   /// The [ScrollBehavior] of the inherited [ScrollConfiguration] will be
   /// modified by default to not apply a [Scrollbar].
   final ScrollBehavior? scrollBehavior;
+
+  /// The axis along which the page view scrolls.
+  ///
+  /// Defaults to [Axis.horizontal].
+  final Axis scrollDirection;
+
+  final double viewportFraction;
+
+  final int initialPage;
 
   @override
   _CarouselState createState() => _CarouselState();
@@ -173,7 +231,10 @@ class _CarouselState extends State<Carousel> {
   }
 
   void _setController() {
-    _pageController = PageController(viewportFraction: widget.viewportFraction);
+    _pageController = PageController(
+      viewportFraction: widget.viewportFraction,
+      initialPage: widget.initialPage,
+    );
     _itemCount = widget.itemCount;
   }
 
@@ -205,33 +266,20 @@ class _CarouselState extends State<Carousel> {
           return AnimatedBuilder(
             animation: _pageController,
             builder: (_, Widget? child) {
-              late double itemOffset;
-
+              late double? page;
               try {
-                itemOffset = (_pageController.page ?? 0.0) - index;
+                page = _pageController.page;
               } catch (_) {
-                itemOffset = 0.0 - index;
+                page = 0.0;
               }
-
-              final double distortionValue = widget.curve.transform(
-                (1 - (itemOffset.abs() * (1 - widget.minScale)))
-                    .clamp(0.0, 1.0)
-                    .toDouble(),
-              );
-
-              final Widget sizedBox = SizedBox(
-                height: distortionValue * height,
-                child: child,
-              );
-
-              return Transform.scale(
-                scale: distortionValue,
-                child: widget.parallaxEffect
-                    ? Align(
-                        alignment: Alignment(distortionValue, 0.0),
-                        child: sizedBox,
-                      )
-                    : sizedBox,
+              return CarouselParallax(
+                height: height,
+                index: index,
+                page: page,
+                minScale: widget.minScale,
+                curve: widget.curve,
+                parallaxEffect: widget.parallaxEffect,
+                child: child!,
               );
             },
             child: widget.itemBuilder(_, realIndex),
@@ -284,6 +332,22 @@ class CarouselController {
       duration: duration,
       curve: curve,
     );
+  }
+
+  /// Jumps the scroll position from its current value to the given value,
+  /// without animation, and without checking if the new value is in range.
+  ///
+  /// Any active animation is canceled. If the user is currently scrolling, that
+  /// action is canceled.
+  ///
+  /// If this method changes the scroll position, a sequence of start/update/end
+  /// scroll notifications will be dispatched. No overscroll notifications can
+  /// be generated by this method.
+  ///
+  /// Immediately after the jump, a ballistic activity is started, in case the
+  /// value was out of range.
+  void jumpTo(double offset) {
+    pageController.jumpTo(offset);
   }
 
   /// Changes which page is displayed in the controlled [PageView].

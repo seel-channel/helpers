@@ -1,7 +1,43 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
+
+class TimerPeriodicBuilder extends StatefulWidget {
+  const TimerPeriodicBuilder({
+    Key? key,
+    this.duration = const Duration(seconds: 1),
+    required this.builder,
+  }) : super(key: key);
+
+  final Duration duration;
+  final WidgetBuilder builder;
+
+  @override
+  TimerPeriodicBuilderState createState() => TimerPeriodicBuilderState();
+}
+
+class TimerPeriodicBuilderState extends State<TimerPeriodicBuilder> {
+  late Timer _timer;
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(widget.duration, (_) => setState(() {}));
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(context);
+  }
+}
 
 class BooleanTween<T> extends StatefulWidget {
   ///It is an AnimatedBuilder.
@@ -56,7 +92,9 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
     super.didUpdateWidget(oldWidget as BooleanTween<T>);
     if (!oldWidget.animate && widget.animate) {
       _controller.forward();
-    } else if (oldWidget.animate && !widget.animate) _controller.reverse();
+    } else if (oldWidget.animate && !widget.animate) {
+      _controller.reverse();
+    }
   }
 
   @override

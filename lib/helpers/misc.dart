@@ -11,11 +11,37 @@ class Misc {
 
   static const int maxInt = 9223372036854775807;
 
+  static bool isEmail(String text) => RegExp(
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+      .hasMatch(text);
+
+  static bool isNumericOnly(String text) => RegExp(r'^\d+$').hasMatch(text);
+
+  static bool isPhoneNumber(String text) {
+    if (text.length > 16 || text.length < 9) return false;
+    return RegExp(r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$')
+        .hasMatch(text);
+  }
+
+  static bool isUsername(String text) =>
+      RegExp(r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$').hasMatch(text);
+
+  static bool isUrl(String text) => RegExp(
+          r"^((((H|h)(T|t)|(F|f))(T|t)(P|p)((S|s)?))\://)?(www.|[a-zA-Z0-9].)[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,6}(\:[0-9]{1,5})*(/($|[a-zA-Z0-9\.\,\;\?\'\\\+&amp;%\$#\=~_\-]+))*$")
+      .hasMatch(text);
+
+  static bool isBase64(String text) =>
+      RegExp(r"^[-A-Za-z0-9+=]{1,50}|=[^=]|={3,}$").hasMatch(text);
+
   static double dynamicToDouble(dynamic value) {
     return value != null
         ? value is int
             ? value * 1.0
-            : value as double
+            : value is double
+                ? value
+                : value is String
+                    ? double.tryParse(value) ?? 0.0
+                    : 0.0
         : 0.0;
   }
 
@@ -55,10 +81,9 @@ class Misc {
   ///adipiscing elit, sed do eiusmod tempor incididunt
   ///ut labore et dolore magna aliqua."
   ///```
-  static String loremIpsum() {
-    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-        "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-  }
+  static const String loremIpsum =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
   ///```dart
   /// return "Lorem ipsum dolor sit amet, consectetur
@@ -67,13 +92,12 @@ class Misc {
   /// veniam, quis nostrud exercitation ullamco laboris
   /// nisi ut aliquip ex ea commodo consequat."
   /// ```
-  static String extendedLoremIpsum() {
-    // ignore: prefer_interpolation_to_compose_strings
-    return "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-        "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
-        "Ut enim ad minim veniam, quis nostrud exercitation " +
-        "ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-  }
+  static const String extendedLoremIpsum =
+      // ignore: prefer_interpolation_to_compose_strings
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
+          "Ut enim ad minim veniam, quis nostrud exercitation " +
+          "ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
   ///DO THAT:
   ///```dart
@@ -148,10 +172,16 @@ class Misc {
 
   ///DO THAT:
   ///```dart
-  ///await SystemChrome.setEnabledSystemUIOverlays(overlays)
+  ///await SystemChrome.setEnabledSystemUIMode(mode, overlays: overlays);
   ///```
-  static Future<void> setSystemOverlay(List<SystemUiOverlay> overlays) async {
-    await SystemChrome.setEnabledSystemUIOverlays(overlays);
+  static Future<void> setSystemOverlay(
+    List<SystemUiOverlay> overlays, {
+    SystemUiMode mode = SystemUiMode.manual,
+  }) async {
+    await SystemChrome.setEnabledSystemUIMode(
+      mode,
+      overlays: overlays,
+    );
   }
 
   ///DO THAT:

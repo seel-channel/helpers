@@ -87,6 +87,13 @@ extension IterableMerging<T> on Iterable<T> {
 }
 
 extension ListMerging<T> on List<T> {
+  void replaceWhere(bool Function(T e) validator, T Function(T e) newValue) {
+    for (int i = 0; i < length; i++) {
+      final item = elementAt(i);
+      if (validator(item)) this[i] = newValue(item);
+    }
+  }
+
   List<T> textSearch(String query, List<String> Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
@@ -156,14 +163,6 @@ extension ListMerging<T> on List<T> {
     return items;
   }
 
-  List<E> mapIndexed<E>(E Function(int index, T e) f) {
-    final List<E> items = [];
-    for (int i = 0; i < length; i++) {
-      items.add(f(i, this[i]));
-    }
-    return items;
-  }
-
   List<E> removeMapDuplicates<E>(E Function(T e) f) {
     return map(f).toSet().toList();
   }
@@ -172,10 +171,18 @@ extension ListMerging<T> on List<T> {
     return toSet().toList();
   }
 
+  List<E> mapIndexed<E>(E Function(int index, T e) f) {
+    return conditionalMapIndexed(f);
+  }
+
   List<E> conditionalMap<E>(E? Function(T e) f) {
+    return conditionalMapIndexed((_, e) => f(e));
+  }
+
+  List<E> conditionalMapIndexed<E>(E? Function(int index, T e) f) {
     final List<E> items = [];
     for (int i = 0; i < length; i++) {
-      final value = f(this[i]);
+      final value = f(i, this[i]);
       if (value != null) items.add(value);
     }
     return items;

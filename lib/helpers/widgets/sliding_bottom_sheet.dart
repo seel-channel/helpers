@@ -105,8 +105,7 @@ class SlidingBottomSheetContainer extends StatefulWidget {
 }
 
 class _SlidingBottomSheetContainerState
-    extends State<SlidingBottomSheetContainer>
-    with SingleTickerProviderStateMixin {
+    extends State<SlidingBottomSheetContainer> {
   final GlobalKey _chevronKey = GlobalKey();
   double _chevronHeight = 0;
 
@@ -134,7 +133,6 @@ class _SlidingBottomSheetContainerState
             color: widget.color,
           ),
           child: AnimatedSize(
-            vsync: this,
             clipBehavior: Clip.none,
             alignment: Alignment.bottomCenter,
             curve: widget.animatedSizeCurve,
