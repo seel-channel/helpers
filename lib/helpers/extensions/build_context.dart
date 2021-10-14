@@ -15,6 +15,8 @@ extension BuildContextHelperExtension on BuildContext {
 
   NavigatorState get navigator => Navigator.of(this);
 
+  ScaffoldMessengerState get messenger => ScaffoldMessenger.of(this);
+
   //---------//
   //SNACKBARS//
   //---------//
@@ -23,7 +25,7 @@ extension BuildContextHelperExtension on BuildContext {
     void Function(SnackBarClosedReason)? onClosed,
     VoidCallback? onVisible,
   }) {
-    final controller = ScaffoldMessenger.of(this).showSnackBar(snackBar);
+    final controller = messenger.showSnackBar(snackBar);
     onVisible?.call();
     if (onClosed != null) {
       controller.closed.then((reason) => onClosed.call(reason));
@@ -33,16 +35,16 @@ extension BuildContextHelperExtension on BuildContext {
 
   void hideCurrentSnackBar(
       [SnackBarClosedReason reason = SnackBarClosedReason.remove]) {
-    ScaffoldMessenger.of(this).hideCurrentSnackBar(reason: reason);
+    messenger.hideCurrentSnackBar(reason: reason);
   }
 
   void removeCurrentSnackBar(
       [SnackBarClosedReason reason = SnackBarClosedReason.remove]) {
-    ScaffoldMessenger.of(this).removeCurrentSnackBar(reason: reason);
+    messenger.removeCurrentSnackBar(reason: reason);
   }
 
   void clearSnackBars() {
-    ScaffoldMessenger.of(this).clearSnackBars();
+    messenger.clearSnackBars();
   }
 
   //----------//

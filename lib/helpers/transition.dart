@@ -2,7 +2,153 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:helpers/helpers.dart';
+
+class OnScrollHideContent extends StatefulWidget {
+  const OnScrollHideContent({
+    Key? key,
+    this.onSizeChanged,
+    this.onChanged,
+    required this.child,
+    required this.controller,
+    this.floating = true,
+    this.hideContent = true,
+    this.onTop = true,
+    this.opacity = false,
+    this.offsetToHideButton,
+  }) : super(key: key);
+
+  final double? offsetToHideButton;
+  final void Function(double height)? onSizeChanged;
+  final void Function(double height)? onChanged;
+  final Widget child;
+  final ScrollController controller;
+  final bool floating;
+  final bool hideContent;
+  final bool onTop;
+  final bool opacity;
+
+  @override
+  _OnScrollHideContentState createState() => _OnScrollHideContentState();
+}
+
+class _OnScrollHideContentState extends State<OnScrollHideContent> {
+  double _buttonHeight = 240, _buttonPositionRef = 0, _offsetRef = 0;
+  final GlobalKey _buttonKey = GlobalKey();
+  final ValueNotifier<double> _buttonPosition = ValueNotifier<double>(0.0);
+  late ScrollController _scrollController;
+  bool _upping = false;
+
+  @override
+  void dispose() {
+    _buttonPosition.dispose();
+    if (widget.hideContent) {
+      _scrollController.removeListener(_controllerListener);
+    }
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    _scrollController = widget.controller;
+    if (widget.hideContent) _scrollController.addListener(_controllerListener);
+    Misc.onLayoutRendered(_assingPositions);
+    super.initState();
+  }
+
+  void _assingPositions() {
+    final double? height = _buttonKey.height;
+    if (height != null) {
+      _buttonHeight = height;
+      widget.onSizeChanged?.call(height);
+      _buttonPositionRef = height;
+      _buttonPosition.value = height;
+      if (mounted) setState(() {});
+    }
+  }
+
+  void _controllerListener() {
+    final ScrollPosition position = _scrollController.position;
+    final ScrollDirection direction = position.userScrollDirection;
+    final double pixels = position.pixels;
+
+    if (pixels <= position.minScrollExtent) {
+      _buttonPosition.value = _buttonHeight;
+      _updateRefs();
+      _updateHeight(_buttonHeight);
+    } else if (pixels >= position.maxScrollExtent) {
+      _buttonPosition.value = 0;
+      _updateRefs();
+      _updateHeight(0);
+    } else {
+      if (widget.floating) {
+        if (direction == ScrollDirection.forward) {
+          if (!_upping) _updateRefs();
+          _updateHeight(_buttonHeight);
+          //UPPING
+        }
+        if (direction == ScrollDirection.reverse) {
+          if (_upping) _updateRefs();
+          _updateHeight(0.0);
+          //DOWNING
+        }
+      } else {
+        _buttonPosition.value =
+            (_buttonHeight - pixels).clamp(0.0, _buttonHeight);
+        widget.onChanged?.call(_buttonPosition.value);
+      }
+    }
+  }
+
+  void _updateRefs() {
+    _upping = !_upping;
+    _offsetRef = _scrollController.offset;
+    _buttonPositionRef = _buttonPosition.value;
+  }
+
+  void _updateHeight(double to) {
+    final double offset = _scrollController.offset;
+    final double toHide = widget.offsetToHideButton ?? _buttonHeight;
+    final double lerp = ((_offsetRef - offset) / toHide).abs();
+
+    _buttonPosition.value =
+        Misc.lerpDouble(_buttonPositionRef, to, lerp <= 1.0 ? lerp : 1.0);
+    widget.onChanged?.call(_buttonPosition.value);
+  }
+
+  bool _onSizeChangeNotification(SizeChangedLayoutNotification notification) {
+    Misc.delayed(300, _assingPositions);
+    return true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return NotificationListener(
+      onNotification: _onSizeChangeNotification,
+      child: SizeChangedLayoutNotifier(
+        key: _buttonKey,
+        child: ValueListenableBuilder(
+          valueListenable: _buttonPosition,
+          builder: (_, double value, Widget? child) {
+            final double opacity = value / _buttonHeight;
+            final Widget transform = Transform.translate(
+              offset: Offset(
+                0.0,
+                widget.onTop ? value - _buttonHeight : _buttonHeight - value,
+              ),
+              child: child,
+            );
+            return widget.opacity
+                ? Opacity(opacity: opacity.clamp(0, 1), child: transform)
+                : transform;
+          },
+          child: widget.child,
+        ),
+      ),
+    );
+  }
+}
 
 class TimerPeriodicBuilder extends StatefulWidget {
   const TimerPeriodicBuilder({
