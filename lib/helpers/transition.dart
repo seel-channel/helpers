@@ -13,19 +13,21 @@ class OnScrollHideContent extends StatefulWidget {
     required this.child,
     required this.controller,
     this.floating = true,
+    this.forcesToHideAtEdge = true,
     this.hideContent = true,
+    this.offsetToHideButton,
     this.onTop = true,
     this.opacity = false,
-    this.offsetToHideButton,
   }) : super(key: key);
 
-  final double? offsetToHideButton;
   final void Function(double height)? onSizeChanged;
   final void Function(double height)? onChanged;
   final Widget child;
   final ScrollController controller;
   final bool floating;
+  final bool forcesToHideAtEdge;
   final bool hideContent;
+  final double? offsetToHideButton;
   final bool onTop;
   final bool opacity;
 
@@ -73,31 +75,34 @@ class _OnScrollHideContentState extends State<OnScrollHideContent> {
     final ScrollDirection direction = position.userScrollDirection;
     final double pixels = position.pixels;
 
-    if (pixels <= position.minScrollExtent) {
-      _buttonPosition.value = _buttonHeight;
-      _updateRefs();
-      _updateHeight(_buttonHeight);
-    } else if (pixels >= position.maxScrollExtent) {
-      _buttonPosition.value = 0;
-      _updateRefs();
-      _updateHeight(0);
-    } else {
-      if (widget.floating) {
-        if (direction == ScrollDirection.forward) {
-          if (!_upping) _updateRefs();
-          _updateHeight(_buttonHeight);
-          //UPPING
-        }
-        if (direction == ScrollDirection.reverse) {
-          if (_upping) _updateRefs();
-          _updateHeight(0.0);
-          //DOWNING
-        }
-      } else {
-        _buttonPosition.value =
-            (_buttonHeight - pixels).clamp(0.0, _buttonHeight);
-        widget.onChanged?.call(_buttonPosition.value);
+    if (widget.forcesToHideAtEdge) {
+      if (pixels <= position.minScrollExtent) {
+        _buttonPosition.value = _buttonHeight;
+        _updateRefs();
+        _updateHeight(_buttonHeight);
+        return;
+      } else if (pixels >= position.maxScrollExtent) {
+        _buttonPosition.value = 0;
+        _updateRefs();
+        _updateHeight(0);
+        return;
       }
+    }
+    if (widget.floating) {
+      if (direction == ScrollDirection.forward) {
+        if (!_upping) _updateRefs();
+        _updateHeight(_buttonHeight);
+        //UPPING
+      }
+      if (direction == ScrollDirection.reverse) {
+        if (_upping) _updateRefs();
+        _updateHeight(0.0);
+        //DOWNING
+      }
+    } else {
+      _buttonPosition.value =
+          (_buttonHeight - pixels).clamp(0.0, _buttonHeight);
+      widget.onChanged?.call(_buttonPosition.value);
     }
   }
 
@@ -157,8 +162,8 @@ class TimerPeriodicBuilder extends StatefulWidget {
     required this.builder,
   }) : super(key: key);
 
-  final Duration duration;
   final WidgetBuilder builder;
+  final Duration duration;
 
   @override
   TimerPeriodicBuilderState createState() => TimerPeriodicBuilderState();
@@ -168,15 +173,15 @@ class TimerPeriodicBuilderState extends State<TimerPeriodicBuilder> {
   late Timer _timer;
 
   @override
-  void initState() {
-    _timer = Timer.periodic(widget.duration, (_) => setState(() {}));
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(widget.duration, (_) => setState(() {}));
+    super.initState();
   }
 
   @override
