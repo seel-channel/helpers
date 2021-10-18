@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:helpers/helpers.dart';
 
 class NoGlowScrollBehavior extends MaterialScrollBehavior {
@@ -64,6 +65,8 @@ class SliverTable<T> extends StatefulWidget {
     required this.defaultColumnWidth,
     this.footer,
     this.header,
+    this.horizontalController,
+    this.tableIsEmpty,
     this.itemCount,
     this.paddingTopOnHeaderHide,
     this.physics,
@@ -72,6 +75,8 @@ class SliverTable<T> extends StatefulWidget {
     this.strokeColor,
     this.strokeWidth,
     this.tablePadding,
+    this.tableVisibility,
+    this.verticalController,
   }) : super(key: key);
 
   final List<Widget> Function(int index) itemBuilder;
@@ -85,6 +90,8 @@ class SliverTable<T> extends StatefulWidget {
   final double defaultColumnWidth;
   final Widget? footer;
   final Widget? header;
+  final ScrollController? horizontalController;
+  final Widget? tableIsEmpty;
   final int? itemCount;
   final double? paddingTopOnHeaderHide;
   final ScrollPhysics? physics;
@@ -93,6 +100,8 @@ class SliverTable<T> extends StatefulWidget {
   final Color? strokeColor;
   final double? strokeWidth;
   final EdgeInsets? tablePadding;
+  final ValueListenable<bool>? tableVisibility;
+  final ScrollController? verticalController;
 
   @override
   State<SliverTable<T>> createState() => _SliverTableState<T>();
@@ -102,7 +111,7 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
   double _globalWidth = 0.0;
   final ValueNotifier<double> _headerHeight = ValueNotifier(0.0);
   final ValueNotifier<double> _headerPosition = ValueNotifier(0.0);
-  final ScrollController _horizontalController = ScrollController();
+  late ScrollController _horizontalController;
   Drag? _horizontalDrag;
   ScrollHoldController? _horizontalHold;
   double _initialScale = 1.0;
@@ -111,7 +120,8 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
   int _pointers = 0;
   final Map<Type, GestureRecognizer> _recognizers = <Type, GestureRecognizer>{};
   final ValueNotifier<double> _scale = ValueNotifier<double>(1.0);
-  final ScrollController _verticalController = ScrollController();
+  double _tableWidth = 0.0;
+  late ScrollController _verticalController;
   Drag? _verticalDrag;
   ScrollHoldController? _verticalHold;
   double _width = 0;
@@ -126,6 +136,8 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
 
   @override
   void initState() {
+    _horizontalController = widget.horizontalController ?? ScrollController();
+    _verticalController = widget.verticalController ?? ScrollController();
     _horizontalController.addListener(_handleHorizontalListener);
     Misc.onLayoutRendered(() {
       _recognizers[PanGestureRecognizer] = PanGestureRecognizer()
@@ -145,6 +157,7 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
         ..onUpdate = _handleScaleUpdate
         ..dragStartBehavior = DragStartBehavior.start;
       _calculateSizes();
+      setState(() {});
     });
     super.initState();
   }
@@ -154,11 +167,13 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
 
   void _handleHorizontalListener() {
     final double offset = _horizontalController.offset;
-    double tableWidth = _width * _scale.value;
-    tableWidth += widget.tablePadding?.right ?? 0;
-    if (offset + _globalWidth > tableWidth) {
-      _horizontalController.jumpTo(offset.clamp(0, tableWidth - _globalWidth));
+    if (offset + _globalWidth > _tableWidth) {
+      _horizontalController.jumpTo(offset.clamp(0, _tableWidth - _globalWidth));
     }
+  }
+
+  void _calculateRelativeTableWidth() {
+    _tableWidth = _width * _scale.value + (widget.tablePadding?.right ?? 0);
   }
 
   void _calculateSizes() {
@@ -169,8 +184,10 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
       _width += widget.columnWidths?[i] ?? widget.defaultColumnWidth;
       if (hasBorder && i < columnsCount) _width += widget.strokeWidth!;
     }
-    _scale.value = (_globalWidth * 2) / _width;
-    _minScale = _globalWidth / _width;
+    _minScale =
+        _globalWidth / (_width + (widget.tablePadding?.horizontal ?? 0));
+    _scale.value = ((_globalWidth * 2) / _width).clamp(_minScale, _maxScale);
+    _calculateRelativeTableWidth();
   }
 
   void _handleScaleStart(ScaleStartDetails details) {
@@ -180,6 +197,7 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
   void _handleScaleUpdate(ScaleUpdateDetails details) {
     final double newScale = _initialScale * details.scale;
     _scale.value = newScale.clamp(_minScale, _maxScale);
+    _calculateRelativeTableWidth();
     _handleHorizontalListener();
   }
 
@@ -235,32 +253,32 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
   }
 
   List<Widget> _castTableRow(List<Widget> children, {bool fitAlign = false}) {
-    final last = children.length - 1;
+    final int length = children.length;
+    final int last = length - 1;
+    final List<Widget> values = [];
     final Widget? stroke = hasBorder
         ? Container(width: widget.strokeWidth, color: widget.strokeColor)
         : null;
-
-    final values = children.mapIndexed<Widget>((index, e) {
-      final width = widget.columnWidths?[index] ?? widget.defaultColumnWidth;
+    for (var i = 0; i < length; i++) {
+      final Widget e = children[i];
+      final double width = widget.columnWidths?[i] ?? widget.defaultColumnWidth;
       Widget child = Padding(
         padding: widget.cellPadding ?? Margin.zero,
         child: e,
       );
-
       if (fitAlign) {
-        if (index == 0) {
+        if (i == 0) {
           child = CenterLeftAlign(child: child);
-        } else if (index == last) {
+        } else if (i == last) {
           child = CenterRightAlign(child: child);
         } else {
           child = Center(child: child);
         }
       }
-      return SizedBox(width: width, child: child);
-    });
-
-    if (stroke != null) {
-      return values.separete(stroke);
+      values.addAll([
+        SizedBox(width: width, child: child),
+        if (stroke != null && i != last) stroke,
+      ]);
     }
     return values;
   }
@@ -271,37 +289,133 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
     final double height = media.height;
 
     Widget _sliverRows({required int? itemCount}) {
+      final Decoration decoration = BoxDecoration(
+        border: hasBorder
+            ? Border(
+                bottom: BorderSide(
+                  color: widget.strokeColor!,
+                  width: widget.strokeWidth!,
+                ),
+              )
+            : null,
+      );
+
       return SliverPadding(
         padding: widget.contentPadding ?? Margin.zero,
-        sliver: SliverFixedExtentList(
-          itemExtent: widget.rowHeight,
-          delegate: SliverChildBuilderDelegate(
-            (_, index) => DecoratedBox(
-              decoration: BoxDecoration(
-                border: hasBorder
-                    ? Border(
-                        bottom: BorderSide(
-                          color: widget.strokeColor!,
-                          width: widget.strokeWidth!,
-                        ),
-                      )
-                    : null,
-              ),
-              child: Row(
-                children: _castTableRow(
-                  widget.itemBuilder(index),
+        sliver: widget.tableIsEmpty != null && (itemCount ?? 0) < 1
+            ? SliverFillViewport(
+                viewportFraction: height / (height * _scale.value),
+                delegate: SliverChildListDelegate.fixed([widget.tableIsEmpty!]),
+              )
+            : SliverFixedExtentList(
+                itemExtent: widget.rowHeight,
+                delegate: SliverChildBuilderDelegate(
+                  (_, index) => DecoratedBox(
+                    decoration: decoration,
+                    child:
+                        Row(children: _castTableRow(widget.itemBuilder(index))),
+                  ),
+                  childCount: itemCount,
                 ),
               ),
-            ),
-            childCount: itemCount,
-          ),
-        ),
       );
     }
 
+    final Widget rows = widget.rowsListenable != null
+        ? ValueListenableBuilder<List<T>>(
+            valueListenable: widget.rowsListenable!,
+            builder: (_, value, ___) => _sliverRows(
+              itemCount: value.length,
+            ),
+          )
+        : _sliverRows(itemCount: widget.itemCount);
+
+    final Widget table = Listener(
+      onPointerUp: (e) => _pointers -= 1,
+      onPointerDown: (e) {
+        _pointers += 1;
+        if (_pointers == 1) {
+          _recognizers[PanGestureRecognizer]?.addPointer(e);
+        }
+        _recognizers[ScaleGestureRecognizer]?.addPointer(e);
+      },
+      behavior: HitTestBehavior.translucent,
+      child: CustomScrollView(
+        controller: _horizontalController,
+        scrollDirection: Axis.horizontal,
+        cacheExtent: _width,
+        physics: const NeverScrollableScrollPhysics(),
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(
+              width: _width,
+              child: Padding(
+                padding: widget.tablePadding ?? Margin.zero,
+                child: ValueListenableBuilder<double>(
+                  valueListenable: _scale,
+                  builder: (_, scale, child) {
+                    return Transform.scale(
+                      scale: scale,
+                      alignment: Alignment.topLeft,
+                      child: FractionallySizedBox(
+                        heightFactor: height / (height * scale),
+                        alignment: Alignment.topLeft,
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: CustomScrollView(
+                    controller: _verticalController,
+                    physics: NeverScrollableScrollPhysics(
+                      parent: widget.physics,
+                    ),
+                    clipBehavior: Clip.none,
+                    slivers: [
+                      SliverAppBar(
+                        pinned: true,
+                        primary: false,
+                        automaticallyImplyLeading: false,
+                        backgroundColor: context.color.scaffold,
+                        shadowColor: Colors.transparent,
+                        titleSpacing: 0.0,
+                        toolbarHeight: widget.columnHeight,
+                        title: Stack(children: [
+                          Positioned.fill(
+                            child: widget.columnBackground ??
+                                const SizedBox.shrink(),
+                          ),
+                          Row(
+                            children: _castTableRow(
+                              widget.columns,
+                              fitAlign: true,
+                            ),
+                          ),
+                        ]),
+                      ),
+                      if (widget.tableVisibility != null)
+                        ValueListenableBuilder<bool>(
+                          valueListenable: widget.tableVisibility!,
+                          builder: (_, visible, child) => SliverVisibility(
+                            visible: visible,
+                            sliver: child!,
+                          ),
+                          child: rows,
+                        )
+                      else
+                        rows
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
     return Stack(children: [
-      Column(children: [
-        if (widget.header != null)
+      if (widget.header != null) ...[
+        Column(children: [
           AnimatedBuilder(
             animation: Listenable.merge([_headerHeight, _headerPosition]),
             builder: (_, __) {
@@ -313,99 +427,20 @@ class _SliverTableState<T> extends State<SliverTable<T>> {
               return SizedBox(height: padding);
             },
           ),
-        Expanded(
-          child: Listener(
-            onPointerUp: (e) => _pointers -= 1,
-            onPointerDown: (e) {
-              _pointers += 1;
-              if (_pointers == 1) {
-                _recognizers[PanGestureRecognizer]?.addPointer(e);
-              }
-              _recognizers[ScaleGestureRecognizer]?.addPointer(e);
-            },
-            behavior: HitTestBehavior.translucent,
-            child: Scrollbar(
-              isAlwaysShown: true,
-              controller: _verticalController,
-              child: SingleChildScrollView(
-                controller: _horizontalController,
-                scrollDirection: Axis.horizontal,
-                physics: const NeverScrollableScrollPhysics(),
-                child: SizedBox(
-                  width: _width,
-                  child: Padding(
-                    padding: widget.tablePadding ?? Margin.zero,
-                    child: ValueListenableBuilder<double>(
-                      valueListenable: _scale,
-                      builder: (_, scale, child) {
-                        return Transform.scale(
-                          scale: scale,
-                          alignment: Alignment.topLeft,
-                          child: FractionallySizedBox(
-                            heightFactor: height / (height * scale),
-                            alignment: Alignment.topLeft,
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: CustomScrollView(
-                        controller: _verticalController,
-                        physics: NeverScrollableScrollPhysics(
-                          parent: widget.physics,
-                        ),
-                        slivers: [
-                          SliverAppBar(
-                            pinned: true,
-                            primary: false,
-                            automaticallyImplyLeading: false,
-                            backgroundColor: context.color.scaffold,
-                            shadowColor: Colors.transparent,
-                            titleSpacing: 0.0,
-                            toolbarHeight: widget.columnHeight,
-                            title: Stack(children: [
-                              Positioned.fill(
-                                child: widget.columnBackground ??
-                                    const SizedBox.shrink(),
-                              ),
-                              Row(
-                                children: _castTableRow(
-                                  widget.columns,
-                                  fitAlign: true,
-                                ),
-                              ),
-                            ]),
-                          ),
-                          if (widget.rowsListenable != null)
-                            ValueListenableBuilder<List<T>>(
-                              valueListenable: widget.rowsListenable!,
-                              builder: (_, value, ___) => _sliverRows(
-                                itemCount: value.length,
-                              ),
-                            )
-                          else
-                            _sliverRows(itemCount: widget.itemCount),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
-      if (widget.header != null)
+          Expanded(child: table),
+        ]),
         OnScrollHideContent(
           controller: _verticalController,
           offsetToHideButton: _headerHeight.value,
           onSizeChanged: (height) {
             _headerPosition.value = height;
             _headerHeight.value = height;
-            setState(() {});
           },
           onChanged: (lerp) => _headerPosition.value = lerp,
           child: widget.header!,
         ),
+      ] else
+        table,
       if (widget.footer != null)
         BottomCenterAlign(
           child: OnScrollHideContent(
