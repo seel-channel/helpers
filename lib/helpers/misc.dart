@@ -6,10 +6,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Misc {
-  DateTime? _init;
-  String? _prefix;
+  ///```dart
+  /// return "Lorem ipsum dolor sit amet, consectetur
+  /// adipiscing elit, sed do eiusmod tempor incididunt
+  /// ut labore et dolore magna aliqua. Ut enim ad minim
+  /// veniam, quis nostrud exercitation ullamco laboris
+  /// nisi ut aliquip ex ea commodo consequat."
+  /// ```
+  static const String extendedLoremIpsum =
+      // ignore: prefer_interpolation_to_compose_strings
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
+          "Ut enim ad minim veniam, quis nostrud exercitation " +
+          "ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+
+  ///```dart
+  ///return "Lorem ipsum dolor sit amet, consectetur
+  ///adipiscing elit, sed do eiusmod tempor incididunt
+  ///ut labore et dolore magna aliqua."
+  ///```
+  static const String loremIpsum =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
+          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
   static const int maxInt = 9223372036854775807;
+
+  DateTime? _init;
+  String? _prefix;
 
   static bool isEmail(String text) => RegExp(
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
@@ -33,16 +56,20 @@ class Misc {
   static bool isBase64(String text) =>
       RegExp(r"^[-A-Za-z0-9+=]{1,50}|=[^=]|={3,}$").hasMatch(text);
 
-  static double dynamicToDouble(dynamic value) {
-    return value != null
-        ? value is int
-            ? value * 1.0
-            : value is double
-                ? value
-                : value is String
-                    ? double.tryParse(value) ?? 0.0
-                    : 0.0
-        : 0.0;
+  static double? dynamicToDouble(dynamic value) {
+    if (value != null) {
+      return value is int
+          ? value * 1.0
+          : value is double
+              ? value
+              : value is String
+                  ? double.tryParse(value)
+                  : null;
+    }
+  }
+
+  static int? dynamicToInt(dynamic value) {
+    return dynamicToDouble(value)?.toInt();
   }
 
   ///Similar to `console.time("TIMER")` (javascript)
@@ -75,29 +102,6 @@ class Misc {
   static void onLayoutRendered(void Function() callback) {
     WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
   }
-
-  ///```dart
-  ///return "Lorem ipsum dolor sit amet, consectetur
-  ///adipiscing elit, sed do eiusmod tempor incididunt
-  ///ut labore et dolore magna aliqua."
-  ///```
-  static const String loremIpsum =
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-
-  ///```dart
-  /// return "Lorem ipsum dolor sit amet, consectetur
-  /// adipiscing elit, sed do eiusmod tempor incididunt
-  /// ut labore et dolore magna aliqua. Ut enim ad minim
-  /// veniam, quis nostrud exercitation ullamco laboris
-  /// nisi ut aliquip ex ea commodo consequat."
-  /// ```
-  static const String extendedLoremIpsum =
-      // ignore: prefer_interpolation_to_compose_strings
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
-          "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
-          "Ut enim ad minim veniam, quis nostrud exercitation " +
-          "ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 
   ///DO THAT:
   ///```dart
@@ -210,6 +214,11 @@ class Misc {
 // ignore: avoid_classes_with_only_static_members
 abstract class SystemOverlay {
   ///```dart
+  ///return [SystemUiOverlay.bottom]
+  ///```
+  static List<SystemUiOverlay> bottom = [SystemUiOverlay.bottom];
+
+  ///```dart
   ///return [SystemUiOverlay.top]
   ///```
   static List<SystemUiOverlay> top = [SystemUiOverlay.top];
@@ -218,32 +227,10 @@ abstract class SystemOverlay {
   ///return SystemUiOverlay.values
   ///```
   static List<SystemUiOverlay> values = SystemUiOverlay.values;
-
-  ///```dart
-  ///return [SystemUiOverlay.bottom]
-  ///```
-  static List<SystemUiOverlay> bottom = [SystemUiOverlay.bottom];
 }
 
 // ignore: avoid_classes_with_only_static_members
 abstract class SystemOrientation {
-  ///```dart
-  ///return [DeviceOrientation.values]
-  ///```
-  static List<DeviceOrientation> values = DeviceOrientation.values;
-
-  ///```dart
-  ///return [DeviceOrientation.portraitUp]
-  ///```
-  static List<DeviceOrientation> portraitUp = [DeviceOrientation.portraitUp];
-
-  ///```dart
-  ///return [DeviceOrientation.portraitDown]
-  ///```
-  static List<DeviceOrientation> portraitDown = [
-    DeviceOrientation.portraitDown
-  ];
-
   ///```dart
   ///return [DeviceOrientation.landscapeLeft]
   ///```
@@ -257,4 +244,21 @@ abstract class SystemOrientation {
   static List<DeviceOrientation> landscapeRight = [
     DeviceOrientation.landscapeRight
   ];
+
+  ///```dart
+  ///return [DeviceOrientation.portraitDown]
+  ///```
+  static List<DeviceOrientation> portraitDown = [
+    DeviceOrientation.portraitDown
+  ];
+
+  ///```dart
+  ///return [DeviceOrientation.portraitUp]
+  ///```
+  static List<DeviceOrientation> portraitUp = [DeviceOrientation.portraitUp];
+
+  ///```dart
+  ///return [DeviceOrientation.values]
+  ///```
+  static List<DeviceOrientation> values = DeviceOrientation.values;
 }
