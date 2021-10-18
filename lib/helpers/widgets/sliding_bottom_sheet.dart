@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
@@ -40,38 +41,26 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   /// ```
   const SlidingBottomSheetContainer({
     Key? key,
-    this.child,
-    this.height,
-    this.boxShadow,
-    this.chevron = const SlidingBottomSheetChevron(),
-    this.color = Colors.white,
     EdgeInsetsGeometry? padding,
     BorderRadius? borderRadius,
     this.animatedSizeCurve = Curves.decelerate,
     this.animatedSizeDuration = const Duration(milliseconds: 400),
+    this.boxShadow,
+    this.chevron = const SlidingBottomSheetChevron(),
+    this.child,
+    this.children,
+    this.color = Colors.white,
     this.controller,
+    this.height,
     this.scrollPhysics,
+    this.scrollToBottom = true,
   })  : padding = padding ?? const EdgeInsets.all(20.0),
         borderRadius = borderRadius ??
             const BorderRadius.vertical(top: Radius.circular(20.0)),
         super(key: key);
 
-  /// The color to paint behind the [child].
-  final Color color;
-
-  ///The Widget over the [builder]
-  final Widget chevron;
-
-  /// The [child] contained by the container.
-  final Widget? child;
-
-  ///Creates a widget that combines common painting, positioning, and sizing widgets.
-  ///The height value include the padding.
-  final double? height;
-
-  ///A list of shadows cast by this box behind the box.
-  ///The shadow follows the [shape] of the box.
-  final List<BoxShadow>? boxShadow;
+  final Curve animatedSizeCurve;
+  final Duration animatedSizeDuration;
 
   ///The border radius of the rounded corners.
   ///Values are clamped so that horizontal and vertical radii sums do not exceed width/height.
@@ -82,6 +71,27 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   /// ```
   final BorderRadius borderRadius;
 
+  ///A list of shadows cast by this box behind the box.
+  ///The shadow follows the [shape] of the box.
+  final List<BoxShadow>? boxShadow;
+
+  ///The Widget over the [builder]
+  final Widget chevron;
+
+  /// The [child] contained by the container.
+  final Widget? child;
+
+  final List<Widget>? children;
+
+  /// The color to paint behind the [child].
+  final Color color;
+
+  final ScrollController? controller;
+
+  ///Creates a widget that combines common painting, positioning, and sizing widgets.
+  ///The height value include the padding.
+  final double? height;
+
   ///Empty space to inscribe inside the [decoration].
   ///The [child], if any, is placed inside this padding.
   ///
@@ -91,13 +101,8 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   /// ```
   final EdgeInsetsGeometry padding;
 
-  final Curve animatedSizeCurve;
-
-  final Duration animatedSizeDuration;
-
   final ScrollPhysics? scrollPhysics;
-
-  final ScrollController? controller;
+  final bool scrollToBottom;
 
   @override
   _SlidingBottomSheetContainerState createState() =>
@@ -106,14 +111,17 @@ class SlidingBottomSheetContainer extends StatefulWidget {
 
 class _SlidingBottomSheetContainerState
     extends State<SlidingBottomSheetContainer> {
-  final GlobalKey _chevronKey = GlobalKey();
   double _chevronHeight = 0;
+  final GlobalKey _chevronKey = GlobalKey();
 
   @override
   void initState() {
     Misc.onLayoutRendered(() {
       final height = _chevronKey.context?.height;
       if (height != null) _chevronHeight = height;
+      if (widget.scrollToBottom && widget.controller != null) {
+        widget.controller!.jumpTo(widget.controller!.position.maxScrollExtent);
+      }
       setState(() {});
     });
     super.initState();
@@ -149,6 +157,7 @@ class _SlidingBottomSheetContainerState
           child: widget.chevron,
         ),
       ),
+      if (widget.children != null) ...widget.children!,
     ]);
 
     return widget.controller != null
@@ -199,21 +208,6 @@ class SlidingBottomSheet extends StatefulWidget {
         backgroundColor = backgroundColor ?? Colors.black.withOpacity(0.2),
         super(key: key);
 
-  ///Allows toggling of the draggability of the SlidingUpPanel.
-  ///Set this to false to prevent the user from being able to drag the panel up and down. Defaults to true
-  final bool isDraggable;
-
-  ///The color to paint behind the [builder].
-  ///
-  ///Default:
-  ///```dart
-  ///Colors.black.withOpacity(0.2)
-  ///```
-  final Color backgroundColor;
-
-  ///Creates an image filter that applies a Gaussian blur.
-  final double backgroundBlur;
-
   ///Provides a [ScrollController] to attach to a scrollable
   ///object in the panel that links the panel position with the scroll position.
   ///Useful for implementing an infinite scroll behavior.
@@ -225,13 +219,18 @@ class SlidingBottomSheet extends StatefulWidget {
   /// between 0.0 and 1.0 where 0.0 is fully collapsed and 1.0 is fully open.
   final void Function(double position)? onPanelSlide;
 
-  /// If non-null, this callback is called when the
-  /// panel is fully opened
-  final VoidCallback? onPanelOpened;
+  ///Creates an image filter that applies a Gaussian blur.
+  final double backgroundBlur;
 
-  /// If non-null, this callback is called when the panel
-  /// is fully collapsed.
-  final VoidCallback? onPanelClosed;
+  ///The color to paint behind the [builder].
+  ///
+  ///Default:
+  ///```dart
+  ///Colors.black.withOpacity(0.2)
+  ///```
+  final Color backgroundColor;
+
+  final BoxConstraints? constraints;
 
   ///Creates an animation controller. This controller allows move the panel.
   ///
@@ -241,13 +240,23 @@ class SlidingBottomSheet extends StatefulWidget {
   ///```
   final SlidingBottomSheetController controller;
 
-  ///[duration] is the length of time this animation should last.
-  final Duration duration;
-
   ///Creates a curved animation. The curve to use in the forward and reverse direction.
   final Curve curve;
 
-  final BoxConstraints? constraints;
+  ///[duration] is the length of time this animation should last.
+  final Duration duration;
+
+  ///Allows toggling of the draggability of the SlidingUpPanel.
+  ///Set this to false to prevent the user from being able to drag the panel up and down. Defaults to true
+  final bool isDraggable;
+
+  /// If non-null, this callback is called when the panel
+  /// is fully collapsed.
+  final VoidCallback? onPanelClosed;
+
+  /// If non-null, this callback is called when the
+  /// panel is fully opened
+  final VoidCallback? onPanelOpened;
 
   final bool? resizeToAvoidBottomInset;
 
@@ -257,18 +266,21 @@ class SlidingBottomSheet extends StatefulWidget {
 
 class _SlidingBottomSheetState extends State<SlidingBottomSheet>
     with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  double _builderHeight = 1500.0;
   final GlobalKey _key = GlobalKey();
   final ScrollController _scrollController = ScrollController();
   final VelocityTracker _tracker = VelocityTracker.withKind(
     PointerDeviceKind.unknown,
   );
 
-  late AnimationController _animationController;
-  double _builderHeight = 1500.0;
-
-  bool get _canScroll =>
-      // ignore: avoid_bool_literals_in_conditional_expressions
-      widget.isDraggable && _scrollController.offset <= 0;
+  @override
+  void dispose() {
+    _animationController.removeListener(_animationControllerListener);
+    _animationController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -282,13 +294,9 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
     });
   }
 
-  @override
-  void dispose() {
-    _animationController.removeListener(_animationControllerListener);
-    _animationController.dispose();
-    _scrollController.dispose();
-    super.dispose();
-  }
+  bool get _canScroll =>
+      // ignore: avoid_bool_literals_in_conditional_expressions
+      widget.isDraggable && _scrollController.offset <= 0;
 
   //---------//
   //DIMESIONS//
