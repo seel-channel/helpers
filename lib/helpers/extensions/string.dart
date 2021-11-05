@@ -16,10 +16,10 @@ extension StringHelperExtension on String {
     );
   }
 
-  String removeLastWord() {
+  String removeLastWord([int amount = 1]) {
     final int cacheLenght = length;
-    if (cacheLenght > 0) {
-      return substring(0, cacheLenght - 1);
+    if (cacheLenght > amount) {
+      return substring(0, cacheLenght - amount);
     } else {
       return "";
     }

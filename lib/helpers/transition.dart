@@ -136,16 +136,15 @@ class _OnScrollHideContentState extends State<OnScrollHideContent> {
         child: ValueListenableBuilder(
           valueListenable: _buttonPosition,
           builder: (_, double value, Widget? child) {
-            final double opacity = value / _buttonHeight;
+            final offset =
+                widget.onTop ? value - _buttonHeight : _buttonHeight - value;
+            final double opacity = (offset / _buttonHeight).clamp(0, 1);
             final Widget transform = Transform.translate(
-              offset: Offset(
-                0.0,
-                widget.onTop ? value - _buttonHeight : _buttonHeight - value,
-              ),
+              offset: Offset(0.0, offset),
               child: child,
             );
             return widget.opacity
-                ? Opacity(opacity: opacity.clamp(0, 1), child: transform)
+                ? Opacity(opacity: opacity, child: transform)
                 : transform;
           },
           child: widget.child,
@@ -353,6 +352,7 @@ class SwipeTransition extends StatelessWidget {
     this.duration = const Duration(milliseconds: 200),
     this.axis = Axis.vertical,
     this.axisAlignment = -1.0,
+    this.clip = Clip.antiAlias,
   }) : super(key: key);
 
   /// [Axis.horizontal] if [sizeFactor] modifies the width, otherwise
@@ -385,22 +385,25 @@ class SwipeTransition extends StatelessWidget {
   /// If false, it will hide the widget.
   final bool visible;
 
+  final Clip clip;
+
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      child: BooleanTween<double>(
-        tween: LerpTween(),
-        curve: curve,
-        animate: visible,
-        duration: duration,
-        builder: (_, lerp, ___) => AlignFactor(
-          axisAlignment: axisAlignment,
-          lerp: lerp,
-          axis: axis,
-          child: child,
-        ),
+    final swipper = BooleanTween<double>(
+      tween: LerpTween(),
+      curve: curve,
+      animate: visible,
+      duration: duration,
+      builder: (_, lerp, ___) => AlignFactor(
+        axisAlignment: axisAlignment,
+        lerp: lerp,
+        axis: axis,
+        child: child,
       ),
     );
+    return clip == Clip.none
+        ? swipper
+        : ClipRRect(clipBehavior: clip, child: swipper);
   }
 }
 
@@ -408,8 +411,8 @@ class AlignFactor extends StatelessWidget {
   const AlignFactor({
     Key? key,
     required this.lerp,
-    required this.axis,
-    required this.axisAlignment,
+    this.axis = Axis.vertical,
+    this.axisAlignment = -1.0,
     required this.child,
   }) : super(key: key);
 

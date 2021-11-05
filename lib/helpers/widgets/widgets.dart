@@ -11,32 +11,56 @@ class DoubleColumn extends StatelessWidget {
   ///```
   const DoubleColumn({
     Key? key,
-    this.leftColumn,
-    this.rightColumn,
-    this.spaceBeetween = 20,
+    this.columnCrossAxisAlignment = CrossAxisAlignment.center,
+    this.columnMainAxisAlignment = MainAxisAlignment.start,
     this.columnSize = MainAxisSize.min,
+    this.leftColumn,
+    this.leftFlex,
+    this.rightColumn,
+    this.rightFlex,
+    this.rowCrossAxisAlignment = CrossAxisAlignment.center,
+    this.rowMainAxisAlignment = MainAxisAlignment.start,
+    this.rowSize = MainAxisSize.max,
+    this.spaceBeetween = 20,
   }) : super(key: key);
 
-  final double spaceBeetween;
+  final CrossAxisAlignment columnCrossAxisAlignment;
+  final MainAxisAlignment columnMainAxisAlignment;
   final MainAxisSize columnSize;
   final List<Widget>? leftColumn;
+  final int? leftFlex;
   final List<Widget>? rightColumn;
+  final int? rightFlex;
+  final CrossAxisAlignment rowCrossAxisAlignment;
+  final MainAxisAlignment rowMainAxisAlignment;
+  final MainAxisSize rowSize;
+  final double spaceBeetween;
 
   @override
   Widget build(BuildContext context) {
+    final Widget left = Column(
+      mainAxisSize: columnSize,
+      crossAxisAlignment: columnCrossAxisAlignment,
+      mainAxisAlignment: columnMainAxisAlignment,
+      children: leftColumn!,
+    );
+    final Widget right = Column(
+      mainAxisSize: columnSize,
+      crossAxisAlignment: columnCrossAxisAlignment,
+      mainAxisAlignment: columnMainAxisAlignment,
+      children: rightColumn!,
+    );
     return Row(
+      mainAxisAlignment: rowMainAxisAlignment,
+      crossAxisAlignment: rowCrossAxisAlignment,
+      mainAxisSize: rowSize,
       children: [
-        Column(
-          mainAxisSize: columnSize,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: leftColumn!,
-        ),
+        if (leftFlex != null) Flexible(flex: leftFlex!, child: left) else left,
         SizedBox(width: spaceBeetween),
-        Column(
-          mainAxisSize: columnSize,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: rightColumn!,
-        ),
+        if (rightFlex != null)
+          Flexible(flex: rightFlex!, child: right)
+        else
+          right,
       ],
     );
   }
@@ -46,6 +70,7 @@ class RemoveScrollGlow extends StatelessWidget {
   ///Eliminate the Splash Effect or Glow Effect when reaching
   ///the limit of a PageView, ScrollView, ListView, etc.
   const RemoveScrollGlow({Key? key, required this.child}) : super(key: key);
+
   final Widget child;
 
   @override
@@ -63,6 +88,7 @@ class RemoveScrollGlow extends StatelessWidget {
 class DismissKeyboard extends StatelessWidget {
   ///Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
   const DismissKeyboard({Key? key, this.child}) : super(key: key);
+
   final Widget? child;
 
   @override
@@ -140,8 +166,8 @@ class ExpandedTap extends StatelessWidget {
   ///```
   const ExpandedTap({Key? key, this.onTap, this.child}) : super(key: key);
 
-  final Widget? child;
   final void Function()? onTap;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +191,7 @@ class ExpandedAlign extends StatelessWidget {
     this.alignment = Alignment.centerRight,
     this.child,
   }) : super(key: key);
+
   final Alignment alignment;
   final Widget? child;
 
@@ -196,10 +223,10 @@ class SafeAreaColor extends StatelessWidget {
       this.width = double.infinity})
       : super(key: key);
 
-  final Color color;
   final Widget? child;
-  final double width;
+  final Color color;
   final double? height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -255,14 +282,12 @@ class SplashTap extends StatelessWidget {
     this.shape = BoxShape.rectangle,
   }) : super(key: key);
 
-  final Color? color;
-
-  final Widget child;
-
-  final BoxShape shape;
-
   ///Creates an ink well.
   final void Function()? onTap;
+
+  final Widget child;
+  final Color? color;
+  final BoxShape shape;
 
   @override
   Widget build(BuildContext context) {
@@ -295,10 +320,6 @@ class SplashButton extends StatelessWidget {
             borderRadius ?? const BorderRadius.all(Radius.circular(20.0)),
         super(key: key);
 
-  final Color color;
-  final Widget child;
-  final BoxShape shape;
-
   ///Creates an ink well.
   final void Function() onTap;
 
@@ -311,6 +332,14 @@ class SplashButton extends StatelessWidget {
   /// ```
   final BorderRadius borderRadius;
 
+  ///A list of shadows cast by this box behind the box.
+  ///
+  ///The shadow follows the [shape] of the box.
+  final List<BoxShadow>? boxShadow;
+
+  final Widget child;
+  final Color color;
+
   ///Empty space to inscribe inside the [decoration].
   ///The [child], if any, is placed inside this padding.
   ///
@@ -320,10 +349,7 @@ class SplashButton extends StatelessWidget {
   /// ```
   final EdgeInsetsGeometry padding;
 
-  ///A list of shadows cast by this box behind the box.
-  ///
-  ///The shadow follows the [shape] of the box.
-  final List<BoxShadow>? boxShadow;
+  final BoxShape shape;
 
   @override
   Widget build(BuildContext context) {
@@ -362,13 +388,10 @@ class TileDesigned extends StatelessWidget {
     this.borderRadius = const BorderRadius.all(Radius.circular(20.0)),
   }) : super(key: key);
 
-  final Color background;
-
-  ///You can wrap it in an Expanded.
-  final Widget? prefix, suffix, child;
-
   ///Creates an ink well.
   final void Function()? onTap;
+
+  final Color background;
 
   ///The border radius of the rounded corners.
   ///Values are clamped so that horizontal and vertical radii sums do not exceed width/height.
@@ -378,6 +401,9 @@ class TileDesigned extends StatelessWidget {
   ///const BorderRadius.all(Radius.circular(20.0))
   /// ```
   final BorderRadius borderRadius;
+
+  ///You can wrap it in an Expanded.
+  final Widget? prefix, suffix, child;
 
   ///Empty space to inscribe inside the [decoration].
   ///The [child], if any, is placed inside this padding.

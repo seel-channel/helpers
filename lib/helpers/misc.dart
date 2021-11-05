@@ -1,11 +1,34 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:math' as math;
+import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:helpers/helpers.dart';
 
 class Misc {
+  /// Creates a [Stopwatch] in stopped state with a zero elapsed count.
+  ///
+  /// The following example shows how to start a [Stopwatch]
+  /// immediately after allocation.
+  /// ```dart
+  /// final misc = Misc()..startWatch();
+  /// //Also it is same
+  /// final misc = Misc.watch();
+  /// ```
+  Misc();
+
+  /// Creates a [Stopwatch] in stopped state with a zero elapsed count.
+  ///
+  /// The following example shows how to start a [Stopwatch]
+  /// immediately after allocation.
+  /// ```dart
+  /// final misc = Misc()..startWatch();
+  /// ```
+  factory Misc.watch([String? prefix]) => Misc()..startWatch(prefix);
+
   ///```dart
   /// return "Lorem ipsum dolor sit amet, consectetur
   /// adipiscing elit, sed do eiusmod tempor incididunt
@@ -46,6 +69,108 @@ class Misc {
         .hasMatch(text);
   }
 
+  static RegExp beetweenCharacterPattern([String character = "*"]) {
+    return RegExp('(\\$character)(.*?)(\\$character)');
+  }
+
+  static String getFunctionReturnType(dynamic function) {
+    final text = function.toString();
+    final splitted = text.split(" ");
+    final count = splitted.length;
+    int index = -1;
+    for (int i = 0; i < count; i++) {
+      final item = splitted[i];
+      if (item == "=>") {
+        index = i;
+        break;
+      }
+    }
+    if (index >= 0 && index + 1 < count) return splitted[index + 1];
+    return "";
+  }
+
+  static Future<Uint8List?> repaintBoundaryToImageBytes(
+    RenderRepaintBoundary? boundary, {
+    double pixelRatio = 3.0,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+  }) async {
+    final ui.Image? image = await boundary?.toImage(pixelRatio: pixelRatio);
+    final ByteData? byteData = await image?.toByteData(format: format);
+    return byteData?.buffer.asUint8List();
+  }
+
+  static Future<Uint8List> widgetToImageBytes({
+    required Widget child,
+    Size? size,
+    double? pixelRatio,
+    ui.ImageByteFormat format = ui.ImageByteFormat.png,
+    Duration delay = Duration.zero,
+    BuildContext? context,
+  }) async {
+    final RenderRepaintBoundary repaintBoundary = RenderRepaintBoundary();
+    final PipelineOwner pipelineOwner = PipelineOwner();
+    final Size logicalSize =
+        size ?? ui.window.physicalSize / ui.window.devicePixelRatio;
+    final RenderView renderView = RenderView(
+      window: ui.window,
+      child: RenderPositionedBox(child: repaintBoundary),
+      configuration: ViewConfiguration(
+        size: logicalSize,
+        devicePixelRatio: pixelRatio ?? 1.0,
+      ),
+    );
+
+    int retryCounter = 3;
+    bool isDirty = false;
+    ui.Image? image;
+
+    final BuildOwner buildOwner = BuildOwner(
+      focusManager: FocusManager(),
+      onBuildScheduled: () => isDirty = true,
+    );
+
+    final rootElement = RenderObjectToWidgetAdapter<RenderBox>(
+      container: repaintBoundary,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: context != null
+            ? InheritedTheme.captureAll(
+                context,
+                MediaQuery(data: MediaQuery.of(context), child: child),
+              )
+            : child,
+      ),
+    ).attachToRenderTree(buildOwner);
+
+    pipelineOwner.rootNode = renderView;
+    renderView.prepareInitialFrame();
+
+    void buildScope() {
+      buildOwner
+        ..buildScope(rootElement)
+        ..finalizeTree();
+      pipelineOwner
+        ..flushLayout()
+        ..flushCompositingBits()
+        ..flushPaint();
+    }
+
+    buildScope();
+
+    do {
+      isDirty = false;
+      image = await repaintBoundary.toImage(
+        pixelRatio:
+            pixelRatio ?? (ui.window.physicalSize.width / logicalSize.width),
+      );
+      await Future.delayed(delay);
+      if (isDirty) buildScope();
+      retryCounter--;
+    } while (isDirty && retryCounter >= 0);
+    final ByteData? byteData = await image.toByteData(format: format);
+    return byteData!.buffer.asUint8List();
+  }
+
   static bool isUsername(String text) =>
       RegExp(r'^[a-zA-Z0-9][a-zA-Z0-9_.]+[a-zA-Z0-9]$').hasMatch(text);
 
@@ -62,9 +187,25 @@ class Misc {
           ? value * 1.0
           : value is double
               ? value
-              : value is String
+              : value is String && value.isNotEmpty
                   ? double.tryParse(value)
                   : null;
+    }
+  }
+
+  static Map<K, V>? dynamicToMap<K, V>(dynamic value) {
+    if (value is Map) return Map<K, V>.from(value);
+  }
+
+  static Map<String, dynamic>? dynamicToMapStringDynamic(dynamic value) {
+    return dynamicToMap<String, dynamic>(value);
+  }
+
+  static DateTime? dynamicToDateTime(dynamic value) {
+    if (value is String) {
+      try {
+        return DateTime.parse(value);
+      } catch (_) {}
     }
   }
 
@@ -72,19 +213,33 @@ class Misc {
     return dynamicToDouble(value)?.toInt();
   }
 
-  ///Similar to `console.time("TIMER")` (javascript)
-  void timeStart([String prefix = "TIMER"]) {
-    _prefix = prefix;
+  static T? dynamicMapToModel<T>(
+    dynamic value,
+    T Function(Map<String, dynamic> e) test,
+  ) {
+    final map = dynamicToMapStringDynamic(value);
+    if (map != null) return test(map);
+  }
+
+  /// Starts the [Stopwatch].
+  ///
+  /// The [elapsed] count is increasing monotonically. If the [Stopwatch] has
+  /// been stopped, then calling start again restarts it without resetting the
+  /// [elapsed] count.
+  ///
+  /// If the [Stopwatch] is currently running, then calling start does nothing.
+  void startWatch([String? prefix]) {
+    _prefix = prefix ?? "TIMER";
     log("Initialized", name: _prefix ?? "");
     _init = DateTime.now();
   }
 
-  ///Similar to `console.timeEnd()` (javascript)
-  void timeStop() {
-    final int ms =
-        DateTime.now().difference(_init ?? DateTime.now()).inMilliseconds;
-    log("Completed in ${ms / 1000} seconds", name: _prefix ?? "");
+  void showElapsed() {
+    final int ms = elapsed.inMilliseconds;
+    printAmber("Completed in ${ms / 1000} seconds", prefix: _prefix ?? "");
   }
+
+  Duration get elapsed => DateTime.now().difference(_init ?? DateTime.now());
 
   static double lerpDouble(num a, num b, double t) {
     return ui.lerpDouble(a, b, t)!;
@@ -97,10 +252,18 @@ class Misc {
 
   ///DO THAT:
   ///```dart
-  /// WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
+  /// WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
   /// ```
   static void onLayoutRendered(void Function() callback) {
-    WidgetsBinding.instance?.addPostFrameCallback((d) => callback());
+    WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
+  }
+
+  ///DO THAT:
+  ///```dart
+  /// WidgetsBinding.instance?.endOfFrame.then((_) => callback());
+  /// ```
+  static void afterFirstLayout(void Function() callback) {
+    WidgetsBinding.instance?.endOfFrame.then((_) => callback());
   }
 
   ///DO THAT:

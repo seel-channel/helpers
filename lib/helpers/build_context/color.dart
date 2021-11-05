@@ -24,6 +24,12 @@ class BuildColor {
   ///```dart
   ///return Theme.of(context).accentColor
   ///```
+  @Deprecated(
+    'Use colorScheme.secondary instead. '
+    'For more information, consult the migration guide at '
+    'https://flutter.dev/docs/release/breaking-changes/theme-data-accent-properties#migration-guide. '
+    'This feature was deprecated after v2.3.0-0.1.pre.',
+  )
   Color get accent => Theme.of(_context).accentColor;
 
   ///```dart
@@ -94,6 +100,12 @@ class BuildColor {
   ///```dart
   ///return Theme.of(context).buttonColor
   ///```
+  @Deprecated(
+    'Use colorScheme.secondary instead. '
+    'For more information, consult the migration guide at '
+    'https://flutter.dev/docs/release/breaking-changes/theme-data-accent-properties#migration-guide. '
+    'This feature was deprecated after v2.3.0-0.1.pre.',
+  )
   Color get button => Theme.of(_context).buttonColor;
 
   ///```dart
