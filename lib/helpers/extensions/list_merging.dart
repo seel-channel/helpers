@@ -94,6 +94,16 @@ extension ListMerging<T> on List<T> {
     }
   }
 
+  Map<K, V> toMap<K, V>(MapEntry<K, V> Function(int index, T e) test) {
+    final Map<K, V> map = {};
+    for (var i = 0; i < length; i++) {
+      final item = this[i];
+      final entry = test(i, item);
+      map[entry.key] = entry.value;
+    }
+    return map;
+  }
+
   List<T> textSearch(String query, List<String> Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
