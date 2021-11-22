@@ -1,4 +1,4 @@
-import 'package:helpers/helpers/extensions/string.dart';
+import 'package:helpers/helpers.dart';
 
 extension ListListMerging<T> on List<List<T>> {
   ///Do that:
