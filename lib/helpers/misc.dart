@@ -209,6 +209,14 @@ class Misc {
     }
   }
 
+  static double pow(double x, int exponent) {
+    return math.pow(x, exponent).toDouble();
+  }
+
+  static double sqrt(double x) {
+    return math.sqrt(x);
+  }
+
   static int? dynamicToInt(dynamic value) {
     return dynamicToDouble(value)?.toInt();
   }
