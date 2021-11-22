@@ -14,7 +14,6 @@ class App extends StatelessWidget {
     return MaterialApp(
       home: HomePage(),
       theme: ThemeData(
-        accentColor: const Color(0xFF0253f5),
         primaryColor: const Color(0xFF37393d),
         scaffoldBackgroundColor: Colors.grey[100],
         textTheme: const TextTheme(
@@ -44,7 +43,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor: context.color.accent,
         onPressed: () => setState(() => visible = !visible),
         child: TurnTransition(
             turn: visible, child: const Icon(Icons.chevron_left)),
