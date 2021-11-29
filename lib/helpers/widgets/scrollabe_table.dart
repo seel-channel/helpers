@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 import 'package:helpers/helpers.dart';
 
 class ScrollableTable<T> extends StatefulWidget {
@@ -22,18 +23,21 @@ class ScrollableTable<T> extends StatefulWidget {
     this.header,
     this.headerOffsetToHide,
     this.horizontalController,
+    this.initialMinScale = 1 / 2,
+    this.initialScale,
+    this.initialScaleFitToWidth = false,
     this.itemCount,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     this.paddingTopOnHeaderHide,
     this.physics,
     this.rowHeight = 48,
     this.rowsListenable,
+    this.showStrokesIntoColumns = true,
     this.strokeColor,
     this.strokeWidth,
     this.tableIsEmpty,
     this.tablePadding,
     this.tableVisibility,
-    this.initialMinScale = 1 / 2,
     this.verticalController,
   }) : super(key: key);
 
@@ -53,19 +57,22 @@ class ScrollableTable<T> extends StatefulWidget {
   final Widget? header;
   final double? headerOffsetToHide;
   final ScrollController? horizontalController;
+  final double initialMinScale;
+  final double? initialScale;
+  final bool initialScaleFitToWidth;
   final int? itemCount;
   final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
   final double? paddingTopOnHeaderHide;
   final ScrollPhysics? physics;
   final double rowHeight;
   final ValueListenable<List<T>>? rowsListenable;
+  final bool showStrokesIntoColumns;
   final Color? strokeColor;
   final double? strokeWidth;
   final Widget? tableIsEmpty;
   final EdgeInsets? tablePadding;
   final ValueListenable<bool>? tableVisibility;
   final ScrollController? verticalController;
-  final double initialMinScale;
 
   @override
   State<ScrollableTable<T>> createState() => _ScrollableTableState<T>();
@@ -150,10 +157,16 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
     }
     _minScale =
         _globalWidth / (_width + (widget.tablePadding?.horizontal ?? 0));
-    _scale.value = ((_globalWidth * 2) / _width).clamp(
-      _minScale >= widget.initialMinScale ? _minScale : widget.initialMinScale,
-      _maxScale,
-    );
+    if (widget.initialScaleFitToWidth) {
+      _scale.value = _minScale;
+    } else {
+      _scale.value = widget.initialScale ??
+          ((_globalWidth * 2) / _width).clamp(
+              _minScale >= widget.initialMinScale
+                  ? _minScale
+                  : widget.initialMinScale,
+              _maxScale);
+    }
     _calculateRelativeTableWidth();
   }
 
@@ -245,7 +258,11 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
       }
       values.addAll([
         SizedBox(width: width, child: child),
-        if (stroke != null && i != last) stroke,
+        if (stroke != null && i != last)
+          if (isColumn && widget.showStrokesIntoColumns)
+            stroke
+          else if (!isColumn)
+            stroke
       ]);
     }
     return values;
@@ -350,18 +367,21 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
                         shadowColor: Colors.transparent,
                         titleSpacing: 0.0,
                         toolbarHeight: widget.columnHeight,
-                        title: Stack(children: [
-                          Positioned.fill(
-                            child: widget.columnBackground ??
-                                const SizedBox.shrink(),
-                          ),
-                          Row(
-                            children: _castTableRow(
-                              widget.columns,
-                              isColumn: true,
+                        title: SizedBox(
+                          height: widget.columnHeight,
+                          child: Stack(children: [
+                            Positioned.fill(
+                              child: widget.columnBackground ??
+                                  const SizedBox.shrink(),
                             ),
-                          ),
-                        ]),
+                            Row(
+                              children: _castTableRow(
+                                widget.columns,
+                                isColumn: true,
+                              ),
+                            ),
+                          ]),
+                        ),
                       ),
                       if (widget.tableVisibility != null)
                         ValueListenableBuilder<bool>(

@@ -1,6 +1,6 @@
 extension DoubleHelperExtension on double {
   double get decimals {
-    return this - toInt();
+    return this - floor();
   }
 }
 
