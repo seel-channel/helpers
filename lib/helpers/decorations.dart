@@ -10,7 +10,7 @@ class NoneInputDecoration extends InputDecoration {
           focusedBorder: InputBorder.none,
           enabledBorder: InputBorder.none,
           disabledBorder: InputBorder.none,
-          contentPadding: const EdgeInsets.all(0),
+          contentPadding: EdgeInsets.zero,
         );
 }
 

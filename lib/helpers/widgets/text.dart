@@ -1,48 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:helpers/helpers.dart';
 
-@Deprecated("Please don't use it, you should use Text(...)")
-class TextDesigned extends StatelessWidget {
-  const TextDesigned(
-    this.text, {
-    Key? key,
-    this.color,
-    this.size = 16,
-    this.bold = false,
-    this.italic = false,
-    this.center = false,
-    this.justify = false,
-    this.uppercase = false,
-    this.underline = false,
-    this.letterSpacing = 0,
-  }) : super(key: key);
-
-  final Color? color;
-  final String text;
-  final double size, letterSpacing;
-  final bool bold, italic, justify, center, uppercase, underline;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      uppercase ? text.toUpperCase() : text,
-      textAlign: justify
-          ? TextAlign.justify
-          : center
-              ? TextAlign.center
-              : TextAlign.start,
-      style: TextStyle(
-        color: color,
-        fontSize: size,
-        fontStyle: italic ? FontStyle.italic : FontStyle.normal,
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-        decoration: underline ? TextDecoration.underline : TextDecoration.none,
-        letterSpacing: letterSpacing,
-      ),
-    );
-  }
-}
-
 class Headline1 extends StatelessWidget {
   ///`Text Widget` with the **headline1** theme style.
   ///```dart

@@ -27,7 +27,7 @@ class CarouselParallax extends StatelessWidget {
     final double itemOffset = (page ?? 0.0) - index;
 
     final double distortionValue = curve.transform(
-      (1 - (itemOffset.abs() * (1 - minScale))).clamp(0.0, 1.0).toDouble(),
+      (1 - (itemOffset.abs() * (1 - minScale))).clamp(0.0, 1.0),
     );
 
     final Widget sizedBox = SizedBox(

@@ -36,7 +36,9 @@ class OnScrollHideContent extends StatefulWidget {
 }
 
 class _OnScrollHideContentState extends State<OnScrollHideContent> {
-  double _buttonHeight = 240, _buttonPositionRef = 0, _offsetRef = 0;
+  double _buttonHeight = 240;
+  double _buttonPositionRef = 0;
+  double _offsetRef = 0;
   final GlobalKey _buttonKey = GlobalKey();
   final ValueNotifier<double> _buttonPosition = ValueNotifier<double>(0.0);
   late ScrollController _scrollController;

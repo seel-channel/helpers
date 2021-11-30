@@ -38,7 +38,8 @@ class NumericPadStyle {
   });
 
   final TextStyle? style;
-  final double? buttonWidth, buttonHeight;
+  final double? buttonWidth;
+  final double? buttonHeight;
   final EdgeInsetsGeometry? buttonPadding;
   final MainAxisAlignment mainAxisAlignment;
   final BoxShape buttonShape;

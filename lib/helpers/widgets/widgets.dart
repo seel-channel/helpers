@@ -403,7 +403,9 @@ class TileDesigned extends StatelessWidget {
   final BorderRadius borderRadius;
 
   ///You can wrap it in an Expanded.
-  final Widget? prefix, suffix, child;
+  final Widget? prefix;
+  final Widget? suffix;
+  final Widget? child;
 
   ///Empty space to inscribe inside the [decoration].
   ///The [child], if any, is placed inside this padding.
