@@ -181,6 +181,15 @@ class Misc {
   static bool isBase64(String text) =>
       RegExp(r"^[-A-Za-z0-9+=]{1,50}|=[^=]|={3,}$").hasMatch(text);
 
+  static double pow(double x, int exponent) {
+    return math.pow(x, exponent).toDouble();
+  }
+
+  static double sqrt(double x) {
+    return math.sqrt(x);
+  }
+
+  //CONVERSORS//
   static double? dynamicToDouble(dynamic value) {
     if (value != null) {
       return value is int
@@ -193,12 +202,8 @@ class Misc {
     }
   }
 
-  static Map<K, V>? dynamicToMap<K, V>(dynamic value) {
-    if (value is Map) return Map<K, V>.from(value);
-  }
-
-  static Map<String, dynamic>? dynamicToMapStringDynamic(dynamic value) {
-    return dynamicToMap<String, dynamic>(value);
+  static int? dynamicToInt(dynamic value) {
+    return dynamicToDouble(value)?.toInt();
   }
 
   static DateTime? dynamicToDateTime(dynamic value) {
@@ -209,24 +214,53 @@ class Misc {
     }
   }
 
-  static double pow(double x, int exponent) {
-    return math.pow(x, exponent).toDouble();
+  static Map<K, V>? dynamicToMap<K, V>(dynamic value) {
+    if (value is Map) return Map<K, V>.from(value);
   }
 
-  static double sqrt(double x) {
-    return math.sqrt(x);
-  }
-
-  static int? dynamicToInt(dynamic value) {
-    return dynamicToDouble(value)?.toInt();
+  static Map<String, dynamic>? dynamicToMapStringDynamic(dynamic value) {
+    return dynamicToMap<String, dynamic>(value);
   }
 
   static T? dynamicMapToModel<T>(
     dynamic value,
-    T Function(Map<String, dynamic> e) test,
+    T Function(Map<String, dynamic> e) f,
   ) {
     final map = dynamicToMapStringDynamic(value);
-    if (map != null) return test(map);
+    if (map != null) return f(map);
+  }
+
+  static List<T> dynamicToListEnum<T>(dynamic list, List<T> values) {
+    return dynamicToList(list, (x) => values[x as int]);
+  }
+
+  static List<T> dynamicToListMap<T>(
+    dynamic list,
+    T Function(Map<String, dynamic> e) f,
+  ) {
+    return dynamicToList<T>(
+      list,
+      (x) => f(Map<String, dynamic>.from(x as Map)),
+    );
+  }
+
+  static List<T> dynamicToList<T>(
+    dynamic list,
+    T Function(dynamic e) f,
+  ) {
+    return List<T>.from((list as List?)?.map((x) => f(x)) ?? []);
+  }
+
+  static ListDifference<T> detectListDifferences<T>({
+    List<T> initialValues = const [],
+    List<T> currentValues = const [],
+    bool Function(List<T>, T)? containsValidator,
+  }) {
+    return ListDifference(
+      initialValues: initialValues,
+      currentValues: currentValues,
+      containsValidator: containsValidator,
+    );
   }
 
   /// Starts the [Stopwatch].
