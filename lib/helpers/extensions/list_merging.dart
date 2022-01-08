@@ -87,11 +87,23 @@ extension IterableMerging<T> on Iterable<T> {
 }
 
 extension ListMerging<T> on List<T> {
-  void replaceWhere(bool Function(T e) validator, T Function(T e) newValue) {
+  bool replaceWhere(bool Function(T e) validator, T Function(T e) newValue) {
+    bool foundOne = false;
     for (int i = 0; i < length; i++) {
       final item = elementAt(i);
-      if (validator(item)) this[i] = newValue(item);
+      if (validator(item)) {
+        foundOne = true;
+        this[i] = newValue(item);
+      }
     }
+    return foundOne;
+  }
+
+  bool containsWhere(bool Function(T e) validator) {
+    for (final item in this) {
+      if (validator(item)) return true;
+    }
+    return false;
   }
 
   Map<K, V> toMap<K, V>(MapEntry<K, V> Function(int index, T e) test) {
@@ -171,6 +183,15 @@ extension ListMerging<T> on List<T> {
       ]);
     }
     return items;
+  }
+
+  int? removeFirstWhere(bool Function(T e) f) {
+    for (var i = 0; i < length; i++) {
+      if (f(this[i])) {
+        removeAt(i);
+        return i;
+      }
+    }
   }
 
   List<E> removeMapDuplicates<E>(E Function(T e) f) {
