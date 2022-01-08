@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 
+export 'align.dart';
+export 'animated_interactive_viewer.dart';
+export 'carousel/carousel.dart';
+export 'interactive_table.dart';
+export 'keyboard.dart';
+export 'numeric_pad.dart';
+export 'sliding_bottom_sheet/sliding_bottom_sheet.dart';
+export 'slivers.dart';
+export 'text.dart';
+
 class DoubleColumn extends StatelessWidget {
   ///It's create a double column with a space beetween.
   ///```dart
@@ -66,6 +76,16 @@ class DoubleColumn extends StatelessWidget {
   }
 }
 
+class RemoveGlowScrollBehavior extends ScrollBehavior {
+  const RemoveGlowScrollBehavior();
+
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
+  }
+}
+
 class RemoveScrollGlow extends StatelessWidget {
   ///Eliminate the Splash Effect or Glow Effect when reaching
   ///the limit of a PageView, ScrollView, ListView, etc.
@@ -77,28 +97,9 @@ class RemoveScrollGlow extends StatelessWidget {
   Widget build(BuildContext context) {
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (OverscrollIndicatorNotification overscroll) {
-        overscroll.disallowGlow();
+        overscroll.disallowIndicator();
         return;
       } as bool Function(OverscrollIndicatorNotification)?,
-      child: child,
-    );
-  }
-}
-
-class DismissKeyboard extends StatelessWidget {
-  ///Tapping on a Widget will apply the FocusScope to it and hide the keyboard.
-  const DismissKeyboard({Key? key, this.child}) : super(key: key);
-
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        final FocusScopeNode focus = FocusScope.of(context);
-        if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
-      },
-      behavior: HitTestBehavior.opaque,
       child: child,
     );
   }

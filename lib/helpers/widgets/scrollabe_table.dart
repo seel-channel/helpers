@@ -99,9 +99,14 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
 
   @override
   void dispose() {
+    _headerHeight.dispose();
+    _headerPosition.dispose();
     _horizontalController.removeListener(_handleHorizontalListener);
     if (widget.horizontalController == null) _horizontalController.dispose();
     if (widget.verticalController == null) _verticalController.dispose();
+    for (final item in _recognizers.values) {
+      item.dispose();
+    }
     super.dispose();
   }
 
@@ -328,8 +333,8 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
       child: CustomScrollView(
         controller: _horizontalController,
         scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
         cacheExtent: _width,
+        keyboardDismissBehavior: widget.keyboardDismissBehavior,
         physics: const NeverScrollableScrollPhysics(),
         slivers: [
           SliverToBoxAdapter(
