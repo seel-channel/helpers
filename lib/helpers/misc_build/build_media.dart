@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class BuildMedia {
   /// It is a simplification of the **_MediaQuery.of(_context)_** statement.
-  BuildMedia(BuildContext context) : _context = context;
-
-  final BuildContext _context;
+  BuildMedia(BuildContext context) : data = MediaQuery.of(context);
 
   ///```dart
   ///return MediaQuery.of(context)
   ///```
-  MediaQueryData get data => MediaQuery.of(_context);
+  final MediaQueryData data;
 
   ///```dart
   ///return MediaQuery.of(context).size
@@ -25,6 +23,16 @@ class BuildMedia {
   ///return MediaQuery.of(context).size.height
   ///```
   double get height => data.size.height;
+
+  ///```dart
+  ///return height - viewInsets.vertical
+  ///```
+  double get heightWithoutViewInsets => height - viewInsets.vertical;
+
+  ///```dart
+  ///return viewInsets.bottom > 0
+  ///```
+  bool get keyboardIsVisible => viewInsets.bottom > 0;
 
   ///```dart
   ///return MediaQuery.of(context).padding
