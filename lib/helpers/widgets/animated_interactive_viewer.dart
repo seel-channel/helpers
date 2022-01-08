@@ -376,6 +376,13 @@ class _AnimatedInteractiveViewerState extends State<AnimatedInteractiveViewer>
   Animation<Matrix4>? _animationMatrix4;
 
   @override
+  void dispose() {
+    if (widget.transformationController == null) _controller.dispose();
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     _controller = widget.transformationController ?? TransformationController();
     _animationController = AnimationController(
