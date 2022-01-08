@@ -10,8 +10,8 @@ class OnScrollHideContent extends StatefulWidget {
     Key? key,
     this.onSizeChanged,
     this.onChanged,
-    required this.child,
     required this.controller,
+    required this.child,
     this.floating = true,
     this.forcesToHideAtEdge = true,
     this.hideContent = true,
@@ -37,10 +37,10 @@ class OnScrollHideContent extends StatefulWidget {
 
 class _OnScrollHideContentState extends State<OnScrollHideContent> {
   double _buttonHeight = 240;
-  double _buttonPositionRef = 0;
-  double _offsetRef = 0;
   final GlobalKey _buttonKey = GlobalKey();
   final ValueNotifier<double> _buttonPosition = ValueNotifier<double>(0.0);
+  double _buttonPositionRef = 0;
+  double _offsetRef = 0;
   late ScrollController _scrollController;
   bool _upping = false;
 
@@ -341,7 +341,7 @@ class _OpacityTransitionState extends State<OpacityTransition> {
 }
 
 class SwipeTransition extends StatelessWidget {
-  /// It is a type of transition very similar to SlideTransition.
+  /// It is a type of transition very similar to SizeTransition.
   /// The SwipeTransition fixes the problem that arises in the SlideTransition since
   /// always hides the elements on the screen and not on the parent widget,
   /// that is, if you performed the effect inside a 100x100 container the child widget
@@ -377,6 +377,8 @@ class SwipeTransition extends StatelessWidget {
   /// It is the child that will be affected by the SwipeTransition
   final Widget child;
 
+  final Clip clip;
+
   /// It is the curve that the SwipeTransition performs
   final Curve curve;
 
@@ -386,8 +388,6 @@ class SwipeTransition extends StatelessWidget {
   /// If true, it will show the widget in its position.
   /// If false, it will hide the widget.
   final bool visible;
-
-  final Clip clip;
 
   @override
   Widget build(BuildContext context) {
@@ -437,6 +437,80 @@ class AlignFactor extends StatelessWidget {
       heightFactor: axis == Axis.vertical ? math.max(lerp, 0.0) : null,
       widthFactor: axis == Axis.horizontal ? math.max(lerp, 0.0) : null,
       child: child,
+    );
+  }
+}
+
+class TranslateTransition extends StatelessWidget {
+  /// It is a type of transition very similar to SlideTransition.
+  const TranslateTransition({
+    Key? key,
+    this.begin = const Offset(0, 1),
+    required this.child,
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 200),
+    this.end = Offset.zero,
+    this.textDirection,
+    this.transformHitTests = true,
+    required this.visible,
+  }) : super(key: key);
+
+  /// If true, it will show the widget in its position.
+  /// If false, it will hide the widget.
+  final Offset begin;
+
+  /// It is the child that will be affected by the SwipeTransition
+  final Widget child;
+
+  /// It is the curve that the SwipeTransition performs
+  final Curve curve;
+
+  /// Is the time it takes to make the transition.
+  final Duration duration;
+
+  final Offset end;
+
+  /// The direction to use for the x offset described by the [position].
+  ///
+  /// If [textDirection] is null, the x offset is applied in the coordinate
+  /// system of the canvas (so positive x offsets move the child towards the
+  /// right).
+  ///
+  /// If [textDirection] is [TextDirection.rtl], the x offset is applied in the
+  /// reading direction such that x offsets move the child towards the left.
+  ///
+  /// If [textDirection] is [TextDirection.ltr], the x offset is applied in the
+  /// reading direction such that x offsets move the child towards the right.
+  final TextDirection? textDirection;
+
+  /// Whether hit testing should be affected by the slide animation.
+  ///
+  /// If false, hit testing will proceed as if the child was not translated at
+  /// all. Setting this value to false is useful for fast animations where you
+  /// expect the user to commonly interact with the child widget in its final
+  /// location and you want the user to benefit from "muscle memory".
+  final bool transformHitTests;
+
+  /// If true, it will show the widget in its position.
+  /// If false, it will hide the widget.
+  final bool visible;
+
+  @override
+  Widget build(BuildContext context) {
+    return BooleanTween<Offset>(
+      tween: Tween(begin: begin, end: end),
+      curve: curve,
+      animate: visible,
+      duration: duration,
+      builder: (_, offset, ___) {
+        return FractionalTranslation(
+          translation: textDirection == TextDirection.rtl
+              ? Offset(-offset.dx, offset.dy)
+              : offset,
+          transformHitTests: transformHitTests,
+          child: child,
+        );
+      },
     );
   }
 }
