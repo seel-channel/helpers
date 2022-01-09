@@ -51,7 +51,7 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   final List<BoxShadow>? boxShadow;
 
   ///The Widget over the [builder]
-  final Widget chevron;
+  final Widget? chevron;
 
   /// The [child] contained by the container.
   final Widget? child;
@@ -100,11 +100,13 @@ class _SlidingBottomSheetContainerState
   @override
   void initState() {
     Misc.onLayoutRendered(() {
-      final controller = widget.controller;
-      final height = _chevronKey.context?.height;
-      if (height != null) _chevronHeight.value = height;
-      if (widget.scrollToBottom && controller != null) {
-        controller.jumpTo(controller.position.maxScrollExtent);
+      if (widget.chevron != null) {
+        final ScrollController? controller = widget.controller;
+        final double? height = _chevronKey.context?.height;
+        if (height != null) _chevronHeight.value = height;
+        if (widget.scrollToBottom && controller != null) {
+          controller.jumpTo(controller.position.maxScrollExtent);
+        }
       }
     });
     super.initState();
@@ -112,10 +114,16 @@ class _SlidingBottomSheetContainerState
 
   @override
   Widget build(BuildContext context) {
-    final Widget child = Padding(
-      padding: widget.margin,
-      child: Stack(children: [
-        ClipRRect(
+    final Widget child = Stack(children: [
+      Positioned.fill(
+        child: GestureDetector(
+          onTap: SlidingBottomSheetController.of(context).close,
+          child: Container(color: Colors.transparent),
+        ),
+      ),
+      Padding(
+        padding: widget.margin,
+        child: ClipRRect(
           borderRadius: widget.borderRadius,
           child: Container(
             padding: widget.padding,
@@ -135,21 +143,25 @@ class _SlidingBottomSheetContainerState
             ),
           ),
         ),
+      ),
+      if (widget.chevron != null)
         TopCenterAlign(
           child: ValueListenableBuilder<double>(
             valueListenable: _chevronHeight,
             builder: (context, value, child) {
               return Transform.translate(
                 key: _chevronKey,
-                offset: Offset(0, -value),
+                offset: Offset(0, value),
                 child: widget.chevron,
               );
             },
           ),
         ),
-        if (widget.children != null) ...widget.children!,
-      ]),
-    );
+      if (widget.children != null)
+        ...widget.children!.map(
+          (e) => Padding(padding: widget.margin, child: e),
+        ),
+    ]);
 
     return widget.controller != null
         ? SingleChildScrollView(

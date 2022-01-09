@@ -6,12 +6,37 @@ import 'package:helpers/helpers.dart';
 
 enum _SlidingBottomSheetFocusType { sliver, panel }
 
+class _SlidingBottomSheetWidget extends InheritedWidget {
+  const _SlidingBottomSheetWidget({
+    Key? key,
+    required this.controller,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final SlidingBottomSheetController controller;
+
+  static _SlidingBottomSheetWidget of(BuildContext context) {
+    final _SlidingBottomSheetWidget? result =
+        context.dependOnInheritedWidgetOfExactType<_SlidingBottomSheetWidget>();
+    assert(result != null, 'No _SlidingBottomSheetWidget found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(_SlidingBottomSheetWidget old) =>
+      controller != old.controller;
+}
+
 class SlidingBottomSheetController {
   _SlidingBottomSheetState? _panelState;
 
   bool get isAttached => _panelState != null;
 
   void dispose() => _panelState = null;
+
+  static SlidingBottomSheetController of(BuildContext context) {
+    return _SlidingBottomSheetWidget.of(context).controller;
+  }
 
   Future<void> close() {
     assert(
@@ -140,9 +165,11 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   final VelocityTracker _tracker = VelocityTracker.withKind(
     PointerDeviceKind.unknown,
   );
+  late SlidingBottomSheetController _controller;
 
   @override
   void dispose() {
+    if (widget.controller != null) _controller.dispose();
     if (widget.scrollController != null) _scrollController.dispose();
     if (_hasCallbacks) {
       _animationController.removeListener(_animationControllerListener);
@@ -159,7 +186,8 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
       upperBound: widget.upperBound,
       lowerBound: widget.lowerBound,
     );
-    widget.controller?._panelState = this;
+    _controller = widget.controller ?? SlidingBottomSheetController();
+    _controller._panelState = this;
     Misc.onLayoutRendered(() {
       _updateDimensions();
       _openPanel();
@@ -296,60 +324,63 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
         await _closePanel();
         return false;
       },
-      child: Scaffold(
-        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        backgroundColor: Colors.transparent,
-        body: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-          Listener(
-            onPointerDown: _onVerticalDragStart,
-            onPointerMove: _animateDragUpdate,
-            onPointerUp: _animateDragEnd,
-            child: GestureDetector(
-              onTap: _closePanel,
-              behavior: HitTestBehavior.opaque,
-              child: ValueListenableBuilder(
-                valueListenable: _animationController,
-                builder: (_, double value, __) {
-                  final color = widget.backgroundColor;
-                  final blur = widget.backgroundBlur * value;
-                  return BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                    child: Container(
-                      color: color.withOpacity(color.opacity * value),
-                    ),
-                  );
-                },
+      child: _SlidingBottomSheetWidget(
+        controller: _controller,
+        child: Scaffold(
+          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+          backgroundColor: Colors.transparent,
+          body: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+            Listener(
+              onPointerDown: _onVerticalDragStart,
+              onPointerMove: _animateDragUpdate,
+              onPointerUp: _animateDragEnd,
+              child: GestureDetector(
+                onTap: _closePanel,
+                behavior: HitTestBehavior.opaque,
+                child: ValueListenableBuilder(
+                  valueListenable: _animationController,
+                  builder: (_, double value, __) {
+                    final color = widget.backgroundColor;
+                    final blur = widget.backgroundBlur * value;
+                    return BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                      child: Container(
+                        color: color.withOpacity(color.opacity * value),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-          ConstrainedBox(
-            constraints: widget.constraints ?? const BoxConstraints(),
-            child: AnimatedBuilder(
-              animation: _animationController,
-              builder: (_, final Widget? child) {
-                return Transform.translate(
-                  offset: Offset(
-                    0.0,
-                    (1 - _animationController.value) * _builderHeight,
-                  ),
-                  child: child,
-                );
-              },
-              child: NotificationListener(
-                onNotification: _onSizeChangeNotification,
-                child: SizeChangedLayoutNotifier(
-                  child: Listener(
-                    key: _key,
-                    onPointerDown: _onVerticalDragStart,
-                    onPointerMove: _onVerticalDragUpdate,
-                    onPointerUp: _onVerticalDragEnd,
-                    child: widget.builder(context, _scrollController),
+            ConstrainedBox(
+              constraints: widget.constraints ?? const BoxConstraints(),
+              child: AnimatedBuilder(
+                animation: _animationController,
+                builder: (_, final Widget? child) {
+                  return Transform.translate(
+                    offset: Offset(
+                      0.0,
+                      (1 - _animationController.value) * _builderHeight,
+                    ),
+                    child: child,
+                  );
+                },
+                child: NotificationListener(
+                  onNotification: _onSizeChangeNotification,
+                  child: SizeChangedLayoutNotifier(
+                    child: Listener(
+                      key: _key,
+                      onPointerDown: _onVerticalDragStart,
+                      onPointerMove: _onVerticalDragUpdate,
+                      onPointerUp: _onVerticalDragEnd,
+                      child: widget.builder(context, _scrollController),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ]),
+          ]),
+        ),
       ),
     );
   }

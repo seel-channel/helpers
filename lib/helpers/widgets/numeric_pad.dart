@@ -45,6 +45,29 @@ class NumericPadStyle {
   final BoxShape buttonShape;
 }
 
+class _NumericInheritedWidget extends InheritedWidget {
+  const _NumericInheritedWidget({
+    Key? key,
+    required this.onTap,
+    required this.style,
+    required Widget child,
+  }) : super(key: key, child: child);
+
+  final NumericPadStyle style;
+  final void Function(String text) onTap;
+
+  static _NumericInheritedWidget of(BuildContext context) {
+    final _NumericInheritedWidget? result =
+        context.dependOnInheritedWidgetOfExactType<_NumericInheritedWidget>();
+    assert(result != null, 'No _NumericInheritedWidget found in context');
+    return result!;
+  }
+
+  @override
+  bool updateShouldNotify(_NumericInheritedWidget old) =>
+      style != old.style || onTap != old.onTap;
+}
+
 class NumericPad extends StatefulWidget {
   const NumericPad({
     Key? key,
@@ -82,29 +105,6 @@ class _NumericPadState extends State<NumericPad> {
       ]),
     );
   }
-}
-
-class _NumericInheritedWidget extends InheritedWidget {
-  const _NumericInheritedWidget({
-    Key? key,
-    required this.onTap,
-    required this.style,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  final NumericPadStyle style;
-  final void Function(String text) onTap;
-
-  static _NumericInheritedWidget of(BuildContext context) {
-    final _NumericInheritedWidget? result =
-        context.dependOnInheritedWidgetOfExactType<_NumericInheritedWidget>();
-    assert(result != null, 'No _NumericInheritedWidget found in context');
-    return result!;
-  }
-
-  @override
-  bool updateShouldNotify(_NumericInheritedWidget old) =>
-      style != old.style || onTap != old.onTap;
 }
 
 class _NumericButton extends StatelessWidget {
