@@ -32,6 +32,7 @@ class SlidingBottomSheetContainer extends StatefulWidget {
     this.height,
     this.scrollPhysics,
     this.scrollToBottom = true,
+    this.clipper,
   }) : super(key: key);
 
   final Curve animatedSizeCurve;
@@ -79,7 +80,10 @@ class SlidingBottomSheetContainer extends StatefulWidget {
   final EdgeInsetsGeometry padding;
 
   final ScrollPhysics? scrollPhysics;
+
   final bool scrollToBottom;
+
+  final Widget Function(BuildContext context, Widget child)? clipper;
 
   @override
   _SlidingBottomSheetContainerState createState() =>
@@ -123,9 +127,8 @@ class _SlidingBottomSheetContainerState
       ),
       Padding(
         padding: widget.margin,
-        child: ClipRRect(
-          borderRadius: widget.borderRadius,
-          child: Container(
+        child: Builder(builder: (context) {
+          final Widget card = Container(
             padding: widget.padding,
             height: widget.height,
             width: double.infinity,
@@ -141,8 +144,10 @@ class _SlidingBottomSheetContainerState
               reverseDuration: widget.animatedSizeDuration,
               child: widget.child,
             ),
-          ),
-        ),
+          );
+          if (widget.clipper != null) return widget.clipper!(context, card);
+          return ClipRRect(borderRadius: widget.borderRadius, child: card);
+        }),
       ),
       if (widget.chevron != null)
         TopCenterAlign(

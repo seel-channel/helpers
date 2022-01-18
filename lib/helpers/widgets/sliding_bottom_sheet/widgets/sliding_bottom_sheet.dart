@@ -166,6 +166,7 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
     PointerDeviceKind.unknown,
   );
   late SlidingBottomSheetController _controller;
+  bool _isHorizontalDrag = false;
 
   @override
   void dispose() {
@@ -235,7 +236,12 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
       _focusType = _SlidingBottomSheetFocusType.sliver;
       _canScroll = false;
     }
-    if (_canScroll) {
+    if (!_isHorizontalDrag &&
+        _animationController.value == 1.0 &&
+        details.delta.dx.abs() > 1) {
+      _isHorizontalDrag = true;
+    }
+    if (_canScroll && !_isHorizontalDrag) {
       if (toBottom) _scrollController.jumpTo(0);
       _animateDragUpdate(details);
     }
@@ -254,6 +260,7 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
       _focusType = _SlidingBottomSheetFocusType.sliver;
     }
     if (_canScroll) _animateDragEnd(details);
+    _isHorizontalDrag = false;
   }
 
   void _onVerticalDragStart(PointerDownEvent details) {
@@ -368,13 +375,15 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
                 child: NotificationListener(
                   onNotification: _onSizeChangeNotification,
                   child: SizeChangedLayoutNotifier(
-                    child: Listener(
-                      key: _key,
-                      onPointerDown: _onVerticalDragStart,
-                      onPointerMove: _onVerticalDragUpdate,
-                      onPointerUp: _onVerticalDragEnd,
-                      child: widget.builder(context, _scrollController),
-                    ),
+                    key: _key,
+                    child: widget.isDraggable
+                        ? Listener(
+                            onPointerDown: _onVerticalDragStart,
+                            onPointerMove: _onVerticalDragUpdate,
+                            onPointerUp: _onVerticalDragEnd,
+                            child: widget.builder(context, _scrollController),
+                          )
+                        : widget.builder(context, _scrollController),
                   ),
                 ),
               ),
