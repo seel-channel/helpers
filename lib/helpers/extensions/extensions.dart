@@ -1,5 +1,6 @@
 export 'axis.dart';
 export 'build_context.dart';
+export 'color.dart';
 export 'double.dart';
 export 'focus_node.dart';
 export 'global_key.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-extension HexColorHelperExtension on Color {
+extension HexColorExtension on Color {
   /// String is in the format "RRGGBB" or "AARRGGBB" with an optional hash sing "#".
   static Color fromHex(String hex) {
     final buffer = StringBuffer();

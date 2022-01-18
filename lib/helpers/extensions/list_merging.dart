@@ -4,12 +4,13 @@ extension ListListMerging<T> on List<List<T>> {
   ///Do that:
   ///```dart
   /// //Input
-  /// final output = [
+  /// final List<List<T>> input = [
   ///   [elementT, elementT],
   ///   [elementT, elementT, elementT, elementT],
   ///   [elementT, elementT, elementT],
-  /// ].merge();
+  /// ];
   ///
+  /// final List<T> output = input.merge()
   ///
   /// //Printing result
   /// print(output);

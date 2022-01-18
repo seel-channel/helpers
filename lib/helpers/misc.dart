@@ -73,6 +73,18 @@ class Misc {
     return RegExp('(\\$character)(.*?)(\\$character)');
   }
 
+  static int randomInt(int max) {
+    return math.Random().nextInt(max);
+  }
+
+  static bool randomBool() {
+    return math.Random().nextBool();
+  }
+
+  static double randomDouble() {
+    return math.Random().nextDouble();
+  }
+
   static String getFunctionReturnType(dynamic function) {
     final text = function.toString();
     final splitted = text.split(" ");
@@ -288,8 +300,12 @@ class Misc {
   }
 
   static double degreesToRadians(double degrees) {
-    final double degrees2radians = math.pi / 180.0;
+    const double degrees2radians = math.pi / 180.0;
     return degrees * degrees2radians;
+  }
+
+  static Color colorFromHex(String hex) {
+    return HexColorExtension.fromHex(hex);
   }
 
   ///DO THAT:
