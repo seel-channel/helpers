@@ -547,14 +547,13 @@ class TurnTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double degrees2radians = math.pi / 180.0;
     return BooleanTween<double>(
       duration: duration,
       animate: turn,
       curve: curve,
       tween: Tween<double>(
-        begin: begin * degrees2radians,
-        end: end * degrees2radians,
+        begin: Misc.degreesToRadians(begin),
+        end: Misc.degreesToRadians(end),
       ),
       builder: (_, angle, child) => Transform.rotate(
         angle: angle,
