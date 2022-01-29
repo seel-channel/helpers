@@ -100,6 +100,12 @@ extension ListMerging<T> on List<T> {
     return foundOne;
   }
 
+  T replaceAt(int index, T value) {
+    final T last = removeAt(index);
+    insert(index, value);
+    return last;
+  }
+
   bool containsWhere(bool Function(T e) validator) {
     for (final item in this) {
       if (validator(item)) return true;

@@ -74,6 +74,7 @@ class SlidingBottomSheet extends StatefulWidget {
     this.controller,
     this.isDraggable = true,
     Color? backgroundColor,
+    this.reverseDuration,
     this.backgroundBlur = 0.0,
     this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.decelerate,
@@ -129,6 +130,9 @@ class SlidingBottomSheet extends StatefulWidget {
 
   ///[duration] is the length of time this animation should last.
   final Duration duration;
+
+  ///[duration] is the length of time this animation should last.
+  final Duration? reverseDuration;
 
   ///Allows toggling of the draggability of the SlidingUpPanel.
   ///Set this to false to prevent the user from being able to drag the panel up and down. Defaults to true
@@ -310,7 +314,8 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
     bool reversed = false,
     double? velocity,
   }) async {
-    Duration duration = widget.duration;
+    Duration duration =
+        reversed ? widget.reverseDuration ?? widget.duration : widget.duration;
     if (velocity != null) {
       final int milliseconds = duration.inMilliseconds;
       duration = Duration(

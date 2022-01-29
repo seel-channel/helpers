@@ -198,12 +198,14 @@ class BooleanTween<T> extends StatefulWidget {
   ///if it is FALSE it will execute the Tween from end to begin (controller.reverse())
   const BooleanTween({
     Key? key,
-    required this.tween,
     required this.animate,
     required this.builder,
     this.child,
-    this.duration = const Duration(milliseconds: 200),
     this.curve = Curves.linear,
+    this.duration = const Duration(milliseconds: 200),
+    this.reverseCurve,
+    this.reverseDuration,
+    required this.tween,
   }) : super(key: key);
 
   ///If it is **TRUE**, it will execute the Tween from begin to end.
@@ -221,7 +223,14 @@ class BooleanTween<T> extends StatefulWidget {
   final Curve curve;
 
   /// It is the time it takes to execute the animation from beginning to end or vice versa.
+
   final Duration duration;
+
+  /// It is the curve that will carry out the interpolation.
+  final Curve? reverseCurve;
+
+  /// It is the time it takes to execute the animation from beginning to end or vice versa.
+  final Duration? reverseDuration;
 
   /// A linear interpolation between a beginning and ending value.
   ///
@@ -261,12 +270,12 @@ class _BooleanTweenState<T> extends State<BooleanTween<T>>
       value: widget.animate ? 1.0 : 0.0,
       vsync: this,
       duration: widget.duration,
-      reverseDuration: widget.duration,
+      reverseDuration: widget.reverseDuration,
     );
     _animation = widget.tween.animate(CurvedAnimation(
       parent: _controller,
       curve: widget.curve,
-      reverseCurve: widget.curve,
+      reverseCurve: widget.reverseCurve,
     ));
     super.initState();
   }
@@ -348,13 +357,15 @@ class SwipeTransition extends StatelessWidget {
   /// of the SwipeTransition would pop out of the container and be overexposed on top of its other widgets.
   const SwipeTransition({
     Key? key,
-    required this.visible,
-    this.curve = Curves.ease,
-    required this.child,
-    this.duration = const Duration(milliseconds: 200),
     this.axis = Axis.vertical,
     this.axisAlignment = -1.0,
+    required this.child,
     this.clip = Clip.antiAlias,
+    this.curve = Curves.ease,
+    this.duration = const Duration(milliseconds: 200),
+    this.reverseCurve,
+    this.reverseDuration,
+    required this.visible,
   }) : super(key: key);
 
   /// [Axis.horizontal] if [sizeFactor] modifies the width, otherwise
@@ -385,6 +396,12 @@ class SwipeTransition extends StatelessWidget {
   /// Is the time it takes to make the transition.
   final Duration duration;
 
+  /// It is the curve that the SwipeTransition performs
+  final Curve? reverseCurve;
+
+  /// Is the time it takes to make the transition.
+  final Duration? reverseDuration;
+
   /// If true, it will show the widget in its position.
   /// If false, it will hide the widget.
   final bool visible;
@@ -396,6 +413,8 @@ class SwipeTransition extends StatelessWidget {
       curve: curve,
       animate: visible,
       duration: duration,
+      reverseCurve: reverseCurve,
+      reverseDuration: reverseDuration,
       builder: (_, lerp, ___) => AlignFactor(
         axisAlignment: axisAlignment,
         lerp: lerp,

@@ -27,7 +27,7 @@ class Misc {
   /// ```dart
   /// final misc = Misc()..startWatch();
   /// ```
-  factory Misc.watch([String? prefix]) => Misc()..startWatch(prefix);
+  factory Misc.stopwatch([String? prefix]) => Misc()..startWatch(prefix);
 
   ///```dart
   /// return "Lorem ipsum dolor sit amet, consectetur
