@@ -123,7 +123,7 @@ extension ListMerging<T> on List<T> {
     return map;
   }
 
-  List<T> textSearch(String query, List<String> Function(T e) test) {
+  List<T> textSearch(String query, Iterable<String> Function(T e) test) {
     final List<T> items = [];
     final String queryLowerCase = query.toLowerCase();
     for (final T item in this) {

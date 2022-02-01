@@ -158,22 +158,22 @@ class SimpleCupertinoBackGestureDetectorState<T>
     assert(debugCheckHasDirectionality(context));
     // For devices with notches, the drag area needs to be larger on the side
     // that has the notch.
-    double dragAreaWidth = Directionality.of(context) == TextDirection.ltr
-        ? MediaQuery.of(context).padding.left
-        : MediaQuery.of(context).padding.right;
-    dragAreaWidth = max(
-      dragAreaWidth,
-      MediaQuery.of(context).size.width * widget.fractionalGesture,
+    final MediaQueryData media = MediaQuery.of(context);
+    final double dragAreaWidth = max(
+      Directionality.of(context) == TextDirection.ltr
+          ? media.padding.left
+          : media.padding.right,
+      media.size.width * widget.fractionalGesture,
     );
     return Stack(
       fit: StackFit.passthrough,
-      children: <Widget>[
+      children: [
         widget.child,
         PositionedDirectional(
           start: 0.0,
-          width: dragAreaWidth,
-          top: 0.0,
           bottom: 0.0,
+          top: 0.0,
+          width: dragAreaWidth,
           child: Listener(
             onPointerDown: _handlePointerDown,
             behavior: HitTestBehavior.translucent,
@@ -192,11 +192,16 @@ class SimpleCupertinoBackGestureController<T> {
     required this.navigator,
     required this.controller,
   }) {
-    navigator.didStartUserGesture();
+    _dragStart();
   }
 
   final AnimationController controller;
   final NavigatorState navigator;
+
+  void _dragStart() {
+    navigator.didStartUserGesture();
+    controller.animateBack(controller.value, duration: Duration.zero);
+  }
 
   /// The drag gesture has changed by [fractionalDelta]. The total range of the
   /// drag should be 0.0 to 1.0.

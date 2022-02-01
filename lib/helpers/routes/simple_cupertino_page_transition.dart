@@ -43,6 +43,16 @@ class SimpleCupertinoPageTransition extends StatelessWidget {
           curve: routeCurve,
           reverseCurve: reverseRouteCurve,
         ).drive(_kMiddleLeftTween),
+        _userGesturePrimaryPositionAnimation = CurvedAnimation(
+          parent: primaryRouteAnimation,
+          curve: Curves.linear,
+          reverseCurve: Curves.linear,
+        ).drive(_kRightMiddleTween),
+        _userGestureSecondaryPositionAnimation = CurvedAnimation(
+          parent: secondaryRouteAnimation,
+          curve: Curves.linear,
+          reverseCurve: Curves.linear,
+        ).drive(_kMiddleLeftTween),
         _primaryShadowAnimation = decoration != null
             ? CurvedAnimation(
                 parent: primaryRouteAnimation,
@@ -58,25 +68,42 @@ class SimpleCupertinoPageTransition extends StatelessWidget {
   final Animation<Offset> _primaryPositionAnimation;
 
   final Animation<Decoration>? _primaryShadowAnimation;
+
   // When this page is becoming covered by another page.
   final Animation<Offset> _secondaryPositionAnimation;
+
+  final Animation<Offset> _userGesturePrimaryPositionAnimation;
+
+  final Animation<Offset> _userGestureSecondaryPositionAnimation;
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
     final TextDirection textDirection = Directionality.of(context);
-    return SlideTransition(
-      position: _secondaryPositionAnimation,
-      textDirection: textDirection,
-      transformHitTests: false,
-      child: SlideTransition(
-        position: _primaryPositionAnimation,
-        textDirection: textDirection,
-        child: _primaryShadowAnimation != null
-            ? DecoratedBoxTransition(
-                decoration: _primaryShadowAnimation!, child: child)
-            : child,
-      ),
+    return ValueListenableBuilder<bool>(
+      valueListenable: Navigator.of(context).userGestureInProgressNotifier,
+      builder: (_, inProgress, child) {
+        return SlideTransition(
+          position: inProgress
+              ? _userGestureSecondaryPositionAnimation
+              : _secondaryPositionAnimation,
+          textDirection: textDirection,
+          transformHitTests: false,
+          child: SlideTransition(
+            position: inProgress
+                ? _userGesturePrimaryPositionAnimation
+                : _primaryPositionAnimation,
+            textDirection: textDirection,
+            child: child,
+          ),
+        );
+      },
+      child: _primaryShadowAnimation != null
+          ? DecoratedBoxTransition(
+              decoration: _primaryShadowAnimation!,
+              child: child,
+            )
+          : child,
     );
   }
 }
