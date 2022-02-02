@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helpers/helpers.dart';
 
 // Offset from offscreen to the right to fully on screen.
 final Animatable<Offset> _kRightMiddleTween = Tween<Offset>(
@@ -16,7 +17,7 @@ final Animatable<Offset> _kMiddleLeftTween = Tween<Offset>(
 ///
 /// The page slides in from the right and exits in reverse. It also shifts to the left in
 /// a parallax motion when another page enters to cover it.
-class SimpleCupertinoPageTransition extends StatelessWidget {
+class SimpleCupertinoPageTransition extends StatefulWidget {
   /// Creates an iOS-style page transition.
   ///
   ///  * `primaryRouteAnimation` is a linear route animation from 0.0 to 1.0
@@ -68,42 +69,65 @@ class SimpleCupertinoPageTransition extends StatelessWidget {
   final Animation<Offset> _primaryPositionAnimation;
 
   final Animation<Decoration>? _primaryShadowAnimation;
-
   // When this page is becoming covered by another page.
   final Animation<Offset> _secondaryPositionAnimation;
 
   final Animation<Offset> _userGesturePrimaryPositionAnimation;
-
   final Animation<Offset> _userGestureSecondaryPositionAnimation;
+
+  @override
+  State<SimpleCupertinoPageTransition> createState() =>
+      _SimpleCupertinoPageTransitionState();
+}
+
+class _SimpleCupertinoPageTransitionState
+    extends State<SimpleCupertinoPageTransition> {
+  bool _inProgress = false;
+  late ValueNotifier<bool> _valueNotifier;
+
+  @override
+  void dispose() {
+    _valueNotifier.removeListener(_notifierListener);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    Misc.onLayoutRendered(() {
+      _valueNotifier = Navigator.of(context).userGestureInProgressNotifier;
+      _valueNotifier.addListener(_notifierListener);
+    });
+    super.initState();
+  }
+
+  void _notifierListener() {
+    _inProgress = _valueNotifier.value;
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasDirectionality(context));
     final TextDirection textDirection = Directionality.of(context);
-    return ValueListenableBuilder<bool>(
-      valueListenable: Navigator.of(context).userGestureInProgressNotifier,
-      builder: (_, inProgress, child) {
-        return SlideTransition(
-          position: inProgress
-              ? _userGestureSecondaryPositionAnimation
-              : _secondaryPositionAnimation,
-          textDirection: textDirection,
-          transformHitTests: false,
-          child: SlideTransition(
-            position: inProgress
-                ? _userGesturePrimaryPositionAnimation
-                : _primaryPositionAnimation,
-            textDirection: textDirection,
-            child: child,
-          ),
-        );
-      },
-      child: _primaryShadowAnimation != null
-          ? DecoratedBoxTransition(
-              decoration: _primaryShadowAnimation!,
-              child: child,
-            )
-          : child,
+    return SlideTransition(
+      position: _inProgress
+          ? widget._userGestureSecondaryPositionAnimation
+          : widget._secondaryPositionAnimation,
+      textDirection: textDirection,
+      transformHitTests: false,
+      child: SlideTransition(
+        position: _inProgress
+            ? widget._userGesturePrimaryPositionAnimation
+            : widget._primaryPositionAnimation,
+        textDirection: textDirection,
+        transformHitTests: false,
+        child: widget._primaryShadowAnimation != null
+            ? DecoratedBoxTransition(
+                decoration: widget._primaryShadowAnimation!,
+                child: widget.child,
+              )
+            : widget.child,
+      ),
     );
   }
 }
