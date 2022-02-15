@@ -107,12 +107,12 @@ extension BuildContextHelperExtension on BuildContext {
   ///);
   /// ```
   @Deprecated(
-      "Avoid use this instance, you should use context.navigator.pushOpaque(...)")
+      "Avoid use this instance, you should use context.navigator.pushNoTransition(...)")
   Future<void> toTransparentPage(
     Widget page, {
     Duration duration = Duration.zero,
   }) async {
-    await Navigator.of(this).pushOpaque(page);
+    await Navigator.of(this).pushNoTransition(page);
   }
 
   ///Do that:
