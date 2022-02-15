@@ -31,6 +31,12 @@ extension StringHelperExtension on String {
         : this;
   }
 
+  String toPluralize() {
+    if (isEmpty) return "";
+    if (this[length - 1].toLowerCase() == "s") return this;
+    return "${this}s";
+  }
+
   String removeAllNotNumber({List<String> exclude = const []}) {
     final List<String> valid = kNumbersString.toList()..addAll(exclude);
     final StringBuffer buffer = StringBuffer();
