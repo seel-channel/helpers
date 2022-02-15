@@ -21,6 +21,9 @@ class ListDifference<T> {
           if (!_validator(_initial, item)) added.add(item);
         }
       }
+      equals.addAll(currentValues.where((e) => _validator(initialValues, e)));
+    } else {
+      equals.addAll(_current);
     }
   }
 
@@ -31,7 +34,9 @@ class ListDifference<T> {
   final bool Function(List<T> elements, T e)? containsValidator;
   final List<T> added = [];
   final List<T> removed = [];
+  final List<T> equals = [];
 
   @override
-  String toString() => "ListDifference(added: $added, removed: $removed)";
+  String toString() =>
+      "ListDifference(added: $added, removed: $removed, equals: $equals)";
 }
