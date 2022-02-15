@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helpers/helpers.dart';
 
 class KeyboardVisibilityBuilder extends StatefulWidget {
   const KeyboardVisibilityBuilder({
@@ -71,10 +72,7 @@ class DismissKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        final FocusScopeNode focus = FocusScope.of(context);
-        if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
-      },
+      onTap: () => Misc.dismissKeyboard(context),
       behavior: behavior,
       child: child,
     );

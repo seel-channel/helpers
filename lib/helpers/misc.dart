@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' as foundation;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -212,6 +213,7 @@ class Misc {
                   ? double.tryParse(value)
                   : null;
     }
+    return null;
   }
 
   static int? dynamicToInt(dynamic value) {
@@ -224,10 +226,12 @@ class Misc {
         return DateTime.parse(value);
       } catch (_) {}
     }
+    return null;
   }
 
   static Map<K, V>? dynamicToMap<K, V>(dynamic value) {
     if (value is Map) return Map<K, V>.from(value);
+    return null;
   }
 
   static Map<String, dynamic>? dynamicToMapStringDynamic(dynamic value) {
@@ -240,6 +244,7 @@ class Misc {
   ) {
     final map = dynamicToMapStringDynamic(value);
     if (map != null) return f(map);
+    return null;
   }
 
   static List<T> dynamicToListEnum<T>(dynamic list, List<T> values) {
@@ -261,6 +266,43 @@ class Misc {
     T Function(dynamic e) f,
   ) {
     return List<T>.from((list as List?)?.map((x) => f(x)) ?? []);
+  }
+
+  static bool listEquals<T>(List<T>? a, List<T>? b) =>
+      foundation.listEquals(a, b);
+
+  static bool mapEquals<T, U>(Map<T, U>? a, Map<T, U>? b) =>
+      foundation.mapEquals(a, b);
+
+  static bool hasMapDifference<K, V>(
+    Map<K, V> initialMap,
+    Map<K, V> currentMap, {
+    List<K> keys = const [],
+  }) {
+    if (keys.isEmpty) return !mapEquals(initialMap, currentMap);
+    for (final key in keys) {
+      final V? current = currentMap[key];
+      final V? initial = initialMap[key];
+      if (current != initial) {
+        printRed("Difference found on $key: $initial, $current");
+        return true;
+      }
+    }
+    return false;
+  }
+
+  ///DO THAT:
+  ///```dart
+  /// final FocusScopeNode focus = FocusScope.of(context);
+  /// if (!focus.hasPrimaryFocus) focus.requestFocus(FocusNode());
+  /// ```
+  static void dismissKeyboard(BuildContext context) {
+    final FocusScopeNode focus = FocusScope.of(context);
+    if (focus.hasFocus) {
+      focus.unfocus();
+    } else {
+      focus.requestFocus(FocusNode());
+    }
   }
 
   static ListDifference<T> detectListDifferences<T>({
@@ -305,7 +347,7 @@ class Misc {
   }
 
   static Color colorFromHex(String hex) {
-    return HexColorExtension.fromHex(hex);
+    return ColorExtension.fromHex(hex);
   }
 
   ///DO THAT:
