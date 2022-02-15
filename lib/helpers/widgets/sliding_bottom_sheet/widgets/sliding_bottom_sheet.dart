@@ -6,8 +6,8 @@ import 'package:helpers/helpers.dart';
 
 enum _SlidingBottomSheetFocusType { sliver, panel }
 
-class _SlidingBottomSheetWidget extends InheritedWidget {
-  const _SlidingBottomSheetWidget({
+class _SlidingBottomSheetInheritedWidget extends InheritedWidget {
+  const _SlidingBottomSheetInheritedWidget({
     Key? key,
     required this.controller,
     required Widget child,
@@ -15,15 +15,16 @@ class _SlidingBottomSheetWidget extends InheritedWidget {
 
   final SlidingBottomSheetController controller;
 
-  static _SlidingBottomSheetWidget of(BuildContext context) {
-    final _SlidingBottomSheetWidget? result =
-        context.dependOnInheritedWidgetOfExactType<_SlidingBottomSheetWidget>();
+  static _SlidingBottomSheetInheritedWidget of(BuildContext context) {
+    final _SlidingBottomSheetInheritedWidget? result =
+        context.dependOnInheritedWidgetOfExactType<
+            _SlidingBottomSheetInheritedWidget>();
     assert(result != null, 'No _SlidingBottomSheetWidget found in context');
     return result!;
   }
 
   @override
-  bool updateShouldNotify(_SlidingBottomSheetWidget old) =>
+  bool updateShouldNotify(_SlidingBottomSheetInheritedWidget old) =>
       controller != old.controller;
 }
 
@@ -35,13 +36,13 @@ class SlidingBottomSheetController {
   void dispose() => _panelState = null;
 
   static SlidingBottomSheetController of(BuildContext context) {
-    return _SlidingBottomSheetWidget.of(context).controller;
+    return _SlidingBottomSheetInheritedWidget.of(context).controller;
   }
 
-  Future<void> close() {
+  Future<void> close<T extends Object?>([T? result]) {
     assert(
         isAttached, "PanelController must be attached to a SlidingBottomSheet");
-    return _panelState!._closePanel();
+    return _panelState!._closePanel(result: result);
   }
 
   Future<void> open() {
@@ -304,9 +305,12 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   Future<void> _openPanel({double? velocity}) =>
       _animateTo(1.0, velocity: velocity);
 
-  Future<void> _closePanel({double? velocity}) async {
+  Future<void> _closePanel<T extends Object?>({
+    T? result,
+    double? velocity,
+  }) async {
     await _animateTo(0.0, reversed: true, velocity: velocity);
-    context.navigator.pop();
+    context.navigator.pop(result);
   }
 
   Future<void> _animateTo(
@@ -336,65 +340,68 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
         await _closePanel();
         return false;
       },
-      child: _SlidingBottomSheetWidget(
+      child: _SlidingBottomSheetInheritedWidget(
         controller: _controller,
-        child: Scaffold(
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-          backgroundColor: Colors.transparent,
-          body: Stack(alignment: AlignmentDirectional.bottomCenter, children: [
-            Listener(
-              onPointerDown: _onVerticalDragStart,
-              onPointerMove: _animateDragUpdate,
-              onPointerUp: _animateDragEnd,
-              child: GestureDetector(
-                onTap: _closePanel,
-                behavior: HitTestBehavior.opaque,
-                child: ValueListenableBuilder(
-                  valueListenable: _animationController,
-                  builder: (_, double value, __) {
-                    final color = widget.backgroundColor;
-                    final blur = widget.backgroundBlur * value;
-                    return BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
-                      child: Container(
-                        color: color.withOpacity(color.opacity * value),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            ConstrainedBox(
-              constraints: widget.constraints ?? const BoxConstraints(),
-              child: AnimatedBuilder(
-                animation: _animationController,
-                builder: (_, final Widget? child) {
-                  return Transform.translate(
-                    offset: Offset(
-                      0.0,
-                      (1 - _animationController.value) * _builderHeight,
-                    ),
-                    child: child,
-                  );
-                },
-                child: NotificationListener(
-                  onNotification: _onSizeChangeNotification,
-                  child: SizeChangedLayoutNotifier(
-                    key: _key,
-                    child: widget.isDraggable
-                        ? Listener(
-                            onPointerDown: _onVerticalDragStart,
-                            onPointerMove: _onVerticalDragUpdate,
-                            onPointerUp: _onVerticalDragEnd,
-                            child: widget.builder(context, _scrollController),
-                          )
-                        : widget.builder(context, _scrollController),
+        child: Builder(builder: (context) {
+          return Scaffold(
+            resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+            backgroundColor: Colors.transparent,
+            body:
+                Stack(alignment: AlignmentDirectional.bottomCenter, children: [
+              Listener(
+                onPointerDown: _onVerticalDragStart,
+                onPointerMove: _animateDragUpdate,
+                onPointerUp: _animateDragEnd,
+                child: GestureDetector(
+                  onTap: _closePanel,
+                  behavior: HitTestBehavior.opaque,
+                  child: ValueListenableBuilder(
+                    valueListenable: _animationController,
+                    builder: (_, double value, __) {
+                      final color = widget.backgroundColor;
+                      final blur = widget.backgroundBlur * value;
+                      return BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
+                        child: Container(
+                          color: color.withOpacity(color.opacity * value),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
-            ),
-          ]),
-        ),
+              ConstrainedBox(
+                constraints: widget.constraints ?? const BoxConstraints(),
+                child: AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (_, final Widget? child) {
+                    return Transform.translate(
+                      offset: Offset(
+                        0.0,
+                        (1 - _animationController.value) * _builderHeight,
+                      ),
+                      child: child,
+                    );
+                  },
+                  child: NotificationListener(
+                    onNotification: _onSizeChangeNotification,
+                    child: SizeChangedLayoutNotifier(
+                      key: _key,
+                      child: widget.isDraggable
+                          ? Listener(
+                              onPointerDown: _onVerticalDragStart,
+                              onPointerMove: _onVerticalDragUpdate,
+                              onPointerUp: _onVerticalDragEnd,
+                              child: widget.builder(context, _scrollController),
+                            )
+                          : widget.builder(context, _scrollController),
+                    ),
+                  ),
+                ),
+              ),
+            ]),
+          );
+        }),
       ),
     );
   }
