@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
         ),
         SplashButton(
           onTap: () {
-            context.navigator.pushOpaque(
+            context.navigator.pushNoTransition(
               SlidingBottomSheet(
                 backgroundBlur: 4.4,
                 builder: (newContext, __) => SlidingBottomSheetContainer(
@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                   child: Column(children: [
                     SplashTap(
                       onTap: () {
-                        context.navigator.pushOpaque(Center(
+                        context.navigator.pushNoTransition(Center(
                           child: Headline4("GG"),
                         ));
                       },

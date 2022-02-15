@@ -84,6 +84,7 @@ extension IterableMerging<T> on Iterable<T> {
     for (final item in this) {
       if (test(item)) return item;
     }
+    return null;
   }
 }
 
@@ -198,6 +199,13 @@ extension ListMerging<T> on List<T> {
         removeAt(i);
         return i;
       }
+    }
+    return null;
+  }
+
+  void removeAll(List<Object?> values) {
+    for (final item in values) {
+      remove(item);
     }
   }
 
