@@ -205,12 +205,12 @@ class Misc {
   //CONVERSORS//
   static double? dynamicToDouble(dynamic value) {
     if (value != null) {
-      return value is int
-          ? value * 1.0
-          : value is double
-              ? value
+      return value is double
+          ? value
+          : value is int
+              ? value * 1.0
               : value is String && value.isNotEmpty
-                  ? double.tryParse(value)
+                  ? double.tryParse(value.removeAllNotNumber(exclude: ["."]))
                   : null;
     }
     return null;
@@ -230,7 +230,11 @@ class Misc {
   }
 
   static Map<K, V>? dynamicToMap<K, V>(dynamic value) {
+    if (value == null) return null;
     if (value is Map) return Map<K, V>.from(value);
+    if (value is List && value.isNotEmpty) {
+      return dynamicToMap<K, V>(value.first);
+    }
     return null;
   }
 
@@ -284,7 +288,9 @@ class Misc {
       final V? current = currentMap[key];
       final V? initial = initialMap[key];
       if (current != initial) {
-        printRed("Difference found on $key: $initial, $current");
+        printRed(
+          "Difference found on $key(initial, current): $initial(${initial.runtimeType}), $current(${current.runtimeType})",
+        );
         return true;
       }
     }
@@ -325,9 +331,9 @@ class Misc {
   ///
   /// If the [Stopwatch] is currently running, then calling start does nothing.
   void startWatch([String? prefix]) {
-    _prefix = prefix ?? "TIMER";
+    _prefix ??= prefix;
     log("Initialized", name: _prefix ?? "");
-    _init = DateTime.now();
+    _init = DateTime.now().toUtc();
   }
 
   void showElapsed() {
@@ -335,7 +341,8 @@ class Misc {
     printAmber("Completed in ${ms / 1000} seconds", prefix: _prefix ?? "");
   }
 
-  Duration get elapsed => DateTime.now().difference(_init ?? DateTime.now());
+  Duration get elapsed =>
+      DateTime.now().toUtc().difference(_init ?? DateTime.now().toUtc());
 
   static double lerpDouble(num a, num b, double t) {
     return ui.lerpDouble(a, b, t)!;

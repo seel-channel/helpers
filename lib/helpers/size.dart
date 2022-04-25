@@ -17,6 +17,9 @@ class Margin extends EdgeInsets {
   const Margin.bottomLeft(double amount)
       : super.only(bottom: amount, left: amount);
 
+  const Margin.bottomLeftTop(double amount)
+      : super.only(bottom: amount, left: amount, top: amount);
+
   const Margin.bottomRight(double amount)
       : super.only(bottom: amount, right: amount);
 
@@ -31,6 +34,9 @@ class Margin extends EdgeInsets {
   ///EdgeInsets.only(left: amount)
   ///```
   const Margin.left(double amount) : super.only(left: amount);
+
+  const Margin.leftTopRight(double amount)
+      : super.only(top: amount, right: amount, left: amount);
 
   ///Do that:
   ///```dart
@@ -54,6 +60,9 @@ class Margin extends EdgeInsets {
   ///```
   const Margin.right(double amount) : super.only(right: amount);
 
+  const Margin.rightBottomLeft(double amount)
+      : super.only(right: amount, bottom: amount, left: amount);
+
   ///Do that:
   ///```dart
   ///EdgeInsets.symmetric(horizontal: horizontal,
@@ -74,14 +83,8 @@ class Margin extends EdgeInsets {
 
   const Margin.topRight(double amount) : super.only(top: amount, right: amount);
 
-  const Margin.leftTopRight(double amount)
-      : super.only(top: amount, right: amount, left: amount);
   const Margin.topRightBottom(double amount)
       : super.only(top: amount, right: amount, bottom: amount);
-  const Margin.rightBottomLeft(double amount)
-      : super.only(right: amount, bottom: amount, left: amount);
-  const Margin.bottomLeftTop(double amount)
-      : super.only(bottom: amount, left: amount, top: amount);
 
   ///Do that:
   ///```dart
@@ -110,6 +113,10 @@ class EdgeRadius extends BorderRadius {
   ///```
   EdgeRadius.bottom(double radius)
       : super.vertical(bottom: Radius.circular(radius));
+
+  EdgeRadius.bottomLeft(double amount) : this.only(bottomLeft: amount);
+
+  EdgeRadius.bottomRight(double amount) : this.only(bottomRight: amount);
 
   ///Do that:
   ///```dart
@@ -165,6 +172,10 @@ class EdgeRadius extends BorderRadius {
   ///BorderRadius.vertical(top: Radius.circular(top))
   ///```
   EdgeRadius.top(double radius) : super.vertical(top: Radius.circular(radius));
+
+  EdgeRadius.topLeft(double amount) : this.only(topLeft: amount);
+
+  EdgeRadius.topRight(double amount) : this.only(topRight: amount);
 
   ///Do that:
   ///```dart

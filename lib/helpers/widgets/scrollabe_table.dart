@@ -482,10 +482,10 @@ import 'package:helpers/helpers.dart';
 class ScrollableTable<T> extends StatefulWidget {
   const ScrollableTable({
     Key? key,
-    required this.itemBuilder,
     this.scrollViewWrapper,
     this.tableWrapper,
     this.cellPadding,
+    this.columnAppBar,
     this.columnBackground,
     this.columnCellPadding,
     this.columnHeight = 48,
@@ -501,8 +501,11 @@ class ScrollableTable<T> extends StatefulWidget {
     this.initialMinScale = 1 / 2,
     this.initialScale,
     this.initialScaleFitToWidth = false,
+    this.isLoading,
+    required this.itemBuilder,
     this.itemCount,
     this.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
+    this.loadingIndicator,
     this.paddingTopOnHeaderHide,
     this.physics,
     this.rowHeight = 48,
@@ -512,13 +515,13 @@ class ScrollableTable<T> extends StatefulWidget {
     this.strokeWidth,
     this.tableIsEmpty,
     this.tablePadding,
-    this.tableVisibility,
     this.verticalController,
   }) : super(key: key);
 
   final Widget Function(Widget child)? scrollViewWrapper;
   final Widget Function(Widget child)? tableWrapper;
   final EdgeInsets? cellPadding;
+  final Widget? columnAppBar;
   final Widget? columnBackground;
   final EdgeInsets? columnCellPadding;
   final double columnHeight;
@@ -534,9 +537,11 @@ class ScrollableTable<T> extends StatefulWidget {
   final double initialMinScale;
   final double? initialScale;
   final bool initialScaleFitToWidth;
+  final ValueNotifier<bool>? isLoading;
   final List<Widget> Function(int index) itemBuilder;
   final int? itemCount;
   final ScrollViewKeyboardDismissBehavior keyboardDismissBehavior;
+  final Widget? loadingIndicator;
   final double? paddingTopOnHeaderHide;
   final ScrollPhysics? physics;
   final double rowHeight;
@@ -546,7 +551,6 @@ class ScrollableTable<T> extends StatefulWidget {
   final double? strokeWidth;
   final Widget? tableIsEmpty;
   final EdgeInsets? tablePadding;
-  final ValueListenable<bool>? tableVisibility;
   final ScrollController? verticalController;
 
   @override
@@ -786,7 +790,7 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
       );
     }
 
-    final Widget rows = widget.rowsListenable != null
+    Widget rows = widget.rowsListenable != null
         ? ValueListenableBuilder<List<T>>(
             valueListenable: widget.rowsListenable!,
             builder: (_, value, ___) => _sliverRows(
@@ -794,6 +798,20 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
             ),
           )
         : _sliverRows(itemCount: widget.itemCount);
+
+    if (widget.isLoading != null) {
+      rows = ValueListenableBuilder<bool>(
+        valueListenable: widget.isLoading!,
+        builder: (_, isLoading, child) {
+          if (isLoading) {
+            return widget.loadingIndicator ??
+                const SliverFillRemaining(child: CircularProgressIndicator());
+          }
+          return child!;
+        },
+        child: rows,
+      );
+    }
 
     final Widget table = Listener(
       onPointerUp: (e) => _pointers -= 1,
@@ -834,9 +852,8 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
                   },
                   child: CustomScrollView(
                     controller: _verticalController,
-                    physics: NeverScrollableScrollPhysics(
-                      parent: widget.physics,
-                    ),
+                    physics:
+                        NeverScrollableScrollPhysics(parent: widget.physics),
                     keyboardDismissBehavior: widget.keyboardDismissBehavior,
                     slivers: [
                       SliverAppBar(
@@ -849,31 +866,28 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
                         toolbarHeight: widget.columnHeight,
                         title: SizedBox(
                           height: widget.columnHeight,
-                          child: Stack(children: [
-                            Positioned.fill(
-                              child: widget.columnBackground ??
-                                  const SizedBox.shrink(),
-                            ),
-                            Row(
-                              children: _castTableRow(
-                                widget.columns,
-                                isColumn: true,
-                              ),
-                            ),
-                          ]),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.columnAppBar != null)
+                                widget.columnAppBar!,
+                              Stack(children: [
+                                Positioned.fill(
+                                  child: widget.columnBackground ??
+                                      const SizedBox.shrink(),
+                                ),
+                                Row(
+                                  children: _castTableRow(
+                                    widget.columns,
+                                    isColumn: true,
+                                  ),
+                                ),
+                              ]),
+                            ],
+                          ),
                         ),
                       ),
-                      if (widget.tableVisibility != null)
-                        ValueListenableBuilder<bool>(
-                          valueListenable: widget.tableVisibility!,
-                          builder: (_, visible, child) => SliverVisibility(
-                            visible: visible,
-                            sliver: child!,
-                          ),
-                          child: rows,
-                        )
-                      else
-                        rows
+                      rows
                     ],
                   ),
                 ),

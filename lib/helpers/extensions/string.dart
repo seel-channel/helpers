@@ -16,6 +16,10 @@ extension StringHelperExtension on String {
     );
   }
 
+  String toNormalize() {
+    return toLowerCase().removeDiacriticalMarks();
+  }
+
   String removeLastWord([int amount = 1]) {
     final int cacheLenght = length;
     if (cacheLenght > amount) {

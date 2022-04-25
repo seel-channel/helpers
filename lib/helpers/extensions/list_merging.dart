@@ -86,6 +86,27 @@ extension IterableMerging<T> on Iterable<T> {
     }
     return null;
   }
+
+  Map<K, V> toMap<K, V>(MapEntry<K, V> Function(int index, T e) test) {
+    final Map<K, V> map = {};
+    for (var i = 0; i < length; i++) {
+      final item = elementAt(i);
+      final entry = test(i, item);
+      map[entry.key] = entry.value;
+    }
+    return map;
+  }
+
+  bool containsWhere(bool Function(T e) validator) {
+    for (final item in this) {
+      if (validator(item)) return true;
+    }
+    return false;
+  }
+}
+
+extension ListNullableMerging<T> on List<T?> {
+  List<T> removeNulls() => conditionalMap((e) => e);
 }
 
 extension ListMerging<T> on List<T> {
@@ -107,31 +128,12 @@ extension ListMerging<T> on List<T> {
     return last;
   }
 
-  bool containsWhere(bool Function(T e) validator) {
-    for (final item in this) {
-      if (validator(item)) return true;
-    }
-    return false;
-  }
-
-  Map<K, V> toMap<K, V>(MapEntry<K, V> Function(int index, T e) test) {
-    final Map<K, V> map = {};
-    for (var i = 0; i < length; i++) {
-      final item = this[i];
-      final entry = test(i, item);
-      map[entry.key] = entry.value;
-    }
-    return map;
-  }
-
   List<T> textSearch(String query, Iterable<String> Function(T e) test) {
     final List<T> items = [];
-    final String queryLowerCase = query.toLowerCase();
+    final String queryNormalized = query.toNormalize();
     for (final T item in this) {
       for (final String text in test(item)) {
-        final String lowercase = text.toLowerCase();
-        if (lowercase.contains(queryLowerCase) ||
-            lowercase.removeDiacriticalMarks().contains(queryLowerCase)) {
+        if (text.toNormalize().contains(queryNormalized)) {
           items.add(item);
           break;
         }
@@ -154,6 +156,31 @@ extension ListMerging<T> on List<T> {
   ///```
   void addIfNotContains(T element) {
     if (!contains(element)) add(element);
+  }
+
+  void addIfNotContainsWhere(bool Function(T e) validator, T element) {
+    if (!containsWhere(validator)) add(element);
+  }
+
+  void addAllIfNotContains(List<T> items) {
+    for (final item in items) {
+      addIfNotContains(item);
+    }
+  }
+
+  void insertAll(int index, List<T> items) {
+    for (final item in items) {
+      insert(index, item);
+    }
+  }
+
+  void addAllIfNotContainsWhere(
+    bool Function(T e, T item) validator,
+    List<T> items,
+  ) {
+    for (final item in items) {
+      addIfNotContainsWhere((e) => validator(e, item), item);
+    }
   }
 
   ///Do that:

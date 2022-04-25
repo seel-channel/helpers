@@ -284,8 +284,8 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   }
 
   bool get _hasCallbacks =>
-      widget.onPanelOpened != null &&
-      widget.onPanelClosed != null &&
+      widget.onPanelOpened != null ||
+      widget.onPanelClosed != null ||
       widget.onPanelSlide != null;
 
   //----------------//
@@ -293,13 +293,15 @@ class _SlidingBottomSheetState extends State<SlidingBottomSheet>
   //----------------//
   void _animationControllerListener() {
     final double value = _animationController.value;
-    if (value == 1.0) {
-      widget.onPanelOpened?.call();
-    } else if (value == 0.0) {
-      widget.onPanelClosed?.call();
-    } else {
-      widget.onPanelSlide?.call(value);
+    if (_animationController.status == AnimationStatus.completed) {
+      if (value == 1.0) {
+        widget.onPanelOpened?.call();
+      } else if (value == 0.0) {
+        widget.onPanelClosed?.call();
+      }
+      return;
     }
+    widget.onPanelSlide?.call(value);
   }
 
   Future<void> _openPanel({double? velocity}) =>

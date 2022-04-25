@@ -5,6 +5,7 @@ export 'animated_interactive_viewer.dart';
 export 'carousel/carousel.dart';
 export 'interactive_table.dart';
 export 'keyboard.dart';
+export 'lazy_load_builder.dart';
 export 'numeric_pad.dart';
 export 'scrollabe_table.dart';
 export 'sliding_bottom_sheet/sliding_bottom_sheet.dart';
