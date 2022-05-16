@@ -23,7 +23,7 @@ class KeyboardVisibilityBuilder extends StatefulWidget {
 
 class _KeyboardVisibilityBuilderState extends State<KeyboardVisibilityBuilder>
     with WidgetsBindingObserver {
-  final WidgetsBinding _instance = WidgetsBinding.instance!;
+  final WidgetsBinding _instance = WidgetsBinding.instance;
   bool _isKeyboardVisible = false;
 
   @override
