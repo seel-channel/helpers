@@ -53,7 +53,7 @@ class Misc {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
           "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-  static BigInt maxInt = BigInt.from(9223372036854775807);
+  static BigInt maxInt = BigInt.parse("9223372036854775807");
 
   DateTime? _init;
   String? _prefix;
