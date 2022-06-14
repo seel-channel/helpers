@@ -53,7 +53,7 @@ class Misc {
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
           "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
-  static const int maxInt = 9223372036854775807;
+  static BigInt maxInt = BigInt.parse("9223372036854775807");
 
   DateTime? _init;
   String? _prefix;
@@ -373,18 +373,18 @@ class Misc {
 
   ///DO THAT:
   ///```dart
-  /// WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
+  /// WidgetsBinding.instance.addPostFrameCallback((_) => callback());
   /// ```
   static void onLayoutRendered(void Function() callback) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) => callback());
+    WidgetsBinding.instance.addPostFrameCallback((_) => callback());
   }
 
   ///DO THAT:
   ///```dart
-  /// WidgetsBinding.instance?.endOfFrame.then((_) => callback());
+  /// WidgetsBinding.instance.endOfFrame.then((_) => callback());
   /// ```
   static void afterFirstLayout(void Function() callback) {
-    WidgetsBinding.instance?.endOfFrame.then((_) => callback());
+    WidgetsBinding.instance.endOfFrame.then((_) => callback());
   }
 
   ///DO THAT:
