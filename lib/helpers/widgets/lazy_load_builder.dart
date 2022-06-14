@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:helpers/helpers.dart';
 
 enum LazyLoadStatus { error, loading, completed, stable }
 
@@ -11,56 +10,57 @@ typedef LazyLoadWidgetBuilder = Widget Function(
 class LazyLoadBuilder extends StatefulWidget {
   const LazyLoadBuilder({
     Key? key,
-    this.controller,
     this.onLoad,
-    this.startLoadBeforeOffset = -80,
     required this.builder,
+    required this.controller,
+    this.startLoadBeforeOffset = -80,
+    this.status,
   }) : super(key: key);
 
   final Future<LazyLoadStatus?> Function()? onLoad;
   final LazyLoadWidgetBuilder builder;
-  final ScrollController? controller;
+  final ScrollController controller;
   final double startLoadBeforeOffset;
+  final ValueNotifier<LazyLoadStatus>? status;
 
   @override
   State<LazyLoadBuilder> createState() => _LazyLoadBuilderState();
 }
 
 class _LazyLoadBuilderState extends State<LazyLoadBuilder> {
-  ScrollController? _scrollController;
-  final ValueNotifier<LazyLoadStatus> _status =
-      ValueNotifier(LazyLoadStatus.stable);
+  late ValueNotifier<LazyLoadStatus> _status;
 
   @override
   void dispose() {
-    _status.dispose();
+    if (widget.status == null) _status.dispose();
+    widget.controller.removeListener(_scrollListener);
     super.dispose();
   }
 
   @override
   void initState() {
-    Misc.onLayoutRendered(() {
-      _scrollController =
-          widget.controller ?? PrimaryScrollController.of(context);
-      _scrollController?.addListener(_scrollListener);
-    });
+    _status = widget.status ?? ValueNotifier(LazyLoadStatus.stable);
+    widget.controller.addListener(_scrollListener);
     super.initState();
   }
 
   bool get _canLoadMore => _status.value == LazyLoadStatus.stable;
 
   void _scrollListener() {
-    final ScrollPosition position = _scrollController!.position;
+    if (!_canLoadMore) return;
+    final ScrollPosition position = widget.controller.position;
     if (position.pixels >=
-            (position.maxScrollExtent + widget.startLoadBeforeOffset) &&
-        _canLoadMore) {
+        (position.maxScrollExtent + widget.startLoadBeforeOffset)) {
       _load();
     }
   }
 
   Future<void> _load() async {
     _status.value = LazyLoadStatus.loading;
-    _status.value = (await widget.onLoad?.call()) ?? LazyLoadStatus.stable;
+    _status.value = await widget.onLoad?.call() ??
+        (_status.value != LazyLoadStatus.completed
+            ? LazyLoadStatus.stable
+            : LazyLoadStatus.completed);
   }
 
   @override

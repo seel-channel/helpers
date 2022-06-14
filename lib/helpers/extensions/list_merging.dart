@@ -80,7 +80,7 @@ extension ListListMerging<T> on List<List<T>> {
 }
 
 extension IterableMerging<T> on Iterable<T> {
-  T? getFirst(bool Function(T e) test) {
+  T? getFirst(ReplaceValidator<T> test) {
     for (final item in this) {
       if (test(item)) return item;
     }
@@ -97,7 +97,7 @@ extension IterableMerging<T> on Iterable<T> {
     return map;
   }
 
-  bool containsWhere(bool Function(T e) validator) {
+  bool containsWhere(ReplaceValidator<T> validator) {
     for (final item in this) {
       if (validator(item)) return true;
     }
@@ -110,7 +110,7 @@ extension ListNullableMerging<T> on List<T?> {
 }
 
 extension ListMerging<T> on List<T> {
-  bool replaceWhere(bool Function(T e) validator, T Function(T e) newValue) {
+  bool replaceWhere(ReplaceValidator<T> validator, ReplaceValue<T> newValue) {
     bool foundOne = false;
     for (int i = 0; i < length; i++) {
       final item = elementAt(i);
@@ -158,7 +158,7 @@ extension ListMerging<T> on List<T> {
     if (!contains(element)) add(element);
   }
 
-  void addIfNotContainsWhere(bool Function(T e) validator, T element) {
+  void addIfNotContainsWhere(ReplaceValidator<T> validator, T element) {
     if (!containsWhere(validator)) add(element);
   }
 
@@ -172,6 +172,17 @@ extension ListMerging<T> on List<T> {
     for (final item in items) {
       insert(index, item);
     }
+  }
+
+  double foldTotal(
+    double? Function(T e) builder, {
+    double initial = 0,
+  }) {
+    return fold<double>(initial, (prev, e) {
+      final double? value = builder(e);
+      if (value != null) return prev + value;
+      return prev;
+    });
   }
 
   void addAllIfNotContainsWhere(
@@ -220,7 +231,7 @@ extension ListMerging<T> on List<T> {
     return items;
   }
 
-  int? removeFirstWhere(bool Function(T e) f) {
+  int? removeFirstWhere(ReplaceValidator<T> f) {
     for (var i = 0; i < length; i++) {
       if (f(this[i])) {
         removeAt(i);
@@ -240,8 +251,12 @@ extension ListMerging<T> on List<T> {
     return map(f).toSet().toList();
   }
 
-  List<T> removeDuplicates<E>() {
+  List<T> removeDuplicates() {
     return toSet().toList();
+  }
+
+  List<T> removeDuplicatesWhere<E>(E Function(T e) test) {
+    return toMap<E, T>((index, e) => MapEntry(test(e), e)).values.toList();
   }
 
   List<E> mapIndexed<E>(E Function(int index, T e) f) {

@@ -513,7 +513,7 @@ class ScrollableTable<T> extends StatefulWidget {
     this.showStrokesIntoColumns = true,
     this.strokeColor,
     this.strokeWidth,
-    this.tableIsEmpty,
+    this.isEmptyBackground,
     this.tablePadding,
     this.verticalController,
   }) : super(key: key);
@@ -537,6 +537,7 @@ class ScrollableTable<T> extends StatefulWidget {
   final double initialMinScale;
   final double? initialScale;
   final bool initialScaleFitToWidth;
+  final Widget? isEmptyBackground;
   final ValueNotifier<bool>? isLoading;
   final List<Widget> Function(int index) itemBuilder;
   final int? itemCount;
@@ -549,7 +550,6 @@ class ScrollableTable<T> extends StatefulWidget {
   final bool showStrokesIntoColumns;
   final Color? strokeColor;
   final double? strokeWidth;
-  final Widget? tableIsEmpty;
   final EdgeInsets? tablePadding;
   final ScrollController? verticalController;
 
@@ -771,11 +771,8 @@ class _ScrollableTableState<T> extends State<ScrollableTable<T>> {
 
       return SliverPadding(
         padding: widget.contentPadding ?? Margin.zero,
-        sliver: widget.tableIsEmpty != null && (itemCount ?? 0) < 1
-            ? SliverFillViewport(
-                viewportFraction: height / (height * _scale.value),
-                delegate: SliverChildListDelegate.fixed([widget.tableIsEmpty!]),
-              )
+        sliver: widget.isEmptyBackground != null && (itemCount ?? 0) <= 0
+            ? SliverFillRemaining(child: widget.isEmptyBackground)
             : SliverFixedExtentList(
                 itemExtent: widget.rowHeight,
                 delegate: SliverChildBuilderDelegate(

@@ -204,15 +204,30 @@ class Misc {
 
   //CONVERSORS//
   static double? dynamicToDouble(dynamic value) {
-    if (value != null) {
-      return value is double
-          ? value
-          : value is int
-              ? value * 1.0
-              : value is String && value.isNotEmpty
-                  ? double.tryParse(value.removeAllNotNumber(exclude: ["."]))
-                  : null;
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String && value.isNotEmpty) {
+      return double.tryParse(value.removeAllNotNumber(exclude: [".", "-"]));
     }
+    return null;
+  }
+
+  static bool? dynamicToBool(dynamic value) {
+    if (value == null) return null;
+    if (value is bool) return value;
+    if (value is int) {
+      if (value == 1) return true;
+      if (value == 0) return false;
+      return null;
+    }
+    if (value is String && value.isNotEmpty) {
+      final String lower = value.toNormalize();
+      if (lower == "true") return true;
+      if (lower == "false") return false;
+      return null;
+    }
+
     return null;
   }
 
@@ -221,11 +236,10 @@ class Misc {
   }
 
   static DateTime? dynamicToDateTime(dynamic value) {
-    if (value is String) {
-      try {
-        return DateTime.parse(value);
-      } catch (_) {}
-    }
+    try {
+      if (value is String) return DateTime.parse(value);
+      if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+    } catch (_) {}
     return null;
   }
 

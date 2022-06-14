@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:helpers/helpers/extensions/list_merging.dart';
+import 'package:helpers/helpers.dart';
 
 class ListDifference<T> {
   ListDifference({
