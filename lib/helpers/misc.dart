@@ -375,7 +375,7 @@ class Misc {
   ///```dart
   /// WidgetsBinding.instance.addPostFrameCallback((_) => callback());
   /// ```
-  static void onLayoutRendered(void Function() callback) {
+  static void onLayoutRendered(VoidCallback callback) {
     WidgetsBinding.instance.addPostFrameCallback((_) => callback());
   }
 
@@ -383,7 +383,7 @@ class Misc {
   ///```dart
   /// WidgetsBinding.instance.endOfFrame.then((_) => callback());
   /// ```
-  static void afterFirstLayout(void Function() callback) {
+  static void afterFirstLayout(VoidCallback callback) {
     WidgetsBinding.instance.endOfFrame.then((_) => callback());
   }
 
@@ -396,7 +396,7 @@ class Misc {
   ///```
   static Future<void> delayed(
     int milliseconds,
-    void Function() callback,
+    VoidCallback callback,
   ) async {
     await Future.delayed(
       Duration(milliseconds: milliseconds),
@@ -413,7 +413,7 @@ class Misc {
   ///return Timer(Duration(milliseconds: milliseconds), callback);
   ///```
   ///
-  static Timer timer(int milliseconds, void Function() callback) {
+  static Timer timer(int milliseconds, VoidCallback callback) {
     return Timer(Duration(milliseconds: milliseconds), callback);
   }
 
@@ -422,7 +422,7 @@ class Misc {
   ///```dart
   ///return Timer.periodic(Duration(milliseconds: milliseconds), (_) => callback());
   ///````
-  static Timer periodic(int milliseconds, void Function() callback) {
+  static Timer periodic(int milliseconds, VoidCallback callback) {
     return Timer.periodic(
       Duration(milliseconds: milliseconds),
       (_) => callback(),
