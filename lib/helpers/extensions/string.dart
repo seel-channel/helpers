@@ -6,6 +6,16 @@ const String kDiacriticsString =
 const String kNonDiacriticsString =
     'AAAAAAaaaaaaOOOOOOOooooooEEEEeeeeeCcDIIIIiiiiUUUUuuuuNnSsYyyZz';
 
+extension NullableStringHelperExtension on String? {
+  /// ```dart
+  /// // DO THIS:
+  /// return this != null && this!.isNotEmpty;
+  /// ```
+  bool haveContent() {
+    return this != null && this!.isNotEmpty;
+  }
+}
+
 extension StringHelperExtension on String {
   String removeDiacriticalMarks() {
     return splitMapJoin(
