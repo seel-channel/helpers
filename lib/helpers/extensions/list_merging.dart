@@ -263,6 +263,38 @@ extension ListMerging<T> on List<T> {
     return conditionalMapIndexed(f);
   }
 
+  /// Reduces a collection to a single value by iteratively combining each
+  /// element of the collection with an existing value
+  ///
+  /// Uses [initialValue] as the initial value,
+  /// then iterates through the elements and updates the value with
+  /// each element using the [combine] function, as if by:
+  /// ```
+  /// var value = initialValue;
+  /// for (E element in this) {
+  ///   value = combine(value, element);
+  /// }
+  /// return value;
+  /// ```
+  /// Example of calculating the sum of an iterable:
+  /// ```dart
+  /// final numbers = <double>[10, 2, 5, 0.5];
+  /// const initialValue = 100.0;
+  /// final result = numbers.fold<double>(
+  ///     initialValue, (previousValue, element) => previousValue + element);
+  /// print(result); // 117.5
+  /// ```
+  E foldIndexed<E>(
+    E initialValue,
+    E Function(int index, E previousValue, T element) combine,
+  ) {
+    var value = initialValue;
+    for (var i = 0; i < length; i++) {
+      value = combine(i, value, this[i]);
+    }
+    return value;
+  }
+
   List<E> conditionalMap<E>(E? Function(T e) f) {
     return conditionalMapIndexed((_, e) => f(e));
   }
