@@ -213,6 +213,11 @@ class Misc {
     return null;
   }
 
+  static String? dynamicToString(dynamic value) {
+    if (value == null) return null;
+    return value.toString();
+  }
+
   static bool? dynamicToBool(dynamic value) {
     if (value == null) return null;
     if (value is bool) return value;
@@ -273,6 +278,9 @@ class Misc {
     dynamic list,
     T Function(Map<String, dynamic> e) f,
   ) {
+    if (list is Map) {
+      return [f(Map<String, dynamic>.from(list))];
+    }
     return dynamicToList<T>(
       list,
       (x) => f(Map<String, dynamic>.from(x as Map)),
@@ -283,7 +291,8 @@ class Misc {
     dynamic list,
     T Function(dynamic e) f,
   ) {
-    return List<T>.from((list as List?)?.map((x) => f(x)) ?? []);
+    if (list is List) return List<T>.from(list.map((x) => f(x)));
+    return [];
   }
 
   static bool listEquals<T>(List<T>? a, List<T>? b) =>
