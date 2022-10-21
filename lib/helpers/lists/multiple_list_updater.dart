@@ -1,19 +1,19 @@
 import 'package:helpers/helpers.dart';
 
-class MultipleListUpdater<T> {
-  MultipleListUpdater(List<List<T>> elements)
+class MultipleListUpdater<T, L extends List<List<T>>> {
+  MultipleListUpdater(L elements)
       : _elements = elements,
         _builder = null;
 
-  MultipleListUpdater.lazy(List<List<T>> Function() builder)
+  MultipleListUpdater.lazy(L Function() builder)
       : _builder = builder,
         _elements = null;
 
-  final List<List<T>> Function()? _builder;
+  final L Function()? _builder;
 
-  final List<List<T>>? _elements;
+  final L? _elements;
 
-  List<List<T>> get elements => _elements ?? _builder!();
+  L get elements => _elements ?? _builder!();
 
   void replaceOrAdd(ReplaceValidator<T> validator, T value) {
     if (!replaceWhere(validator, (e) => value)) add(value);
