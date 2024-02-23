@@ -129,6 +129,7 @@ class Misc {
         size: logicalSize,
         devicePixelRatio: pixelRatio ?? 1.0,
       ),
+      view: ui.window,
     );
 
     int retryCounter = 3;
@@ -172,7 +173,7 @@ class Misc {
       isDirty = false;
       image = await repaintBoundary.toImage(
         pixelRatio:
-            pixelRatio ?? (ui.window.physicalSize.width / logicalSize.width),
+        pixelRatio ?? (ui.window.physicalSize.width / logicalSize.width),
       );
       await Future.delayed(delay);
       if (isDirty) buildScope();
